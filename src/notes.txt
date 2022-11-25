@@ -1,18 +1,18 @@
 DataStoreObject
 - toString()
-- static fromString()
+- fromString()
 
 RecordList<T extends DataStoreObject>
 - fileName
 - T[] objects
 - save() => objects.forEach(o => writeFile(o.toString()))
-- load() => file.lines.forEach((l, i) => objects[i] = DataStoreObject.fromString(l))
+- load() => file.lines.forEach((l, i) => objects[i] = (new T()).fromString(l))
 - select(where: Function)
 - update(where: Function)
 - delete(where: Function)
 
-User extends DataStoreObject
-Transaction extends DataStoreObject
+User implements DataStoreObject
+Transaction implements DataStoreObject
 
 DataStore
 - users: RecordList<User>

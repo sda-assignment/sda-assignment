@@ -1,2 +1,4 @@
 bin/
 *.class
+payments/data/*
+!payments/data/.gitkeep

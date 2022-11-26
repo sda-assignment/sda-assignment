@@ -1,7 +1,7 @@
 DataStoreObject
 - toString()
 
-DataStoreBuilder
+DataStoreObjectBuilder
 - fromString(): DataStoreObject
 
 UserBuilder implements DataStoreBuilder

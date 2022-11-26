@@ -1,4 +1,6 @@
 ./payments/App.java
+./payments/records/builders/UserRecordBuilder.java
+./payments/records/User.java
 ./datastore/exceptions/RecordListSaveException.java
 ./datastore/exceptions/RecordListInitializationException.java
 ./datastore/exceptions/RecordListException.java

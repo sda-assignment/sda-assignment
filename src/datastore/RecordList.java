@@ -22,6 +22,10 @@ public class RecordList {
         this.records = new ArrayList<DataStoreObject>();
     }
 
+    public DataStoreObject select() {
+        return records.get(0);
+    }
+
     public void save() throws RecordListSaveException {
         String recordsStr = "";
         for (DataStoreObject record : records) {

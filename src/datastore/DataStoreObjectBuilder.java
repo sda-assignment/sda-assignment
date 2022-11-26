@@ -1,5 +1,5 @@
 package datastore;
 
 public interface DataStoreObjectBuilder {
-    DataStoreObject fromString();
+    DataStoreObject fromString(String string);
 }

@@ -1,27 +1,29 @@
 package datastore;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import datastore.exceptions.RecordListInitializationException;
 import datastore.exceptions.RecordListLoadException;
 import datastore.exceptions.RecordListSaveException;
 
-public class RecordList<T extends DataStoreObject, B extends DataStoreObjectBuilder> {
+public class RecordList {
     private String fileName;
-    ArrayList<T> records;
-    B recordBuilder;
+    ArrayList<DataStoreObject> records;
+    DataStoreObjectBuilder recordBuilder;
 
-    public RecordList(String fileName, B recordBuilder) throws RecordListInitializationException {
+    public RecordList(String fileName, DataStoreObjectBuilder recordBuilder) throws RecordListInitializationException {
         this.fileName = fileName;
         this.recordBuilder = recordBuilder;
-        this.records = new ArrayList<T>();
+        this.records = new ArrayList<DataStoreObject>();
     }
 
     public void save() throws RecordListSaveException {
         String recordsStr = "";
-        for (T record: records) {
+        for (DataStoreObject record : records) {
             recordsStr = recordsStr.concat(record.toString()) + "\n";
         }
         try {
@@ -34,5 +36,16 @@ public class RecordList<T extends DataStoreObject, B extends DataStoreObjectBuil
     }
 
     public void load() throws RecordListLoadException {
+        try {
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                records.add(recordBuilder.fromString(line));
+            }
+            scanner.close();
+        } catch (IOException e) {
+            throw new RecordListLoadException("Failed to read file: " + fileName);
+        }
     }
 }

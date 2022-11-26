@@ -4,27 +4,24 @@ DataStoreObject
 DataStoreObjectBuilder
 - fromString(): DataStoreObject
 
-UserBuilder implements DataStoreBuilder
-TransactionBuilder implements DataStoreBuilder
+UserBuilder implements DataStoreObjectBuilder
+TransactionBuilder implements DataStoreObjectBuilder
 
-RecordList<T extends DataStoreObject, B extends DataStoreBuilder>
+RecordList
 - fileName
-- T[] objects
-- B builder
+- DataStoreObject[] objects
+- DataStoreObjectBuilder builder
 - save() => objects.forEach(o => writeFile(o.toString()))
 - load() => file.lines.forEach((l, i) => objects[i] = builder.fromString(l))
 - select(where: Function)
 - update(where: Function)
 - delete(where: Function)
-- insert(object: T)
+- insert(object: DataStoreObject)
 
 User implements DataStoreObject
 Transaction implements DataStoreObject
 
 DataStore
-- users: RecordList<User>
-- transactions: RecordList<Transaction>
-- userBuilder: UserBuilder
-- transactionBuilder: TransactionBuilder
-- loadAll() => {users.load(); transactions.load()}
-- saveAll() => {users.save(); transactions.save()}
+- RecordList[] recordLists;
+- loadAll() => recordLists.forEach(r => r.load())
+- saveAll() => recordLists.forEach(r => r.save())

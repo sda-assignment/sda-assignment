@@ -1,5 +1,5 @@
 DataStoreObject
-- toString()
+- storify()
 
 DataStoreObjectBuilder
 - fromString(): DataStoreObject
@@ -14,14 +14,14 @@ RecordList
 - save() => objects.forEach(o => writeFile(o.toString()))
 - load() => file.lines.forEach((l, i) => objects[i] = builder.fromString(l))
 - select(where: Function)
-- update(where: Function)
+- update(where: Function, DataStoreObject record)
 - delete(where: Function)
 - insert(object: DataStoreObject)
 
 User implements DataStoreObject
 Transaction implements DataStoreObject
 
-DataStore
+DataStore (Maybe won't be used)
 - RecordList[] recordLists;
 - loadAll() => recordLists.forEach(r => r.load())
 - saveAll() => recordLists.forEach(r => r.save())

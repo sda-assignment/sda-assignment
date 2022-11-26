@@ -11,12 +11,13 @@ import datastore.exceptions.RecordListLoadException;
 import datastore.exceptions.RecordListSaveException;
 
 public class RecordList {
-    private String fileName;
+    private final String DATA_PATH = "data/";
+    private String path;
     ArrayList<DataStoreObject> records;
     DataStoreObjectBuilder recordBuilder;
 
     public RecordList(String fileName, DataStoreObjectBuilder recordBuilder) throws RecordListInitializationException {
-        this.fileName = fileName;
+        this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<DataStoreObject>();
     }
@@ -24,20 +25,20 @@ public class RecordList {
     public void save() throws RecordListSaveException {
         String recordsStr = "";
         for (DataStoreObject record : records) {
-            recordsStr = recordsStr.concat(record.toString()) + "\n";
+            recordsStr = recordsStr.concat(record.storify()) + "\n";
         }
         try {
-            FileWriter fileWriter = new FileWriter(fileName);
+            FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(recordsStr);
             fileWriter.close();
         } catch (IOException e) {
-            throw new RecordListSaveException("Failed to write to file: " + fileName);
+            throw new RecordListSaveException("Failed to write to file: " + path);
         }
     }
 
     public void load() throws RecordListLoadException {
         try {
-            File file = new File(fileName);
+            File file = new File(path);
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -45,7 +46,7 @@ public class RecordList {
             }
             scanner.close();
         } catch (IOException e) {
-            throw new RecordListLoadException("Failed to read file: " + fileName);
+            throw new RecordListLoadException("Failed to read file: " + path);
         }
     }
 }

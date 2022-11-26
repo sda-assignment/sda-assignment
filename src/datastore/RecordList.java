@@ -2,11 +2,9 @@ package datastore;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import datastore.exceptions.RecordListInitializationException;
 import datastore.exceptions.RecordListLoadException;
 import datastore.exceptions.RecordListSaveException;
 
@@ -16,14 +14,10 @@ public class RecordList {
     ArrayList<DataStoreObject> records;
     DataStoreObjectBuilder recordBuilder;
 
-    public RecordList(String fileName, DataStoreObjectBuilder recordBuilder) throws RecordListInitializationException {
+    public RecordList(String fileName, DataStoreObjectBuilder recordBuilder) {
         this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<DataStoreObject>();
-    }
-
-    public DataStoreObject select() {
-        return records.get(0);
     }
 
     public void save() throws RecordListSaveException {
@@ -35,22 +29,23 @@ public class RecordList {
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(recordsStr);
             fileWriter.close();
-        } catch (IOException e) {
-            throw new RecordListSaveException("Failed to write to file: " + path);
+        } catch (Exception e) {
+            throw new RecordListSaveException("Failed to write to file: " + path + "\n" + e.getStackTrace());
         }
     }
 
     public void load() throws RecordListLoadException {
         try {
             File file = new File(path);
+            file.createNewFile();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 records.add(recordBuilder.fromString(line));
             }
             scanner.close();
-        } catch (IOException e) {
-            throw new RecordListLoadException("Failed to read file: " + path);
+        } catch (Exception e) {
+            throw new RecordListLoadException("Failed to read file: " + path + "\n" + e.getStackTrace());
         }
     }
 }

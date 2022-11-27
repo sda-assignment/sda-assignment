@@ -8,13 +8,14 @@ Users
 Service
 - name (PK)
 
+Transaction
+- email
+- timestamp
+- amount
+
 Providers
 - serviceName (PK)
 - providerName: enum (PK)
-
-class EtisalatPhoneRecharge
-
-if (providerName == "ETISALAT" && ser)
 
 UserDiscounts
 - email (PK)

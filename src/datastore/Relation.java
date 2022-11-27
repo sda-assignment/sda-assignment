@@ -12,9 +12,9 @@ public class Relation<T extends Entity> {
     private final String DATA_PATH = "data/";
     private String path;
     ArrayList<T> records;
-    DataStoreObjectBuilder<T> recordBuilder;
+    EntityBuilder<T> recordBuilder;
 
-    public Relation(String fileName, DataStoreObjectBuilder<T> recordBuilder) {
+    public Relation(String fileName, EntityBuilder<T> recordBuilder) {
         this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<T>();

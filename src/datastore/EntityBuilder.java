@@ -1,5 +1,5 @@
 package datastore;
 
-public interface DataStoreObjectBuilder<T> {
+public interface EntityBuilder<T> {
     T fromString(String string);
 }

@@ -1,9 +1,9 @@
 package payments.entities.builders;
 
-import datastore.DataStoreObjectBuilder;
+import datastore.EntityBuilder;
 import payments.entities.User;
 
-public class UserRecordBuilder implements DataStoreObjectBuilder<User> {
+public class UserRecordBuilder implements EntityBuilder<User> {
     public User fromString(String user) {
         String[] splitted = user.split(":");
         return new User(splitted[0], splitted[1], splitted[2]);

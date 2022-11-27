@@ -48,4 +48,28 @@ public class RecordList {
             throw new RecordListLoadException("Failed to read file: " + path + "\n" + e.getStackTrace());
         }
     }
+
+    public void insert(DataStoreObject record) throws RecordListSaveException {
+        this.records.add(record);
+        save();
+    }
+
+    public ArrayList<DataStoreObject> select(SelectionFunction selection) {
+        ArrayList<DataStoreObject> result = new ArrayList<DataStoreObject>();
+        for (DataStoreObject record : records) {
+            if (selection.function(record)) {
+                result.add(record);
+            }
+        }
+        return result;
+    }
+
+    public void update(DataStoreObject newRecord, SelectionFunction selection) throws RecordListSaveException {
+        for (int i = 0; i < records.size(); i++) {
+            if (selection.function(records.get(i))) {
+                records.set(i, newRecord);
+            }
+        }
+        save();
+    }
 }

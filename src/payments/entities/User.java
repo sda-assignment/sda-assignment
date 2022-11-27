@@ -1,8 +1,8 @@
-package payments.records;
+package payments.entities;
 
-import datastore.DataStoreObject;
+import datastore.Entity;
 
-public class User implements DataStoreObject {
+public class User implements Entity {
     public final String email;
     public final String username;
     public final String password;

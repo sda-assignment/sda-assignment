@@ -1,5 +1,5 @@
 package datastore;
 
-public interface DataStoreObject {
+public interface Entity {
     String storify();
 }

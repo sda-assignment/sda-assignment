@@ -5,22 +5,22 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import datastore.exceptions.RecordListLoadException;
-import datastore.exceptions.RecordListSaveException;
+import datastore.exceptions.EntityLoadException;
+import datastore.exceptions.EntitySaveException;
 
-public class RecordList<T extends DataStoreObject> {
+public class Relation<T extends Entity> {
     private final String DATA_PATH = "data/";
     private String path;
     ArrayList<T> records;
     DataStoreObjectBuilder<T> recordBuilder;
 
-    public RecordList(String fileName, DataStoreObjectBuilder<T> recordBuilder) {
+    public Relation(String fileName, DataStoreObjectBuilder<T> recordBuilder) {
         this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<T>();
     }
 
-    public void save() throws RecordListSaveException {
+    public void save() throws EntitySaveException {
         String recordsStr = "";
         for (T record : records) {
             recordsStr = recordsStr.concat(record.storify()) + "\n";
@@ -30,11 +30,11 @@ public class RecordList<T extends DataStoreObject> {
             fileWriter.write(recordsStr);
             fileWriter.close();
         } catch (Exception e) {
-            throw new RecordListSaveException("Failed to write to file: " + path + "\n" + e.getStackTrace());
+            throw new EntitySaveException("Failed to write to file: " + path + "\n" + e.getStackTrace());
         }
     }
 
-    public void load() throws RecordListLoadException {
+    public void load() throws EntityLoadException {
         try {
             File file = new File(path);
             file.createNewFile();
@@ -45,11 +45,11 @@ public class RecordList<T extends DataStoreObject> {
             }
             scanner.close();
         } catch (Exception e) {
-            throw new RecordListLoadException("Failed to read file: " + path + "\n" + e.getStackTrace());
+            throw new EntityLoadException("Failed to read file: " + path + "\n" + e.getStackTrace());
         }
     }
 
-    public void insert(T record) throws RecordListSaveException {
+    public void insert(T record) throws EntitySaveException {
         this.records.add(record);
         save();
     }
@@ -64,7 +64,7 @@ public class RecordList<T extends DataStoreObject> {
         return result;
     }
 
-    public void update(T newRecord, SelectionFunction<T> selection) throws RecordListSaveException {
+    public void update(T newRecord, SelectionFunction<T> selection) throws EntitySaveException {
         for (int i = 0; i < records.size(); i++) {
             if (selection.function(records.get(i))) {
                 records.set(i, newRecord);

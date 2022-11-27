@@ -1,7 +1,7 @@
-package payments.records.builders;
+package payments.entities.builders;
 
 import datastore.DataStoreObjectBuilder;
-import payments.records.User;
+import payments.entities.User;
 
 public class UserRecordBuilder implements DataStoreObjectBuilder<User> {
     public User fromString(String user) {

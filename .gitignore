@@ -1,4 +1,4 @@
 bin/
 *.class
-payments/data/*
-!payments/data/.gitkeep
+src/data/*
+!src/data/.gitkeep

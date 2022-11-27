@@ -6,7 +6,6 @@
 ./datastore/exceptions/RecordListException.java
 ./datastore/exceptions/RecordListLoadException.java
 ./datastore/DataStoreObject.java
-./datastore/DataStore.java
 ./datastore/SelectionFunction.java
 ./datastore/RecordList.java
 ./datastore/DataStoreObjectBuilder.java

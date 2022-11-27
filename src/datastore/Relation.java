@@ -54,19 +54,19 @@ public class Relation<T extends Entity> {
         save();
     }
 
-    public ArrayList<T> select(SelectionFunction<T> selection) {
+    public ArrayList<T> select(RecordFilter<T> selection) {
         ArrayList<T> result = new ArrayList<T>();
         for (T record : records) {
-            if (selection.function(record)) {
+            if (selection.apply(record)) {
                 result.add(record);
             }
         }
         return result;
     }
 
-    public void update(T newRecord, SelectionFunction<T> selection) throws EntitySaveException {
+    public void update(T newRecord, RecordFilter<T> selection) throws EntitySaveException {
         for (int i = 0; i < records.size(); i++) {
-            if (selection.function(records.get(i))) {
+            if (selection.apply(records.get(i))) {
                 records.set(i, newRecord);
             }
         }

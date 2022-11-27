@@ -1,2 +1,28 @@
 Users
-Admin
+- email (PK)
+- username
+- password
+- isStaff
+- wallet
+
+Service
+- name (PK)
+
+Providers
+- serviceName (PK)
+- providerName: enum (PK)
+
+class EtisalatPhoneRecharge
+
+if (providerName == "ETISALAT" && ser)
+
+UserDiscounts
+- email (PK)
+- discount_id (PK)
+- isActive
+
+Discounts
+- discount_id (PK)
+- type
+- serviceName
+- value

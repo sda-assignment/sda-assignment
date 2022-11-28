@@ -12,10 +12,13 @@ Transaction
 - email
 - timestamp
 - amount
+- type
 
 Providers
-- serviceName (PK)
-- providerName: enum (PK)
+- serviceName (PK) (Ex: Recharge)
+- providerName: string (PK) (Ex: Etisalat)
+- socketName: enum (Ex: EtisalatRechargeService)
+- cash_on_delivery: boolean
 
 UserDiscounts
 - email (PK)
@@ -27,3 +30,7 @@ Discounts
 - type
 - serviceName
 - value
+
+RefundRequests
+- amount
+- serviceName

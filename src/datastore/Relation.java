@@ -64,10 +64,10 @@ public class Relation<T extends Entity> {
         return result;
     }
 
-    public void update(T newRecord, RecordFilter<T> selection) throws EntitySaveException {
+    public void update(RecordUpdate<T> updater, RecordFilter<T> filter) throws EntitySaveException {
         for (int i = 0; i < records.size(); i++) {
-            if (selection.apply(records.get(i))) {
-                records.set(i, newRecord);
+            if (filter.apply(records.get(i))) {
+                records.set(i, updater.apply(records.get(i)));
             }
         }
         save();

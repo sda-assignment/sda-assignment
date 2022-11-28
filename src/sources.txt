@@ -8,4 +8,5 @@
 ./datastore/Entity.java
 ./datastore/Relation.java
 ./datastore/EntityBuilder.java
+./datastore/RecordUpdate.java
 ./datastore/RecordFilter.java

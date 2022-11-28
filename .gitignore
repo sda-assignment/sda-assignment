@@ -2,3 +2,4 @@ bin/
 *.class
 src/data/*
 !src/data/.gitkeep
+.vscode

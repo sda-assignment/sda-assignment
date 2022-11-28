@@ -11,13 +11,14 @@ import datastore.exceptions.EntitySaveException;
 public class Relation<T extends Entity> {
     private final String DATA_PATH = "data/";
     private String path;
-    ArrayList<T> records;
-    EntityBuilder<T> recordBuilder;
+    private ArrayList<T> records;
+    private EntityBuilder<T> recordBuilder;
 
-    public Relation(String fileName, EntityBuilder<T> recordBuilder) {
+    public Relation(String fileName, EntityBuilder<T> recordBuilder) throws EntityLoadException {
         this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<T>();
+        load();
     }
 
     public void save() throws EntitySaveException {
@@ -30,11 +31,11 @@ public class Relation<T extends Entity> {
             fileWriter.write(recordsStr);
             fileWriter.close();
         } catch (Exception e) {
-            throw new EntitySaveException("Failed to write to file: " + path + "\n" + e.getStackTrace());
+            throw new EntitySaveException("Failed to write to file: " + path + "\n" + e.toString());
         }
     }
 
-    public void load() throws EntityLoadException {
+    private void load() throws EntityLoadException {
         try {
             File file = new File(path);
             file.createNewFile();
@@ -45,7 +46,7 @@ public class Relation<T extends Entity> {
             }
             scanner.close();
         } catch (Exception e) {
-            throw new EntityLoadException("Failed to read file: " + path + "\n" + e.getStackTrace());
+            throw new EntityLoadException("Failed to read file: " + path + "\n" + e.toString());
         }
     }
 

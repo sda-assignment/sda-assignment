@@ -9,8 +9,8 @@ import payments.entities.builders.UserBuilder;
 public class App {
     public static void main(String[] args) throws EntityLoadException, EntitySaveException {
         Relation<User> userRelation = new Relation<User>("users", new UserBuilder());
-        userRelation.load();
-        System.out.println(userRelation.select(u -> u.username.equals("ali")));
-        userRelation.update(u -> new User(u.email, "aloka", u.password), u -> u.username.equals("ali"));
+        System.out.println(userRelation.select(u -> true));
+        userRelation.update(u -> new User(u.email, "aloka", u.password, u.isStaff, u.wallet),
+                u -> u.username.equals("ali"));
     }
 }

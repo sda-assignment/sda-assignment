@@ -1,0 +1,27 @@
+DataStoreObject
+- storify()
+
+DataStoreObjectBuilder
+- fromString(): DataStoreObject
+
+UserBuilder implements DataStoreObjectBuilder
+TransactionBuilder implements DataStoreObjectBuilder
+
+RecordList
+- fileName
+- DataStoreObject[] objects
+- DataStoreObjectBuilder builder
+- save() => objects.forEach(o => writeFile(o.toString()))
+- load() => file.lines.forEach((l, i) => objects[i] = builder.fromString(l))
+- select(where: Function)
+- update(where: Function, DataStoreObject record)
+- delete(where: Function)
+- insert(object: DataStoreObject)
+
+User implements DataStoreObject
+Transaction implements DataStoreObject
+
+DataStore (Maybe won't be used)
+- RecordList[] recordLists;
+- loadAll() => recordLists.forEach(r => r.load())
+- saveAll() => recordLists.forEach(r => r.save())

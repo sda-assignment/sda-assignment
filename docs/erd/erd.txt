@@ -1,0 +1,38 @@
+// users might need to be separated from admins, because if they are both are users
+then logical conditions that compares and filters users might compare admins with normal users
+// also staff doesn't have a wallet so make admin a separate entity for now ?
+// transaction should include service name as a foreign key to the service payed 
+Users
+- email (PK)
+- username
+- password
+- wallet
+
+Admin
+- email (PK)
+- username
+- password
+
+Service
+- name (PK)
+
+Transaction
+- email (PK)
+- timestamp (PK)
+- SName (FK)
+- amount
+
+Providers
+- serviceName (PK)
+- providerName: enum (PK)
+
+UserDiscounts
+- email (PK)
+- discount_id (PK)
+- isActive
+
+Discounts
+- discount_id (PK)
+- type
+- serviceName (FK)
+- value

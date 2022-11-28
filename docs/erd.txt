@@ -29,8 +29,10 @@ Discounts
 - discount_id (PK)
 - type
 - serviceName
-- value
+- percentage
 
 RefundRequests
+- id
 - amount
 - serviceName
+- status

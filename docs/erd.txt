@@ -1,4 +1,4 @@
-Users
+User
 - email (PK)
 - username
 - password
@@ -14,7 +14,7 @@ Transaction
 - amount
 - type
 
-Providers
+Provider
 - serviceName (PK) (Ex: Recharge)
 - providerName: string (PK) (Ex: Etisalat)
 - cashOnDelivery: boolean
@@ -29,7 +29,7 @@ FormElement
 (there must only be one FormElement per serviceName and providerName that his this field set to true.
 Also when set to true, the info must be an integer that is going to be deducted from the wallet)
 
-UsedDiscounts
+UsedDiscount
 - email (PK)
 - discount_id (PK)
 
@@ -39,7 +39,7 @@ Discounts
 - serviceName
 - percentage
 
-RefundRequests
+RefundRequest
 - id (PK)
 - amount
 - serviceName

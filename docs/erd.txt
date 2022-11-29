@@ -27,7 +27,6 @@ UserDiscounts
 
 Discounts
 - discount_id (PK)
-- type
 - serviceName
 - percentage
 
@@ -36,3 +35,4 @@ RefundRequests
 - amount
 - serviceName
 - status
+- email

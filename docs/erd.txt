@@ -29,7 +29,7 @@ FormElement
 (there must only be one FormElement per serviceName and providerName that his this field set to true.
 Also when set to true, the info must be an integer that is going to be deducted from the wallet)
 
-ConsumedDiscounts
+UsedDiscounts
 - email (PK)
 - discount_id (PK)
 

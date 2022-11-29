@@ -5,17 +5,23 @@ import payments.entities.User;
 
 
 public class LogInSession {
-    private LogInSession instance ;
+    private static LogInSession instance ;
     public User LoggedInUser;
 
-    private LogInSession() {}
+    private LogInSession() {
+        LoggedInUser = null;
+    }
 
 
-    public LogInSession getInstance(){
+    public static LogInSession getInstance(){
         if (instance == null) {
             instance = new LogInSession();
         }
         return instance;
+    }
+
+    public void setInstance(User LoggedInUser){
+        this.LoggedInUser = LoggedInUser;
     }
 }
 

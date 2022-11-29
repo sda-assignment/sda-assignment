@@ -1,4 +1,4 @@
-Users
+User
 - email (PK)
 - username
 - password
@@ -14,25 +14,34 @@ Transaction
 - amount
 - type
 
-Providers
+Provider
 - serviceName (PK) (Ex: Recharge)
 - providerName: string (PK) (Ex: Etisalat)
-- socketName: enum (Ex: EtisalatRechargeService)
-- cash_on_delivery: boolean
+- cashOnDelivery: boolean
 
-UserDiscounts
+FormElement
+- name (PK) (what is sent to the provider server is going to be {name: info}, for example {"phone": "+201239813232"})
+- serviceName (PK, FK)
+- providerName (PK, FK)
+- type: FormElementType
+- info: String
+- hasDeductionAmount: Boolean
+(there must only be one FormElement per serviceName and providerName that his this field set to true.
+Also when set to true, the info must be an integer that is going to be deducted from the wallet)
+
+UsedDiscount
 - email (PK)
 - discount_id (PK)
-- isActive
 
 Discounts
 - discount_id (PK)
+- type
 - serviceName
 - percentage
 
-RefundRequests
-- id
+RefundRequest
+- id (PK)
 - amount
 - serviceName
 - status
-- email
+- userEmail

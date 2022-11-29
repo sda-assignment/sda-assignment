@@ -3,6 +3,7 @@ package payments.controllers;
 import datastore.exceptions.EntitySaveException;
 
 import payments.entities.Discount;
+import payments.entities.enums.DiscountType;
 import datastore.Relation;
 
 public class AdminDiscountController {
@@ -12,9 +13,9 @@ public class AdminDiscountController {
         this.relation = relation;
     }
 
-    public void AddDiscount(Discount Obj) throws EntitySaveException {
+    public void addDiscount(int id, DiscountType discountType, String serviceName, double percentage) throws EntitySaveException {
         try {
-            relation.insert(Obj);
+            relation.insert(new Discount(id, discountType, serviceName, percentage));
         } catch (Exception e) {
             throw new EntitySaveException("Failed to Add Discount : " + e.toString());
         }

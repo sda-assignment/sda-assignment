@@ -11,7 +11,7 @@ public class UserDiscountController {
         this.relation = relation;
     }
 
-    public ArrayList<Discount> ReturnDiscounts() {
+    public ArrayList<Discount> returnDiscounts() {
         ArrayList<Discount> array = relation.select(d -> true);
         return array;
     }

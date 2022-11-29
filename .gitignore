@@ -3,3 +3,4 @@ bin/
 src/data/*
 !src/data/.gitkeep
 .vscode
+sources.txt

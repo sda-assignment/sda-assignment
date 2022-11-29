@@ -20,10 +20,9 @@ Providers
 - socketName: enum (Ex: EtisalatRechargeService)
 - cash_on_delivery: boolean
 
-UserDiscounts
+ConsumedDiscounts
 - email (PK)
 - discount_id (PK)
-- isActive
 
 Discounts
 - discount_id (PK)

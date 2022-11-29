@@ -3,6 +3,7 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
+import payments.common.LogInSession;
 import payments.common.ResponseType;
 import datastore.exceptions.EntitySaveException;
 import payments.entities.User;
@@ -10,9 +11,11 @@ import datastore.Relation;
 
 public class AuthController{
     private Relation<User> relation;
+    private LogInSession logInSession;
 
     public AuthController(Relation<User> relation){
         this.relation = relation;
+        logInSession = LogInSession.getInstance();
     }
 
     public ResponseType signUp(String email, String userName, String password) throws EntitySaveException{
@@ -22,7 +25,11 @@ public class AuthController{
         try{ 
             if(temp.size() == 0){
                 relation.insert(new User(email, userName, password, false, 0));
-                return new ResponseType(true, "Signed up successfully");}
+                logInSession.setInstance(new User(email, userName, password, false, 0));
+
+                return new ResponseType(true, "Signed up successfully");
+            }
+
             else {
                 return new ResponseType(false, "User already exists");
             }
@@ -42,7 +49,8 @@ public class AuthController{
         {
             if(temp.get(0).password.equals(password))
             {
-            
+                logInSession.setInstance(temp.get(0));
+
                 return new ResponseType(true, "Logged in successfully");
             }
             else 
@@ -59,7 +67,7 @@ public class AuthController{
 
     public ResponseType logOut(){
 
-        //extra logic for login session 
+        logInSession.setInstance(null);
         return new ResponseType(false, null);
     }
 }

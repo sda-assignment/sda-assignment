@@ -1,11 +1,21 @@
 package payments.common;
 
-public class LogInSession {
-    private LogInSession LoggedInUser = new LogInSession();
+import payments.entities.User;
 
-    private LogInSession(){}
+
+
+public class LogInSession {
+    private LogInSession instance ;
+    public User LoggedInUser;
+
+    private LogInSession() {}
+
 
     public LogInSession getInstance(){
-        return LoggedInUser;
+        if (instance == null) {
+            instance = new LogInSession();
+        }
+        return instance;
     }
 }
+

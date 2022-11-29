@@ -8,6 +8,7 @@
 ./datastore/RecordUpdate.java
 ./datastore/Relation.java
 ./payments/App.java
+./payments/common/LogInSession.java
 ./payments/common/ResponseType.java
 ./payments/controllers/AuthController.java
 ./payments/entities/builders/DiscountBuilder.java

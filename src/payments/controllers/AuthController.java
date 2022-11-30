@@ -22,19 +22,15 @@ public class AuthController {
 
         ArrayList<User> temp = relation.select(u -> u.email.equals(email));
 
-        try {
-            if (temp.size() == 0) {
-                relation.insert(new User(email, userName, password, false, 0));
-                logInSession.setInstance(new User(email, userName, password, false, 0));
+        if (temp.size() == 0) {
+            relation.insert(new User(email, userName, password, false, 0));
+            logInSession.setInstance(new User(email, userName, password, false, 0));
 
-                return new ResponseType(true, "Signed up successfully");
-            }
+            return new ResponseType(true, "Signed up successfully");
+        }
 
-            else {
-                return new ResponseType(false, "User already exists");
-            }
-        } catch (Exception e) {
-            throw new EntitySaveException("Failed to sign up : " + e.toString());
+        else {
+            return new ResponseType(false, "User already exists");
         }
     }
 

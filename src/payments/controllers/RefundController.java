@@ -24,17 +24,21 @@ public class RefundController {
 
     }
 
-    public ResponseType evaluateRefund(boolean status, int rid) throws EntitySaveException
-    {
-        if(status == true){
-            refundRelation.update(r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.ACCEPTED, r.userEmail), r -> r.id == rid);
-            
+    public ResponseType evaluateRefund(boolean status, int rid) throws EntitySaveException {
+        if (status == true) {
+            refundRelation.update(
+                    r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.ACCEPTED, r.userEmail),
+                    r -> r.id == rid);
+
             ArrayList<RefundRequest> current = refundRelation.select(r -> r.id == rid);
-            userRelation.update(u-> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + current.get(0).amount ), u -> u.email == current.get(0).userEmail );
+            userRelation.update(
+                    u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + current.get(0).amount),
+                    u -> u.email == current.get(0).userEmail);
             return new ResponseType(true, "Refund got accepted, returning funds to wallet");
-        }
-        else{
-            refundRelation.update(r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.REJECTED, r.userEmail), r -> r.id == rid);
+        } else {
+            refundRelation.update(
+                    r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.REJECTED, r.userEmail),
+                    r -> r.id == rid);
             return new ResponseType(false, "Refund got Rejected");
         }
     }

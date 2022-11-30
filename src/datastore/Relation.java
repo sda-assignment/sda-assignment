@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
+import payments.entities.RefundRequest;
 
 public class Relation<T extends Entity> {
     private final String DATA_PATH = "data/";
@@ -72,5 +73,15 @@ public class Relation<T extends Entity> {
             }
         }
         save();
+    }
+
+    public int getMaxID() throws Exception {
+        if (records.get(0) instanceof RefundRequest) {
+            RefundRequest Max = (RefundRequest) records.get(records.size() - 1);
+            int id = Max.id;
+            return id;
+        } else {
+            throw new Exception("Entity is not a refund request object \n");
+        }
     }
 }

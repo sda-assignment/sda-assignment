@@ -2,3 +2,16 @@ todo
 - No singleton in login session
 - max aggregate function in Relation
 - After finishing, change lambda functions to classes
+
+------------
+
+1) encapsulate getting the id of the refund request in its entity class 
+2) add service provider controller with function :
+   - create Service Provider () -> adds sp to the sp file
+   - create form element ()-> creates one form element , called in a loop in ui, adds to form element file
+3) user transaction controller -> all payment transactions need to account for discounts
+   -> search for eligible discounts to the current transaction and apply it
+   -> delegate adding used discount to Useddiscounts file to the discount controller
+   -> aggregate with the discount controller
+4) change rechargeService -> payForService 
+5) add payment method functions in the user transaction controller into as separate functions 

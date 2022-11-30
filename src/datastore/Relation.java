@@ -55,6 +55,20 @@ public class Relation<T extends Entity> {
         save();
     }
 
+    public <B extends Comparable<B>> B selectMax(RecordProject<T, B> RecordProject) {
+        if (records.size() == 0) {
+            return null;
+        }
+        B max = RecordProject.apply(records.get(0));
+        for (int i = 1; i < records.size(); ++i) {
+            B afterProjection = RecordProject.apply(records.get(i));
+            if (afterProjection.compareTo(max) > 0) {
+                max = afterProjection;
+            }
+        }
+        return max;
+    }
+
     public ArrayList<T> select(RecordFilter<T> selection) {
         ArrayList<T> result = new ArrayList<T>();
         for (T record : records) {

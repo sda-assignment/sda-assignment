@@ -1,4 +1,3 @@
 todo
-- No singleton in login session
 - max aggregate function in Relation
 - After finishing, change lambda functions to classes

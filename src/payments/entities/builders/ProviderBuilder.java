@@ -9,6 +9,6 @@ public class ProviderBuilder implements EntityBuilder<Provider> {
     public Provider fromString(String provider) {
         String[] splitted = provider.split(":");
         return new Provider(splitted[0], splitted[1], ProviderSocketName.valueOf(splitted[2]),
-                Util.stringIsTrue(splitted[3]));
+                Util.stringToBoolean(splitted[3]));
     }
 }

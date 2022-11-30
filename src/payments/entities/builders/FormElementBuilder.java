@@ -9,6 +9,6 @@ public class FormElementBuilder implements EntityBuilder<FormElement> {
     public FormElement fromString(String formElement) {
         String[] splitted = formElement.split(":");
         return new FormElement(splitted[0], splitted[1], splitted[2], FormElementType.valueOf(splitted[3]), splitted[4],
-                Util.stringIsTrue(splitted[5]));
+                Util.stringToBoolean(splitted[5]));
     }
 }

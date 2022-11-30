@@ -7,7 +7,7 @@ import payments.entities.User;
 public class UserBuilder implements EntityBuilder<User> {
     public User fromString(String user) {
         String[] splitted = user.split(":");
-        return new User(splitted[0], splitted[1], splitted[2], Util.stringIsTrue(splitted[3]),
+        return new User(splitted[0], splitted[1], splitted[2], Util.stringToBoolean(splitted[3]),
                 Double.parseDouble(splitted[4]));
     }
 }

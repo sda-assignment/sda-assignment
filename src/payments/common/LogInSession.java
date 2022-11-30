@@ -3,21 +3,17 @@ package payments.common;
 import payments.entities.User;
 
 public class LogInSession {
-    private static LogInSession instance;
-    public User LoggedInUser;
+    private User loggedInUser;
 
-    private LogInSession() {
-        LoggedInUser = null;
+    public LogInSession() {
+        this.loggedInUser = null;
     }
 
-    public static LogInSession getInstance() {
-        if (instance == null) {
-            instance = new LogInSession();
-        }
-        return instance;
+    public void setLoggedInUser(User user) {
+        loggedInUser = user;
     }
 
-    public void setInstance(User LoggedInUser) {
-        this.LoggedInUser = LoggedInUser;
+    public User getLoggedInUser() {
+        return loggedInUser;
     }
 }

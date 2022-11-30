@@ -12,8 +12,8 @@ public class UserController {
         this.relation = relation;
     }
 
-    public Response AddAdmin(String email) throws EntitySaveException {
-        relation.update(u -> new User(u.email, u.username, u.password, true, u.wallet), u -> u.email == email);
+    public Response addAdmin(String email) throws EntitySaveException {
+        relation.update(u -> new User(u.email, u.username, u.password, true, u.wallet), u -> u.email.equals(email));
         return new Response(true, email + "is an admin now");
     }
 }

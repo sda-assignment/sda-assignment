@@ -28,7 +28,7 @@ public class AuthController {
         }
 
         else {
-            return new Response(false, "User already exists");
+            return new Response(false, "This email is already taken");
         }
     }
 

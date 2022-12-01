@@ -1,5 +1,7 @@
 package payments.controllers;
 
+import java.util.ArrayList;
+
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
@@ -17,5 +19,9 @@ public class ServiceController {
             return new Response(false, "Service already exists");
         serviceRelation.insert(new Service(serviceName));
         return new Response(true, "Service added successfully");
+    }
+
+    public ArrayList<Service> getAllServices() {
+        return serviceRelation.select(s -> true);
     }
 }

@@ -21,4 +21,8 @@ public class ProviderController {
         return providerRelation.select(
                 p -> p.serviceName.contains(serviceNameAndProviderName) || p.name.contains(serviceNameAndProviderName));
     }
+
+    public ArrayList<Provider> getProvidersForService(String serviceName) {
+        return providerRelation.select(p -> p.serviceName.equals(serviceName));
+    }
 }

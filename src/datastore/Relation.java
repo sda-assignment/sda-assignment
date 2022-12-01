@@ -84,12 +84,15 @@ public class Relation<T extends Entity> {
         return result.size() > 0;
     }
 
-    public void update(RecordUpdate<T> updater, RecordFilter<T> filter) throws EntitySaveException {
+    public ArrayList<T> update(RecordUpdate<T> updater, RecordFilter<T> filter) throws EntitySaveException {
+        ArrayList<T> result = new ArrayList<T>();
         for (int i = 0; i < records.size(); i++) {
             if (filter.apply(records.get(i))) {
                 records.set(i, updater.apply(records.get(i)));
+                result.add(records.get(i));
             }
         }
         save();
+        return result;
     }
 }

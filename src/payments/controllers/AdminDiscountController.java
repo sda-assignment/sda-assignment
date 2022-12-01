@@ -1,7 +1,7 @@
 package payments.controllers;
 
 import datastore.exceptions.EntitySaveException;
-
+import payments.Util;
 import payments.entities.Discount;
 import payments.entities.enums.DiscountType;
 import datastore.Relation;
@@ -15,9 +15,7 @@ public class AdminDiscountController {
 
     public void addDiscount(DiscountType discountType, String serviceName, double percentage)
             throws EntitySaveException {
-        Integer id = relation.selectMax(d -> d.id);
-        if (id == null) id = 0;
-        else id++;
+        Integer id = Util.incrementOrInitialize(relation.selectMax(d -> d.id));
         relation.insert(new Discount(id, discountType, percentage));
     }
 

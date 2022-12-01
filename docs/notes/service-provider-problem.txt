@@ -24,6 +24,6 @@ Problem
 All services search must include the provider's name as well
 Solution: make it a providers search directly
 All services list must categorize the service into different providers
-Solution: use a join
+Solution: loop over the services in the View and for each service use getProvidersForService in the providers controller
 
 ========================================================

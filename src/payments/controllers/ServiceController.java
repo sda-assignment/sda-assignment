@@ -15,7 +15,7 @@ public class ServiceController {
     }
 
     public Response addService(String serviceName) throws EntitySaveException {
-        if (serviceRelation.entityExists(s -> s.name.equals(serviceName)))
+        if (serviceRelation.recordExists(s -> s.name.equals(serviceName)))
             return new Response(false, "Service already exists");
         serviceRelation.insert(new Service(serviceName));
         return new Response(true, "Service added successfully");

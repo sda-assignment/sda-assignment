@@ -18,7 +18,7 @@ public class AuthController {
     }
 
     public Response signUp(String email, String userName, String password) throws EntitySaveException {
-        if (relation.entityExists(u -> u.email.equals(email)))
+        if (relation.recordExists(u -> u.email.equals(email)))
             return new Response(false, "This email is already associated with an account");
         relation.insert(new User(email, userName, password, false, 0));
         logInSession.setLoggedInUser((new User(email, userName, password, false, 0)));

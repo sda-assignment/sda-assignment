@@ -11,7 +11,7 @@ public class ProviderController {
     private Relation<Provider> providerRelation;
 
     public Response addProvider(String serviceName, String name, boolean cashOnDelivery) throws EntitySaveException {
-        if (providerRelation.entityExists(p -> p.serviceName.equals(serviceName) && p.name.equals(name)))
+        if (providerRelation.recordExists(p -> p.serviceName.equals(serviceName) && p.name.equals(name)))
             return new Response(false, "The provider already exists");
         providerRelation.insert(new Provider(serviceName, name, cashOnDelivery));
         return new Response(true, "Provider created successfully");

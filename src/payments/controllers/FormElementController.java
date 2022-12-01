@@ -12,10 +12,10 @@ public class FormElementController {
     public Response addFormElement(String name, String serviceName, String providerName, FormElementType type,
             String info,
             boolean hasDeductionAmount) throws EntitySaveException {
-        if (formElementRelation.entityExists(
+        if (formElementRelation.recordExists(
                 fe -> fe.name.equals(name) && fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName)))
             return new Response(false, "This form element already exists");
-        if (hasDeductionAmount && formElementRelation.entityExists(
+        if (hasDeductionAmount && formElementRelation.recordExists(
                 fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName) && fe.hasDeductionAmount))
             return new Response(false, "Only one form element can have the deduction amount");
         formElementRelation

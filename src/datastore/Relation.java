@@ -79,7 +79,7 @@ public class Relation<T extends Entity> {
         return result;
     }
 
-    public boolean entityExists(RecordFilter<T> filter) {
+    public boolean recordExists(RecordFilter<T> filter) {
         ArrayList<T> result = select(filter);
         return result.size() > 0;
     }

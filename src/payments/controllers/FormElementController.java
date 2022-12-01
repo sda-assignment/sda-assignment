@@ -13,10 +13,10 @@ public class FormElementController {
             String info,
             boolean hasDeductionAmount) throws EntitySaveException {
         if (formElementRelation.entityExists(
-                fe -> fe.name == name && fe.serviceName == serviceName && fe.providerName == providerName))
+                fe -> fe.name.equals(name) && fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName)))
             return new Response(false, "This form element already exists");
         if (hasDeductionAmount && formElementRelation.entityExists(
-                fe -> fe.serviceName == serviceName && fe.providerName == providerName && fe.hasDeductionAmount))
+                fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName) && fe.hasDeductionAmount))
             return new Response(false, "Only one form element can have the deduction amount");
         formElementRelation
                 .insert(new FormElement(name, serviceName, providerName, type, info, hasDeductionAmount));

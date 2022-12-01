@@ -19,7 +19,7 @@ public class UserDiscountController {
 
     public ArrayList<Discount> getDiscounts(String userEmail) {
         ArrayList<Discount> allDiscounts = discountRelation.select(d -> true);
-        Collection<UsedDiscount> usedDiscounts = usedDiscountRelation.select(d -> d.email == userEmail);
+        Collection<UsedDiscount> usedDiscounts = usedDiscountRelation.select(d -> d.email.equals(userEmail));
         Set<Integer> usedDiscountsIds = new HashSet<Integer>();
         for (UsedDiscount d : usedDiscounts) {
             usedDiscountsIds.add(d.discountId);

@@ -30,7 +30,7 @@ public class AdminRefundController {
         ArrayList<RefundRequest> targetRefund = refundRelation.select(r -> r.id == rid);
         userRelation.update(
                 u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + targetRefund.get(0).amount),
-                u -> u.email == targetRefund.get(0).userEmail);
+                u -> u.email.equals(targetRefund.get(0).userEmail));
         return new Response(true, "Refund accepted, returning funds to wallet");
     }
 

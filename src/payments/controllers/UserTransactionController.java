@@ -3,7 +3,6 @@ package payments.controllers;
 import java.util.ArrayList;
 
 import datastore.Relation;
-import payments.common.LogInSession;
 import payments.entities.Transaction;
 
 public class UserTransactionController {

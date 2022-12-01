@@ -1,4 +1,4 @@
-package payments.handlers;
+package common;
 
 public enum HandlerName {
 

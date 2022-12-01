@@ -2,8 +2,7 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import payments.common.LogInSession;
-import payments.common.Response;
+import common.Response;
 import datastore.exceptions.EntitySaveException;
 import payments.entities.User;
 import datastore.Relation;

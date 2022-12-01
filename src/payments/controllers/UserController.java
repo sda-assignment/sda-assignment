@@ -1,7 +1,7 @@
 package payments.controllers;
 
-import payments.common.Response;
 import payments.entities.User;
+import common.Response;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 

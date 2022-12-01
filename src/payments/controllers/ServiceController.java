@@ -2,9 +2,9 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
+import common.Response;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
-import payments.common.Response;
 import payments.entities.Service;
 
 public class ServiceController {

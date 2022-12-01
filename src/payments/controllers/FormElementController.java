@@ -1,8 +1,8 @@
 package payments.controllers;
 
+import common.Response;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
-import payments.common.Response;
 import payments.entities.FormElement;
 import payments.entities.enums.FormElementType;
 

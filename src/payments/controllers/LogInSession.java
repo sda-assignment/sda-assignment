@@ -1,4 +1,4 @@
-package payments.common;
+package payments.controllers;
 
 import payments.entities.User;
 

@@ -1,10 +1,9 @@
 package payments.controllers;
 
+import common.Response;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.Util;
-import payments.common.LogInSession;
-import payments.common.Response;
 import payments.entities.RefundRequest;
 import payments.entities.enums.RefundRequestStatus;
 

@@ -1,4 +1,4 @@
-package payments.common;
+package common;
 
 public class Response {
     public final boolean success;

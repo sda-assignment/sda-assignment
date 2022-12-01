@@ -9,10 +9,10 @@ import payments.entities.Transaction;
 import datastore.Relation;
 import payments.entities.User;
 
-public class AdminRefundView {
+public class AdminRefundBoundary {
     private AdminRefundController aRefund;
 
-    public AdminRefundView(Relation<RefundRequest> refundRelation, Relation<User> userRelation,
+    public AdminRefundBoundary(Relation<RefundRequest> refundRelation, Relation<User> userRelation,
             Relation<Transaction> transactionRelation) {
         this.aRefund = new AdminRefundController(refundRelation, userRelation, transactionRelation);
     }

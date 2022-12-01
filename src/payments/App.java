@@ -9,7 +9,7 @@ import payments.entities.User;
 import payments.entities.builders.RefundRequestBuilder;
 import payments.entities.builders.TransactionBuilder;
 import payments.entities.builders.UserBuilder;
-import payments.boundaries.AdminRefundView;
+import payments.boundaries.AdminRefundBoundary;
 
 public class App {
     public static void main(String[] args) throws EntityLoadException, EntitySaveException {
@@ -39,7 +39,7 @@ public class App {
         // refundRelation.insert(new RefundRequest(1, 1, RefundRequestStatus.PENDING, "ahmedwaelwanas@gmail.com"));
         // refundRelation.insert(new RefundRequest(2, 2, RefundRequestStatus.PENDING, "waelwanas@gmail.com"));
 
-        AdminRefundView adminView = new AdminRefundView(refundRelation, userRelation, transactionRelation);
+        AdminRefundBoundary adminView = new AdminRefundBoundary(refundRelation, userRelation, transactionRelation);
 
         adminView.displayRequests();
     }

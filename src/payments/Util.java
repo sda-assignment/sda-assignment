@@ -10,4 +10,13 @@ public class Util {
             return 0;
         return integer++;
     }
+
+    public static String separateWithColons(Object[] objs) {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < objs.length - 1; ++i) {
+            str.append(objs[i].toString() + ":");
+        }
+        str.append(objs[objs.length - 1]);
+        return str.toString();
+    }
 }

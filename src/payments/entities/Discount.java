@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 import payments.entities.enums.DiscountType;
 
 public class Discount implements Entity {
@@ -12,10 +13,9 @@ public class Discount implements Entity {
         this.id = id;
         this.type = type;
         this.percentage = percentage;
-
     }
 
     public String storify() {
-        return id + ":" + type + ":" +  percentage;
+        return Util.separateWithColons(new Object[] {id, type,  percentage});
     }
 }

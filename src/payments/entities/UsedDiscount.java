@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 
 public class UsedDiscount implements Entity {
     public final String email;
@@ -12,6 +13,6 @@ public class UsedDiscount implements Entity {
     }
 
     public String storify() {
-        return email + ":" + discountId;
+        return Util.separateWithColons(new Object[] {email, discountId});
     }
 }

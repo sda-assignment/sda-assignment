@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 
 public class User implements Entity {
     public final String email;
@@ -18,6 +19,6 @@ public class User implements Entity {
     }
 
     public String storify() {
-        return email + ":" + username + ":" + password + ":" + isAdmin + ":" + wallet;
+        return Util.separateWithColons(new Object[] {email, username, password, isAdmin, wallet});
     }
 }

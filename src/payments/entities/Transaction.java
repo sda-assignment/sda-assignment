@@ -3,6 +3,7 @@ package payments.entities;
 import java.time.LocalDateTime;
 
 import datastore.Entity;
+import payments.Util;
 import payments.entities.enums.TransactionType;
 
 public class Transaction implements Entity {
@@ -21,6 +22,6 @@ public class Transaction implements Entity {
     }
 
     public String storify() {
-        return id + ":" + userEmail + ":" + timestamp.toString() + ":" + amount + ":" + type;
+        return Util.separateWithColons(new Object[] {id, userEmail, timestamp.toString(), amount, type});
     }
 }

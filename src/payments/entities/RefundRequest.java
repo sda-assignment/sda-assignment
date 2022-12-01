@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 import payments.entities.enums.RefundRequestStatus;
 
 public class RefundRequest implements Entity {
@@ -17,6 +18,6 @@ public class RefundRequest implements Entity {
     }
 
     public String storify() {
-        return id + ":" + transactionId + ":" + status + ":" + userEmail;
+        return Util.separateWithColons(new Object[] {id, transactionId, status, userEmail});
     }
 }

@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 
 public class SpecificDiscount implements Entity {
     public final int discountId;
@@ -14,6 +15,6 @@ public class SpecificDiscount implements Entity {
     }
 
     public String storify() {
-        return discountId + ":" + serviceName + ":" + providerName;
+        return Util.separateWithColons(new Object[] {discountId, serviceName, providerName});
     }
 }

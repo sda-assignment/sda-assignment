@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 
 public class Provider implements Entity {
     public final String serviceName;
@@ -14,6 +15,6 @@ public class Provider implements Entity {
     }
 
     public String storify() {
-        return serviceName + ":" + name + ":" + cashOnDelivery;
+        return Util.separateWithColons(new Object[] {serviceName, name, cashOnDelivery});
     }
 }

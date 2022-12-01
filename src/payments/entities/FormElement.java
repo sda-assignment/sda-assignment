@@ -1,6 +1,7 @@
 package payments.entities;
 
 import datastore.Entity;
+import payments.Util;
 import payments.entities.enums.FormElementType;
 
 public class FormElement implements Entity {
@@ -19,6 +20,6 @@ public class FormElement implements Entity {
     }
 
     public String storify() {
-        return name + ":" + serviceName + ":" + providerName + ":" + type + ":" + info;
+        return Util.separateWithColons(new Object[] {name, serviceName, providerName, type, info});
     }
 }

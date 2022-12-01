@@ -1,0 +1,17 @@
+package payments.controllers;
+
+import datastore.Relation;
+import datastore.exceptions.EntitySaveException;
+import payments.common.Response;
+import payments.entities.Provider;
+
+public class ProviderController {
+    private Relation<Provider> providerRelation;
+
+    public Response addProvider(String serviceName, String name, boolean cashOnDelivery) throws EntitySaveException {
+        if (providerRelation.entityExists(p -> p.serviceName == serviceName && p.name == name))
+            return new Response(false, "The provider already exists");
+        providerRelation.insert(new Provider(serviceName, name, cashOnDelivery));
+        return new Response(true, "Provider created successfully");
+    }
+}

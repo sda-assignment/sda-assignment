@@ -69,14 +69,19 @@ public class Relation<T extends Entity> {
         return max;
     }
 
-    public ArrayList<T> select(RecordFilter<T> selection) {
+    public ArrayList<T> select(RecordFilter<T> filter) {
         ArrayList<T> result = new ArrayList<T>();
         for (T record : records) {
-            if (selection.apply(record)) {
+            if (filter.apply(record)) {
                 result.add(record);
             }
         }
         return result;
+    }
+
+    public boolean entityExists(RecordFilter<T> filter) {
+        ArrayList<T> result = select(filter);
+        return result.size() > 0;
     }
 
     public void update(RecordUpdate<T> updater, RecordFilter<T> filter) throws EntitySaveException {

@@ -44,16 +44,10 @@ public class UserTransactionController {
 
     // utility function
     private Response walletPaymentValidation(double amount, String serviceName) {
-
         User current = session.getLoggedInUser();
 
         if (current.wallet < amount) {
             return new Response(false, "Failed to perform payment: Not enough balance in wallet \n");
-        }
-
-        ArrayList<Service> array = service.select(s -> s.name.equals(serviceName));
-        if (array.size() == 0) {
-            return new Response(false, "Failed to perform payment: No such service name exists \n");
         }
 
         return new Response(true, "Payment details are valid \n");
@@ -61,15 +55,9 @@ public class UserTransactionController {
 
     // utility function
     private Response creditCardPaymentValidation(double amount, String serviceName, String creditCard) {
-
         if (creditCard.length() != 12) {
             return new Response(false,
                     "Failed to perform payment: please enter a valid credit card number (must be 12 digits) \n");
-        }
-
-        ArrayList<Service> array = service.select(s -> s.name.equals(serviceName));
-        if (array.size() == 0) {
-            return new Response(false, "Failed to perform payment: No such service name exists \n");
         }
 
         return new Response(true, "Payment details are valid \n");
@@ -112,7 +100,6 @@ public class UserTransactionController {
     }
 
     public Response refundRequest(double amount, String ServiceName) throws EntitySaveException {
-
         User current = session.getLoggedInUser();
         int id = refundRequest.selectMax(r -> r.id);
 
@@ -139,7 +126,6 @@ public class UserTransactionController {
     }
 
     public ArrayList<Transaction> getTransactionHistory() {
-
         User current = session.getLoggedInUser();
         return transaction.select(t -> t.email.equals(current.email));
 

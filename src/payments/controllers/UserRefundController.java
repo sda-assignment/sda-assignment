@@ -16,12 +16,12 @@ public class UserRefundController {
         this.logInSession = logInSession;
     }
 
-    public Response requestRefund(int transactionId) throws EntitySaveException {
+    public Response<String> requestRefund(int transactionId) throws EntitySaveException {
         if (refundRequestRelation.recordExists(r -> r.transactionId == transactionId))
-            return new Response(false, "You already have a refund request on this transaction");
+            return new Response<String>(false, "You already have a refund request on this transaction");
         refundRequestRelation.insert(new RefundRequest(
                 Util.incrementOrInitialize(refundRequestRelation.selectMax(r -> r.id)),
                 transactionId, RefundRequestStatus.PENDING, logInSession.getLoggedInUser().email));
-        return new Response(true, "Refund requested");
+        return new Response<String>(true, "Refund requested");
     }
 }

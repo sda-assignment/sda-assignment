@@ -14,11 +14,11 @@ public class ServiceController {
         this.serviceRelation = serviceRelation;
     }
 
-    public Response addService(String serviceName) throws EntitySaveException {
+    public Response<String> addService(String serviceName) throws EntitySaveException {
         if (serviceRelation.recordExists(s -> s.name.equals(serviceName)))
-            return new Response(false, "Service already exists");
+            return new Response<String>(false, "Service already exists");
         serviceRelation.insert(new Service(serviceName));
-        return new Response(true, "Service added successfully");
+        return new Response<String>(true, "Service added successfully");
     }
 
     public ArrayList<Service> getAllServices() {

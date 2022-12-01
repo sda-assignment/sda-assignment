@@ -16,26 +16,26 @@ public class AuthController {
         this.logInSession = logInSession;
     }
 
-    public Response signUp(String email, String userName, String password) throws EntitySaveException {
+    public Response<String> signUp(String email, String userName, String password) throws EntitySaveException {
         if (relation.recordExists(u -> u.email.equals(email)))
-            return new Response(false, "This email is already associated with an account");
+            return new Response<String>(false, "This email is already associated with an account");
         relation.insert(new User(email, userName, password, false, 0));
         logInSession.setLoggedInUser((new User(email, userName, password, false, 0)));
 
-        return new Response(true, "Signed up successfully");
+        return new Response<String>(true, "Signed up successfully");
     }
 
-    public Response logIn(String email, String password) {
+    public Response<String> logIn(String email, String password) {
         ArrayList<User> users = relation.select(u -> u.email.equals(email) && u.password.equals(password));
         if (users.size() >= 0) {
             logInSession.setLoggedInUser(users.get(0));
-            return new Response(true, "Logged in Successfully");
+            return new Response<String>(true, "Logged in Successfully");
         }
-        return new Response(false, "Incorrect username or password");
+        return new Response<String>(false, "Incorrect username or password");
     }
 
-    public Response logOut() {
+    public Response<String> logOut() {
         logInSession.setLoggedInUser(null);
-        return new Response(true, null);
+        return new Response<String>(true, null);
     }
 }

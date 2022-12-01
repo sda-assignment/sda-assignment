@@ -1,11 +1,11 @@
 package common;
 
-public class Response {
+public class Response<T> {
     public final boolean success;
-    public final String status;
+    public final T value;
 
-    public Response(boolean success, String status) {
+    public Response(boolean success, T status) {
         this.success = success;
-        this.status = status;
+        this.value = status;
     }
 }

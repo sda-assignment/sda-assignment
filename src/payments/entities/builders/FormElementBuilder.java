@@ -1,7 +1,6 @@
 package payments.entities.builders;
 
 import datastore.EntityBuilder;
-import payments.Util;
 import payments.entities.FormElement;
 import payments.entities.enums.FormElementType;
 
@@ -10,7 +9,6 @@ public class FormElementBuilder implements EntityBuilder<FormElement> {
         String[] splitted = formElement.split(":");
         int i = 0;
         return new FormElement(splitted[i++], splitted[i++], splitted[i++], FormElementType.valueOf(splitted[i++]),
-                splitted[i++],
-                Util.stringToBoolean(splitted[i++]));
+                splitted[i++]);
     }
 }

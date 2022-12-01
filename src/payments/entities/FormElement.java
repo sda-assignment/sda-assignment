@@ -9,19 +9,16 @@ public class FormElement implements Entity {
     public final String providerName;
     public final FormElementType type;
     public final String info;
-    public final boolean hasDeductionAmount;
 
-    public FormElement(String name, String serviceName, String providerName, FormElementType type, String info,
-            boolean hasDeductionAmount) {
+    public FormElement(String name, String serviceName, String providerName, FormElementType type, String info) {
         this.name = name;
         this.serviceName = serviceName;
         this.providerName = providerName;
         this.type = type;
         this.info = info;
-        this.hasDeductionAmount = hasDeductionAmount;
     }
 
     public String storify() {
-        return name + ":" + serviceName + ":" + providerName + ":" + type + ":" + info + ":" + hasDeductionAmount;
+        return name + ":" + serviceName + ":" + providerName + ":" + type + ":" + info;
     }
 }

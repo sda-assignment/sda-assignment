@@ -8,9 +8,9 @@ todo
 2) add service provider controller with function : (done)
    - create Service Provider () -> adds sp to the sp file
    - create form element ()-> creates one form element , called in a loop in ui, adds to form element file
-3) user transaction controller -> all payment transactions need to account for discounts
+3) user transaction controller -> all payment transactions need to account for discounts (done)
    -> search for eligible discounts to the current transaction and apply it
    -> delegate adding used discount to Useddiscounts file to the discount controller
    -> aggregate with the discount controller
-4) change rechargeService -> payForService 
-5) add payment method functions in the user transaction controller into as separate functions 
+4) change rechargeService -> payForService (done)
+5) add payment method functions in the user transaction controller into as separate functions (done)

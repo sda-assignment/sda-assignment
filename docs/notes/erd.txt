@@ -24,6 +24,7 @@ Provider
 - serviceName (PK) (Ex: Recharge)
 - providerName: string (PK) (Ex: Etisalat)
 - cashOnDelivery: boolean
+- handlerName: enum
 
 FormElement
 - name (PK) (what is sent to the provider server is going to be {name: info}, for example {"phone": "+201239813232"})

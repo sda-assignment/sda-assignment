@@ -19,6 +19,6 @@ public class User implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {email, username, password, isAdmin, wallet});
+        return Util.separateWithColons(new Object[] { email, username, password, isAdmin, wallet });
     }
 }

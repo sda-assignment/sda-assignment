@@ -15,6 +15,6 @@ public class SpecificDiscount implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {discountId, serviceName, providerName});
+        return Util.separateWithColons(new Object[] { discountId, serviceName, providerName });
     }
 }

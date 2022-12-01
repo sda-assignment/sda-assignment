@@ -15,6 +15,6 @@ public class ServiceProviderTransaction implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {transactionId, serviceName, providerName});
+        return Util.separateWithColons(new Object[] { transactionId, serviceName, providerName });
     }
 }

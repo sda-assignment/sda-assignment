@@ -13,6 +13,6 @@ public class UsedDiscount implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {email, discountId});
+        return Util.separateWithColons(new Object[] { email, discountId });
     }
 }

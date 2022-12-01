@@ -20,6 +20,6 @@ public class FormElement implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {name, serviceName, providerName, type, info});
+        return Util.separateWithColons(new Object[] { name, serviceName, providerName, type, info });
     }
 }

@@ -16,6 +16,6 @@ public class Discount implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {id, type,  percentage});
+        return Util.separateWithColons(new Object[] { id, type, percentage });
     }
 }

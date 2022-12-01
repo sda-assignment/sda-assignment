@@ -18,6 +18,6 @@ public class RefundRequest implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {id, transactionId, status, userEmail});
+        return Util.separateWithColons(new Object[] { id, transactionId, status, userEmail });
     }
 }

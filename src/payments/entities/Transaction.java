@@ -22,6 +22,6 @@ public class Transaction implements Entity {
     }
 
     public String storify() {
-        return Util.separateWithColons(new Object[] {id, userEmail, timestamp.toString(), amount, type});
+        return Util.separateWithColons(new Object[] { id, userEmail, timestamp.toString(), amount, type });
     }
 }

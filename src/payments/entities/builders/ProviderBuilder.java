@@ -2,7 +2,7 @@ package payments.entities.builders;
 
 import datastore.EntityBuilder;
 import payments.entities.Provider;
-import payments.entities.enums.HandlerName;
+import payments.handlers.HandlerName;
 import payments.Util;
 
 public class ProviderBuilder implements EntityBuilder<Provider> {

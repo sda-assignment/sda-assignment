@@ -2,7 +2,7 @@ package payments.entities;
 
 import datastore.Entity;
 import payments.Util;
-import payments.entities.enums.HandlerName;
+import payments.handlers.HandlerName;
 
 public class Provider implements Entity {
     public final String serviceName;

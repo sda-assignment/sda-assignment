@@ -1,1 +1,4 @@
-- Use proxy on the top of authorized controllers to ensure that the user is an admin
+Notes
+- Handler uses TEmplate method pattern
+- Relation (update, select, selectMax) uses Strategy pattern
+- Relation uses Builder pattern

@@ -6,7 +6,7 @@ import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
 import payments.entities.Provider;
-import payments.entities.enums.HandlerName;
+import payments.handlers.HandlerName;
 
 public class ProviderController {
     private Relation<Provider> providerRelation;

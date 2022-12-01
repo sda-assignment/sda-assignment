@@ -1,4 +1,4 @@
 Notes
-- Handler uses TEmplate method pattern
+- Handler uses Template method pattern
 - Relation (update, select, selectMax) uses Strategy pattern
-- Relation uses Builder pattern
+- EntityBuilder uses Builder pattern

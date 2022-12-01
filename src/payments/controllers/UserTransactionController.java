@@ -49,8 +49,7 @@ public class UserTransactionController {
     public Response refundRequest(double amount, String ServiceName) throws EntitySaveException {
 
         User current = session.getLoggedInUser();
-        ArrayList<RefundRequest> array = refundRequest.select(r -> true);
-        int id = array.get(array.size() - 1).id;
+        int id = refundRequest.selectMax(r -> r.id);
 
         refundRequest
                 .insert(new RefundRequest(id + 1, amount, ServiceName, RefundRequestStatus.PENDING, current.email));

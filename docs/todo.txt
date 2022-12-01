@@ -4,8 +4,8 @@ todo
 
 ------------
 
-1) encapsulate getting the id of the refund request in its entity class 
-2) add service provider controller with function :
+1) encapsulate getting the id of the refund request in its entity class (done)
+2) add service provider controller with function : (done)
    - create Service Provider () -> adds sp to the sp file
    - create form element ()-> creates one form element , called in a loop in ui, adds to form element file
 3) user transaction controller -> all payment transactions need to account for discounts

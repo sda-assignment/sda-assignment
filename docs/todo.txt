@@ -14,3 +14,5 @@ todo
    -> aggregate with the discount controller
 4) change rechargeService -> payForService (done)
 5) add payment method functions in the user transaction controller into as separate functions (done)
+6) service provider controller needs fix on the " has deduction condition" 
+7) change all inputs to updates and inserts to storifiy() ??

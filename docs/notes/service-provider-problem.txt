@@ -1,0 +1,20 @@
+Problem
+Services are dynamically added
+Providers are statically added
+User needs to choose a certain service and a certain provider
+Service selection is done through a service relation
+
+Solution: keep the provider an entity as well
+In the controller, send the user's request through a bus
+The providers listen to this bus for their socket name
+They send the response (will be the amount to deduce) back to the bus
+
+========================================
+
+Problem
+All services search must include the provider's name as well
+Solution: make it a providers search directly
+All services list must categorize the service into different providers
+Solution: use a join
+
+========================================================

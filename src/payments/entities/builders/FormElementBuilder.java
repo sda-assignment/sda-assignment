@@ -8,7 +8,9 @@ import payments.entities.enums.FormElementType;
 public class FormElementBuilder implements EntityBuilder<FormElement> {
     public FormElement fromString(String formElement) {
         String[] splitted = formElement.split(":");
-        return new FormElement(splitted[0], splitted[1], splitted[2], FormElementType.valueOf(splitted[3]), splitted[4],
-                Util.stringToBoolean(splitted[5]));
+        int i = 0;
+        return new FormElement(splitted[i++], splitted[i++], splitted[i++], FormElementType.valueOf(splitted[i++]),
+                splitted[i++],
+                Util.stringToBoolean(splitted[i++]));
     }
 }

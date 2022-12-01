@@ -6,6 +6,7 @@ import payments.entities.UsedDiscount;
 public class UsedDiscountBuilder implements EntityBuilder<UsedDiscount> {
     public UsedDiscount fromString(String usedDiscount) {
         String[] splitted = usedDiscount.split(":");
-        return new UsedDiscount(splitted[0], Integer.parseInt(splitted[1]));
+        int i = 0;
+        return new UsedDiscount(splitted[i++], Integer.parseInt(splitted[i++]));
     }
 }

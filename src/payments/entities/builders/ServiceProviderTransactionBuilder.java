@@ -6,6 +6,7 @@ import payments.entities.ServiceProviderTransaction;
 public class ServiceProviderTransactionBuilder implements EntityBuilder<ServiceProviderTransaction> {
     public ServiceProviderTransaction fromString(String serviceProviderTransaction) {
         String[] splitted = serviceProviderTransaction.split(":");
-        return new ServiceProviderTransaction(Integer.parseInt(splitted[0]), splitted[1], splitted[2]);
+        int i = 0;
+        return new ServiceProviderTransaction(Integer.parseInt(splitted[i++]), splitted[i++], splitted[i++]);
     }
 }

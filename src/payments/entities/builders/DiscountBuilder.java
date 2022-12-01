@@ -7,7 +7,8 @@ import payments.entities.enums.DiscountType;
 public class DiscountBuilder implements EntityBuilder<Discount> {
     public Discount fromString(String discount) {
         String[] splitted = discount.split(":");
-        return new Discount(Integer.parseInt(splitted[0]), DiscountType.valueOf(splitted[1]),
-                Double.parseDouble(splitted[2]));
+        int i = 0;
+        return new Discount(Integer.parseInt(splitted[i++]), DiscountType.valueOf(splitted[i++]),
+                Double.parseDouble(splitted[i++]));
     }
 }

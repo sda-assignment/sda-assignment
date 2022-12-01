@@ -7,8 +7,9 @@ import payments.entities.enums.RefundRequestStatus;
 public class RefundRequestBuilder implements EntityBuilder<RefundRequest> {
     public RefundRequest fromString(String refundRequest) {
         String[] splitted = refundRequest.split(":");
-        return new RefundRequest(Integer.parseInt(splitted[0]), Double.parseDouble(splitted[1]),
-                Integer.parseInt(splitted[2]),
-                RefundRequestStatus.valueOf(splitted[3]), splitted[4]);
+        int i = 0;
+        return new RefundRequest(Integer.parseInt(splitted[i++]), Double.parseDouble(splitted[i++]),
+                Integer.parseInt(splitted[i++]),
+                RefundRequestStatus.valueOf(splitted[i++]), splitted[i++]);
     }
 }

@@ -29,16 +29,19 @@ public class App {
         userRelation.update(u -> new User(u.email, "aloka", u.password, u.isAdmin, u.wallet),
                 u -> u.username.equals("ali"));
 
-
-        Relation<RefundRequest> refundRelation = new Relation<RefundRequest>("refundRequests" , new RefundRequestBuilder());
-        refundRelation.insert(new RefundRequest(0, 0, 2 , RefundRequestStatus.PENDING, "ahmedwanas@gmail.com"));
-        refundRelation.insert(new RefundRequest(1, 110, 1 , RefundRequestStatus.PENDING, "ahmedwaelwanas@gmail.com"));
-        refundRelation.insert(new RefundRequest(2, 2132130, 0 , RefundRequestStatus.PENDING, "waelwanas@gmail.com"));
-
         Relation<Transaction> transactionRelation = new Relation<Transaction>("transactions", new TransactionBuilder());
-        transactionRelation.insert(new Transaction(0, "waelwanas@gmail.com", LocalDateTime.now(), 0, TransactionType.REFUND));
-        transactionRelation.insert(new Transaction(1, "ahmedwaelwanas@gmail.com", LocalDateTime.now(), 110, TransactionType.REFUND));
-        transactionRelation.insert(new Transaction(2, "ahmedwanas@gmail.com", LocalDateTime.now(), 2132130, TransactionType.REFUND));
+        transactionRelation
+                .insert(new Transaction(0, "waelwanas@gmail.com", LocalDateTime.now(), 0, TransactionType.REFUND));
+        transactionRelation.insert(
+                new Transaction(1, "ahmedwaelwanas@gmail.com", LocalDateTime.now(), 110, TransactionType.REFUND));
+        transactionRelation.insert(
+                new Transaction(2, "ahmedwanas@gmail.com", LocalDateTime.now(), 2132130, TransactionType.REFUND));
+
+        Relation<RefundRequest> refundRelation = new Relation<RefundRequest>("refundRequests",
+                new RefundRequestBuilder());
+        refundRelation.insert(new RefundRequest(0, 0, RefundRequestStatus.PENDING, "ahmedwanas@gmail.com"));
+        refundRelation.insert(new RefundRequest(1, 1, RefundRequestStatus.PENDING, "ahmedwaelwanas@gmail.com"));
+        refundRelation.insert(new RefundRequest(2, 2, RefundRequestStatus.PENDING, "waelwanas@gmail.com"));
 
         AdminRefundView adminView = new AdminRefundView(refundRelation, userRelation, transactionRelation);
 

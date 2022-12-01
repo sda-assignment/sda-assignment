@@ -1,4 +1,4 @@
-pseudo code for controller classes : 
+pseudo code for controller classes :
 
 1) Authientication controller
 
@@ -32,7 +32,7 @@ public boolean SignUp(String email, String userName, String password)
 
     User newUser = new User(email, username, password, false, 0);
 
-    // Set current session info to username, email, password, isStaff  
+    // Set current session info to username, email, password, isStaff
 
 }
 
@@ -48,7 +48,7 @@ public boolean LogIn (string Email, string password)
                 // print successful sign in
                 return true;
             }
-            else 
+            else
             {
                 // print password incorrect
                 return false;
@@ -58,12 +58,12 @@ public boolean LogIn (string Email, string password)
         }
         else
         {
-            // print user does not exist 
+            // print user does not exist
             // or throw an exception
             return false;
         }
     }
-} 
+}
 
 2) User Discount Controller
 
@@ -120,7 +120,7 @@ public boolean AddServiceProvider (string serviceName, string providerName)
         return false;
         // throw exception instead if needed
     }
-} 
+}
 
 5) Refund Controller
 
@@ -143,11 +143,11 @@ public void ViewRefundRequests ()
 
 public boolean EvaluateRefund ()
 {
-    // for a certain transaction : 
+    // for a certain transaction :
     // if accepted -> addes to the user's wallet the amount in the transaction
     // and is supposed to deduct the amount from the service (might add balance to service)
     // returns true only in case of successful accepted refund
-    // else returns false if it fails to accept the refund or refund is rejected 
+    // else returns false if it fails to accept the refund or refund is rejected
     // prints exception in failure and prints rejected if refund is rejected
 }
 
@@ -186,7 +186,7 @@ public void PrintTransactionHistory (string type)
     }
 }
 
-7) User Controller 
+7) User Controller
 
 private Relation <User> relation
 
@@ -197,7 +197,7 @@ public UserDiscountController (Relation <User> relation)
 
 public boolean AddAdmin(string Email)
 {
-    // sets the is staff variable to 1 for the user that is filtered from relation.select(email) 
+    // sets the is staff variable to 1 for the user that is filtered from relation.select(email)
     // giving him admin privliges, returns 1 if successful, false if unsuccessful or not found
     // can throw exception if needed
 }
@@ -212,7 +212,7 @@ private <Services> relation4
 
 + UserTransactionController (Relation <Transaction> relation, Relation <User> relation2, Relation <RefundRequests> relation3,Relation <Services> relation4)
 {
-    
+
     this.relation1 = relation1
     this.relation2 = relation2
     this.relation3 = relation3
@@ -225,7 +225,7 @@ public boolean RechargeService (int amount,string serviceName)
     // create transaction object
     Transaction obj = new Transaction(email, LocalDateTime timestamp, amount, TransactionType type)
     relation1.insert -> obj to relation
-    //Update file 
+    //Update file
     if successful return true else false or excepetion
 }
 public void RefundRequest (double amount,string ServiceName)
@@ -246,7 +246,7 @@ public ChargeWallet (int amount,string creditCard)
         // Update file
         return true
     }
-    else 
+    else
     {
         invalid credit card details
         print error

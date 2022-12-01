@@ -7,9 +7,7 @@ import java.util.Set;
 
 import payments.entities.Discount;
 import payments.entities.UsedDiscount;
-import payments.common.Response;
 import datastore.Relation;
-import datastore.exceptions.EntitySaveException;
 
 public class UserDiscountController {
     private Relation<Discount> discountRelation;
@@ -29,26 +27,4 @@ public class UserDiscountController {
         allDiscounts.removeIf(d -> usedDiscountsIds.contains(d.id));
         return allDiscounts;
     }
-
-    public Response addUsedDiscount(Discount record) throws EntitySaveException {
-        discountRelation.insert(record);
-        return new Response(true, "Discout successfully logged to used Discounts \n");
-    }
-
-    // returns maximum discount per service
-    public Discount getMaxDiscount(String userEmail, String serviceName) {
-        ArrayList<Discount> allDiscounts = getDiscounts(userEmail);
-        Discount maxDiscount = new Discount(-1, null, userEmail, 0);
-        for (Discount d : allDiscounts) {
-            if (d.serviceName.equals(serviceName)) {
-                if (d.percentage > maxDiscount.percentage) {
-                    maxDiscount = d;
-                }
-            }
-
-        }
-        return maxDiscount;
-
-    }
-
 }

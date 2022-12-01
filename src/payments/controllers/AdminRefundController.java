@@ -24,7 +24,7 @@ public class AdminRefundController {
 
     public Response acceptRefund(int rid) throws EntitySaveException {
         refundRelation.update(
-                r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.ACCEPTED, r.userEmail),
+                r -> new RefundRequest(r.id, r.amount, r.transactionId, RefundRequestStatus.ACCEPTED, r.userEmail),
                 r -> r.id == rid);
 
         ArrayList<RefundRequest> targetRefund = refundRelation.select(r -> r.id == rid);
@@ -36,7 +36,7 @@ public class AdminRefundController {
 
     public Response rejectRefund(int rid) throws EntitySaveException {
         refundRelation.update(
-                r -> new RefundRequest(r.id, r.amount, r.serviceName, RefundRequestStatus.REJECTED, r.userEmail),
+                r -> new RefundRequest(r.id, r.amount, r.transactionId, RefundRequestStatus.REJECTED, r.userEmail),
                 r -> r.id == rid);
         return new Response(true, "Refund rejected");
     }

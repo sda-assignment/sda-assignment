@@ -6,19 +6,21 @@ import datastore.Entity;
 import payments.entities.enums.TransactionType;
 
 public class Transaction implements Entity {
-    public final String email;
+    public final int id;
+    public final String userEmail;
     public final LocalDateTime timestamp;
     public final double amount;
     public final TransactionType type;
 
-    public Transaction(String email, LocalDateTime timestamp, double amount, TransactionType type) {
-        this.email = email;
+    public Transaction(int id, String email, LocalDateTime timestamp, double amount, TransactionType type) {
+        this.id = id;
+        this.userEmail = email;
         this.timestamp = timestamp;
         this.amount = amount;
         this.type = type;
     }
 
     public String storify() {
-        return email + ":" + timestamp.toString() + ":" + amount + ":" + type;
+        return id + ":" + userEmail + ":" + timestamp.toString() + ":" + amount + ":" + type;
     }
 }

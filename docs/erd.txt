@@ -9,10 +9,16 @@ Service
 - name (PK)
 
 Transaction
+- id
 - email
 - timestamp
 - amount
 - type
+
+ServiceProviderTransaction
+- transactionId (PK, FK)
+- serviceName (FK)
+- providerName (FK)
 
 Provider
 - serviceName (PK) (Ex: Recharge)
@@ -29,19 +35,23 @@ FormElement
 (there must only be one FormElement per serviceName and providerName that his this field set to true.
 Also when set to true, the info must be an integer that is going to be deducted from the wallet)
 
+Discounts
+- id (PK)
+- type
+- percentage
+
 UsedDiscount
 - email (PK)
-- discount_id (PK)
+- discountId (PK)
 
-Discounts
-- discount_id (PK)
-- type
-- serviceName
-- percentage
+SpecificDiscount
+- discountId (pk, fk)
+- serviceName (FK)
+- providerName (FK)
 
 RefundRequest
 - id (PK)
 - amount
-- serviceName
+- transactionId
 - status
 - userEmail

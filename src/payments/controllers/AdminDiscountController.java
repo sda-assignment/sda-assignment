@@ -13,9 +13,12 @@ public class AdminDiscountController {
         this.relation = relation;
     }
 
-    public void addDiscount(int id, DiscountType discountType, String serviceName, double percentage)
+    public void addDiscount(DiscountType discountType, String serviceName, double percentage)
             throws EntitySaveException {
-        relation.insert(new Discount(id, discountType, serviceName, percentage));
+        Integer id = relation.selectMax(d -> d.id);
+        if (id == null) id = 0;
+        else id++;
+        relation.insert(new Discount(id, discountType, percentage));
     }
 
 }

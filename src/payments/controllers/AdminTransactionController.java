@@ -12,7 +12,7 @@ public class AdminTransactionController {
         this.relation = relation;
     }
 
-    public ArrayList<Transaction> printTransactionHistory() {
+    public ArrayList<Transaction> getAllTransactions() {
         return relation.select(t -> true);
     }
 }

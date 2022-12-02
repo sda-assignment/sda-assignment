@@ -1,7 +1,7 @@
 package payments.entities;
 
+import common.Util;
 import datastore.Entity;
-import payments.Util;
 import payments.entities.enums.FormElementType;
 
 public class FormElement implements Entity {

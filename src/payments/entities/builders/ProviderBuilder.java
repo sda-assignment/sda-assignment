@@ -1,9 +1,9 @@
 package payments.entities.builders;
 
 import common.HandlerName;
+import common.Util;
 import datastore.EntityBuilder;
 import payments.entities.Provider;
-import payments.Util;
 
 public class ProviderBuilder implements EntityBuilder<Provider> {
     public Provider fromString(String provider) {

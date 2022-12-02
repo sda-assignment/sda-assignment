@@ -2,8 +2,8 @@ package payments.entities;
 
 import java.time.LocalDateTime;
 
+import common.Util;
 import datastore.Entity;
-import payments.Util;
 import payments.entities.enums.TransactionType;
 
 public class Transaction implements Entity {

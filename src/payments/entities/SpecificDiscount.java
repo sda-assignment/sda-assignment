@@ -1,7 +1,7 @@
 package payments.entities;
 
+import common.Util;
 import datastore.Entity;
-import payments.Util;
 
 public class SpecificDiscount implements Entity {
     public final int discountId;

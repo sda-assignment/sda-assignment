@@ -1,5 +1,6 @@
 package payments;
 
+import common.Util;
 import datastore.Relation;
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
@@ -14,6 +15,9 @@ import payments.boundaries.AdminRefundBoundary;
 public class App {
     public static void main(String[] args) throws EntityLoadException, EntitySaveException {
         System.out.println("hello world");
+        System.out.println(Util.isPositiveFloat("123"));
+        System.out.println(Util.isPositiveFloat("-123"));
+        System.out.println(Util.isPositiveFloat("123.2"));
 
         Relation<User> userRelation = new Relation<User>("users", new UserBuilder());
         // userRelation.insert(new User("ali", "asd", "asd", false, 12.2));

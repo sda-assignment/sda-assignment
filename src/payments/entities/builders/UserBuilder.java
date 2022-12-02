@@ -1,7 +1,7 @@
 package payments.entities.builders;
 
+import common.Util;
 import datastore.EntityBuilder;
-import payments.Util;
 import payments.entities.User;
 
 public class UserBuilder implements EntityBuilder<User> {

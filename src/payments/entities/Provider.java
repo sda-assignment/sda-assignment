@@ -1,8 +1,8 @@
 package payments.entities;
 
 import common.HandlerName;
+import common.Util;
 import datastore.Entity;
-import payments.Util;
 
 public class Provider implements Entity {
     public final String serviceName;

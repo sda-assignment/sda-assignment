@@ -1,4 +1,4 @@
-package payments;
+package common;
 
 public class Util {
     public static boolean stringToBoolean(String string) {
@@ -18,5 +18,9 @@ public class Util {
         }
         str.append(objs[objs.length - 1]);
         return str.toString();
+    }
+
+    public static boolean isPositiveFloat(String string) {
+        return string.matches("[+]?[0-9]*\\.?[0-9]+");
     }
 }

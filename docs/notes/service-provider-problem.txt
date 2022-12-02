@@ -5,18 +5,10 @@ User needs to choose a certain service and a certain provider
 Service selection is done through a service relation
 
 Solution: keep the provider an entity as well
-In the controller, send the user's request through a bus
-The providers listen to this bus for their socket name
-They send the response (will be the amount to deduce) back to the bus
-There exists an overhead of having to know how to format the request in the handler
-
-Alternative solution: make both services and providers statically
-New services and providers are hard-coded
-The service providers do not belong to our payments system (need to be a separate package)
-But our system needs to know which service providers it deals with
-Also how do we search?
-
-The root of these problems is that handler functions can not be dynamically created
+In the controller, send the user's request through a proxy
+The proxy picks a handler based on the Provider's handlerName attribute
+The handler sends the response back to the proxy
+The proxy sends the response to the controller
 
 ========================================
 

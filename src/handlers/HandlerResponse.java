@@ -1,4 +1,4 @@
-package common;
+package handlers;
 
 public class HandlerResponse {
     public final boolean success;

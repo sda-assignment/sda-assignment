@@ -1,12 +1,13 @@
-package handlers;
+package handlers.concrete;
 
 import java.util.HashMap;
 
-import common.HandlerName;
-import common.HandlerResponse;
 import common.Util;
+import handlers.AbstractHandler;
+import handlers.HandlerName;
+import handlers.HandlerResponse;
 
-public class SchoolDonationHandler extends Handler {
+public class SchoolDonationHandler extends AbstractHandler {
     public HandlerName getHandlerName() {
         return HandlerName.SCHOOL_DONATION;
     }

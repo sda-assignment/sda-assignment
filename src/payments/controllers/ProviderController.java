@@ -2,9 +2,9 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import common.HandlerName;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
+import handlers.HandlerName;
 import payments.common.Response;
 import payments.entities.Provider;
 

@@ -1,14 +1,15 @@
-package handlers;
+package handlers.concrete;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import common.HandlerName;
-import common.HandlerResponse;
+import handlers.AbstractHandler;
+import handlers.HandlerName;
+import handlers.HandlerResponse;
 
-public class VodafoneInternetHandler extends Handler {
+public class VodafoneInternetHandler extends AbstractHandler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("150", "300", "700"));
 
     public HandlerName getHandlerName() {

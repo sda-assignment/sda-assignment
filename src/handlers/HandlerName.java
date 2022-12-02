@@ -1,4 +1,4 @@
-package common;
+package handlers;
 
 public enum HandlerName {
     VODAFONE_RECHARGE,
@@ -13,5 +13,7 @@ public enum HandlerName {
     MONTHLY_LANDLINE,
     NGO_DONATION,
     CANCER_HOSPITAL_DONATION,
-    SCHOOL_DONATION
+    SCHOOL_DONATION,
+    PROXY,
+    ERRONEOUS
 }

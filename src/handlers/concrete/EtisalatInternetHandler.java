@@ -1,14 +1,15 @@
-package handlers;
+package handlers.concrete;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import common.HandlerName;
-import common.HandlerResponse;
+import handlers.AbstractHandler;
+import handlers.HandlerName;
+import handlers.HandlerResponse;
 
-public class EtisalatInternetHandler extends Handler {
+public class EtisalatInternetHandler extends AbstractHandler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("100", "200", "500"));
 
     public HandlerName getHandlerName() {

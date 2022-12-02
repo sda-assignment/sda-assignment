@@ -1,14 +1,15 @@
-package handlers;
+package handlers.concrete;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import common.HandlerName;
-import common.HandlerResponse;
+import handlers.AbstractHandler;
+import handlers.HandlerName;
+import handlers.HandlerResponse;
 
-public class OrangeInternetHandler extends Handler {
+public class OrangeInternetHandler extends AbstractHandler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("500", "1000"));
 
     public HandlerName getHandlerName() {

@@ -1,12 +1,13 @@
-package handlers;
+package handlers.concrete;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import common.HandlerName;
-import common.HandlerResponse;
+import handlers.AbstractHandler;
+import handlers.HandlerName;
+import handlers.HandlerResponse;
 
-public class CancerHospitalDonationHandler extends Handler {
+public class CancerHospitalDonationHandler extends AbstractHandler {
     private static Map<String, Double> TYPES_PRICES = Map.of("beds", 1382.9, "medicine", 500.9);
 
     public HandlerName getHandlerName() {

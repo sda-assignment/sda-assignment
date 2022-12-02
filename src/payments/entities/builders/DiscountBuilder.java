@@ -1,8 +1,8 @@
 package payments.entities.builders;
 
 import datastore.EntityBuilder;
+import payments.common.enums.DiscountType;
 import payments.entities.Discount;
-import payments.entities.enums.DiscountType;
 
 public class DiscountBuilder implements EntityBuilder<Discount> {
     public Discount fromString(String discount) {

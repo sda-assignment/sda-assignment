@@ -3,8 +3,8 @@ package payments.controllers;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
+import payments.common.enums.FormElementType;
 import payments.entities.FormElement;
-import payments.entities.enums.FormElementType;
 
 public class FormElementController {
     private Relation<FormElement> formElementRelation;

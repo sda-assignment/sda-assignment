@@ -1,4 +1,4 @@
-package payments.entities.enums;
+package payments.common.enums;
 
 public enum RefundRequestStatus {
     ACCEPTED,

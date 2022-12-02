@@ -2,7 +2,7 @@ package payments.entities;
 
 import common.Util;
 import datastore.Entity;
-import payments.entities.enums.DiscountType;
+import payments.common.enums.DiscountType;
 
 public class Discount implements Entity {
     public final int id;

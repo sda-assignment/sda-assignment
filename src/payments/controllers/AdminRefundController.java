@@ -7,11 +7,11 @@ import common.Util;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
+import payments.common.enums.RefundRequestStatus;
+import payments.common.enums.TransactionType;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 import payments.entities.User;
-import payments.entities.enums.RefundRequestStatus;
-import payments.entities.enums.TransactionType;
 
 public class AdminRefundController {
     private Relation<RefundRequest> refundRelation;

@@ -1,8 +1,8 @@
 package payments.entities.builders;
 
 import datastore.EntityBuilder;
+import payments.common.enums.RefundRequestStatus;
 import payments.entities.RefundRequest;
-import payments.entities.enums.RefundRequestStatus;
 
 public class RefundRequestBuilder implements EntityBuilder<RefundRequest> {
     public RefundRequest fromString(String refundRequest) {

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import common.Util;
 import datastore.Entity;
-import payments.entities.enums.TransactionType;
+import payments.common.enums.TransactionType;
 
 public class Transaction implements Entity {
     public final int id;

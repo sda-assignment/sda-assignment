@@ -1,8 +1,8 @@
 package payments.controllers;
 
 import datastore.exceptions.EntitySaveException;
+import payments.common.enums.DiscountType;
 import payments.entities.Discount;
-import payments.entities.enums.DiscountType;
 import common.Util;
 import datastore.Relation;
 

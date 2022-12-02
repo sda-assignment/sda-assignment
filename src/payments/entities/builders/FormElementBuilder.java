@@ -1,8 +1,8 @@
 package payments.entities.builders;
 
 import datastore.EntityBuilder;
+import payments.common.enums.FormElementType;
 import payments.entities.FormElement;
-import payments.entities.enums.FormElementType;
 
 public class FormElementBuilder implements EntityBuilder<FormElement> {
     public FormElement fromString(String formElement) {

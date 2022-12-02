@@ -3,8 +3,8 @@ package payments.entities.builders;
 import java.time.LocalDateTime;
 
 import datastore.EntityBuilder;
+import payments.common.enums.TransactionType;
 import payments.entities.Transaction;
-import payments.entities.enums.TransactionType;
 
 public class TransactionBuilder implements EntityBuilder<Transaction> {
     public Transaction fromString(String transaction) {

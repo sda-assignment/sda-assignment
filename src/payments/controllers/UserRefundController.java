@@ -4,8 +4,8 @@ import common.Util;
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
+import payments.common.enums.RefundRequestStatus;
 import payments.entities.RefundRequest;
-import payments.entities.enums.RefundRequestStatus;
 
 public class UserRefundController {
     private Relation<RefundRequest> refundRequestRelation;

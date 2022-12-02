@@ -26,7 +26,6 @@ public class AdminRefundBoundary {
         fmt.format("%15s %15s %15s %15s\n", "id", "transactionId", "status", "User Email");
 
         for (RefundRequest request : refundRequests) {
-            fmt.flush();
             fmt.format("%15s %15s %15s %15s\n", request.id, request.transactionId, request.status,
                     request.userEmail);
 
@@ -34,7 +33,7 @@ public class AdminRefundBoundary {
         System.out.println(fmt);
     }
 
-    public void handleRequest() throws EntitySaveException{
+    public void handleRequest() throws EntitySaveException {
         Scanner adminInput = new Scanner(System.in);
 
         System.out.println("which Request do you want to handle");
@@ -45,11 +44,11 @@ public class AdminRefundBoundary {
         System.out.println("1- Accepted\n2- Rejected");
         int refundRequestStatus = adminInput.nextInt();
 
-        if(refundRequestStatus == 1){
+        if (refundRequestStatus == 1) {
             aRefund.acceptRefund(requestId);
         }
 
-        else if (refundRequestStatus == 2){
+        else if (refundRequestStatus == 2) {
             aRefund.rejectRefund(requestId);
         }
 
@@ -59,6 +58,5 @@ public class AdminRefundBoundary {
         adminInput.close();
 
     }
-
 
 }

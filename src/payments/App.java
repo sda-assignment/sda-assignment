@@ -42,5 +42,7 @@ public class App {
         AdminRefundBoundary adminView = new AdminRefundBoundary(refundRelation, userRelation, transactionRelation);
 
         adminView.displayRequests();
+        adminView.handleRequest();
+
     }
 }

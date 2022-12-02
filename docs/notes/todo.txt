@@ -2,3 +2,9 @@ Notes
 - Handler uses Template method pattern
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
+
+TODO
+- Proxy pattern in front of authorized controller (?)
+- Strategy pattern for choosing payment method
+- Command pattern in UI choices/input
+- Decorator pattern to accumulate the discounts

@@ -23,4 +23,8 @@ public class Util {
     public static boolean isPositiveFloat(String string) {
         return string.matches("[+]?[0-9]*\\.?[0-9]+");
     }
+
+    public static boolean isPositiveInt(String string) {
+        return string.matches("[+]?[0-9]+");
+    }
 }

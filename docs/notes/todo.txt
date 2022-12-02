@@ -1,5 +1,6 @@
 Notes
 - Handler uses Template method pattern
+- HandlerBus uses proxy
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
 
@@ -9,3 +10,4 @@ TODO
 - Command pattern in UI choices/input
 - Decorator pattern to accumulate the discounts
 - Split response and handler response?
+- Abstract factory with Handlers (?)

@@ -14,10 +14,16 @@ import payments.boundaries.AdminRefundBoundary;
 
 public class App {
     public static void main(String[] args) throws EntityLoadException, EntitySaveException {
-        System.out.println("hello world");
+        System.out.println("isPositiveFloat");
         System.out.println(Util.isPositiveFloat("123"));
         System.out.println(Util.isPositiveFloat("-123"));
         System.out.println(Util.isPositiveFloat("123.2"));
+        System.out.println(Util.isPositiveFloat("+"));
+        System.out.println("isPositiveInt");
+        System.out.println(Util.isPositiveInt("123"));
+        System.out.println(Util.isPositiveInt("-123"));
+        System.out.println(Util.isPositiveInt("123.2"));
+        System.out.println(Util.isPositiveInt("+"));
 
         Relation<User> userRelation = new Relation<User>("users", new UserBuilder());
         // userRelation.insert(new User("ali", "asd", "asd", false, 12.2));

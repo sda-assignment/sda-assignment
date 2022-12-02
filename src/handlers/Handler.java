@@ -10,6 +10,8 @@ public abstract class Handler {
 
     public abstract String[] getRequestKeys();
 
+    public abstract String getConstraints();
+
     protected abstract HandlerResponse handleRequestAndGetAmount(HashMap<String, String> request);
 
     protected boolean requestContainsAllKeys(HashMap<String, String> request) {

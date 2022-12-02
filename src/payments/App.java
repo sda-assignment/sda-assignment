@@ -2,6 +2,7 @@ package payments;
 
 import common.Util;
 import datastore.Relation;
+import datastore.exceptions.EntityException;
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
 import payments.entities.RefundRequest;
@@ -11,9 +12,10 @@ import payments.entities.builders.RefundRequestBuilder;
 import payments.entities.builders.TransactionBuilder;
 import payments.entities.builders.UserBuilder;
 import payments.boundaries.AdminRefundBoundary;
+import payments.boundaries.Router;
 
 public class App {
-    public static void main(String[] args) throws EntityLoadException, EntitySaveException {
+    public static void main(String[] args) throws EntityException, EntitySaveException, EntityLoadException {
         System.out.println("isPositiveFloat");
         System.out.println(Util.isPositiveFloat("123"));
         System.out.println(Util.isPositiveFloat("-123"));
@@ -37,22 +39,27 @@ public class App {
 
         Relation<Transaction> transactionRelation = new Relation<Transaction>("transactions", new TransactionBuilder());
         // transactionRelation
-        //         .insert(new Transaction(0, "waelwanas@gmail.com", LocalDateTime.now(), 0, TransactionType.REFUND));
+        // .insert(new Transaction(0, "waelwanas@gmail.com", LocalDateTime.now(), 0,
+        // TransactionType.REFUND));
         // transactionRelation.insert(
-        //         new Transaction(1, "ahmedwaelwanas@gmail.com", LocalDateTime.now(), 110, TransactionType.REFUND));
+        // new Transaction(1, "ahmedwaelwanas@gmail.com", LocalDateTime.now(), 110,
+        // TransactionType.REFUND));
         // transactionRelation.insert(
-        //         new Transaction(2, "ahmedwanas@gmail.com", LocalDateTime.now(), 2132130, TransactionType.REFUND));
+        // new Transaction(2, "ahmedwanas@gmail.com", LocalDateTime.now(), 2132130,
+        // TransactionType.REFUND));
 
         Relation<RefundRequest> refundRelation = new Relation<RefundRequest>("refundRequests",
                 new RefundRequestBuilder());
-        // refundRelation.insert(new RefundRequest(0, 0, RefundRequestStatus.PENDING, "ahmedwanas@gmail.com"));
-        // refundRelation.insert(new RefundRequest(1, 1, RefundRequestStatus.PENDING, "ahmedwaelwanas@gmail.com"));
-        // refundRelation.insert(new RefundRequest(2, 2, RefundRequestStatus.PENDING, "waelwanas@gmail.com"));
+        // refundRelation.insert(new RefundRequest(0, 0, RefundRequestStatus.PENDING,
+        // "ahmedwanas@gmail.com"));
+        // refundRelation.insert(new RefundRequest(1, 1, RefundRequestStatus.PENDING,
+        // "ahmedwaelwanas@gmail.com"));
+        // refundRelation.insert(new RefundRequest(2, 2, RefundRequestStatus.PENDING,
+        // "waelwanas@gmail.com"));
 
         AdminRefundBoundary adminView = new AdminRefundBoundary(refundRelation, userRelation, transactionRelation);
-
-        adminView.displayRequests();
-        adminView.handleRequest();
+        Router r = new Router(adminView);
+        r.execute();
 
     }
 }

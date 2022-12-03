@@ -1,8 +1,9 @@
 Notes
 - Handler uses Template method pattern
-- HandlerBus uses proxy
+- HandlerFactory uses factory
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
+- The concept of "handlers" if factory
 
 TODO
 - Proxy pattern in front of authorized controller (?)

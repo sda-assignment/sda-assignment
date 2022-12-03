@@ -14,6 +14,6 @@ public class UserTransactionController {
     }
 
     public ArrayList<Transaction> getTransactionsForUser() {
-        return transactionRelation.select(t -> t.userEmail == logInSession.getLoggedInUser().email);
+        return transactionRelation.select(t -> t.userEmail.equals(logInSession.getLoggedInUser().email));
     }
 }

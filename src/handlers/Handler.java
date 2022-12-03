@@ -2,7 +2,7 @@ package handlers;
 
 import java.util.HashMap;
 
-public abstract class AbstractHandler implements IHandler {
+public abstract class Handler {
     public abstract HandlerName getHandlerName();
 
     public abstract String[] getRequestKeys();

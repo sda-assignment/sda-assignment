@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class EtisalatInternetHandler extends AbstractHandler {
+public class EtisalatInternetHandler extends Handler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("100", "200", "500"));
 
     public HandlerName getHandlerName() {

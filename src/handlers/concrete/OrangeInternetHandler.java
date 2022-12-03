@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class OrangeInternetHandler extends AbstractHandler {
+public class OrangeInternetHandler extends Handler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("500", "1000"));
 
     public HandlerName getHandlerName() {

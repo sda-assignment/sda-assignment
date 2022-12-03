@@ -3,11 +3,11 @@ package handlers.concrete;
 import java.util.HashMap;
 
 import common.Util;
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class EtisalatRechargeHandler extends AbstractHandler {
+public class EtisalatRechargeHandler extends Handler {
     public HandlerName getHandlerName() {
         return HandlerName.ETISALAT_RECHARGE;
     }

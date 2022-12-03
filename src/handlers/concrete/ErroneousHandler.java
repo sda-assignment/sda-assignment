@@ -2,11 +2,11 @@ package handlers.concrete;
 
 import java.util.HashMap;
 
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class ErroneousHandler extends AbstractHandler {
+public class ErroneousHandler extends Handler {
 
     public HandlerName getHandlerName() {
         return HandlerName.ERRONEOUS;

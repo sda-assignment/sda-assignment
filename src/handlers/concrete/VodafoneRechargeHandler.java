@@ -3,11 +3,11 @@ package handlers.concrete;
 import java.util.HashMap;
 
 import common.Util;
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class VodafoneRechargeHandler extends AbstractHandler {
+public class VodafoneRechargeHandler extends Handler {
     public HandlerName getHandlerName() {
         return HandlerName.VODAFONE_RECHARGE;
     }

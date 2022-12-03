@@ -3,11 +3,11 @@ package handlers.concrete;
 import java.util.HashMap;
 
 import common.Util;
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class OrangeRechargeHandler extends AbstractHandler {
+public class OrangeRechargeHandler extends Handler {
     public HandlerName getHandlerName() {
         return HandlerName.ORANGE_RECHARGE;
     }

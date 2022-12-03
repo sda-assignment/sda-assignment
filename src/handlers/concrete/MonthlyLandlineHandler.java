@@ -2,11 +2,11 @@ package handlers.concrete;
 
 import java.util.HashMap;
 
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class MonthlyLandlineHandler extends AbstractHandler {
+public class MonthlyLandlineHandler extends Handler {
     private static double MONTHLY_PRICE = 250;
 
     public HandlerName getHandlerName() {

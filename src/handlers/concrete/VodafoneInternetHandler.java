@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import handlers.AbstractHandler;
+import handlers.Handler;
 import handlers.HandlerName;
 import handlers.HandlerResponse;
 
-public class VodafoneInternetHandler extends AbstractHandler {
+public class VodafoneInternetHandler extends Handler {
     private static final Set<String> allowedBandwidth = new HashSet<String>(Arrays.asList("150", "300", "700"));
 
     public HandlerName getHandlerName() {

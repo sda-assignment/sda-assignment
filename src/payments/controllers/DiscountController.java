@@ -9,11 +9,11 @@ import payments.entities.Discount;
 import payments.entities.UsedDiscount;
 import datastore.Relation;
 
-public class UserDiscountController {
+public class DiscountController {
     private Relation<Discount> discountRelation;
     private Relation<UsedDiscount> usedDiscountRelation;
 
-    public UserDiscountController(Relation<Discount> relation) {
+    public DiscountController(Relation<Discount> relation) {
         this.discountRelation = relation;
     }
 

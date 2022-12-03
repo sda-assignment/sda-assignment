@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.admin;
 
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
@@ -6,7 +6,7 @@ import payments.common.Response;
 import payments.common.enums.FormElementType;
 import payments.entities.FormElement;
 
-public class FormElementController {
+public class AdminFormElementController {
     private Relation<FormElement> formElementRelation;
 
     public Response addFormElement(String name, String serviceName, String providerName, FormElementType type,

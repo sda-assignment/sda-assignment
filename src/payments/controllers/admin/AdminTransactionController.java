@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.admin;
 
 import java.util.ArrayList;
 

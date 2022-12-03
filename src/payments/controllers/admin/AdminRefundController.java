@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.admin;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

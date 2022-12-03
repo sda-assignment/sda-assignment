@@ -7,11 +7,11 @@ import payments.common.Response;
 import payments.common.enums.RefundRequestStatus;
 import payments.entities.RefundRequest;
 
-public class UserRefundController {
+public class RefundController {
     private Relation<RefundRequest> refundRequestRelation;
     private LogInSession logInSession;
 
-    public UserRefundController(Relation<RefundRequest> refundRequestRelation, LogInSession logInSession) {
+    public RefundController(Relation<RefundRequest> refundRequestRelation, LogInSession logInSession) {
         this.refundRequestRelation = refundRequestRelation;
         this.logInSession = logInSession;
     }

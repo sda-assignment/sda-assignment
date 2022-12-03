@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.admin;
 
 import datastore.exceptions.EntitySaveException;
 import payments.common.enums.DiscountType;

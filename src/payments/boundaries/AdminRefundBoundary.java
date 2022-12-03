@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import payments.entities.RefundRequest;
 import payments.common.Response;
-import payments.controllers.AdminRefundController;
+import payments.controllers.admin.AdminRefundController;
 import payments.entities.Transaction;
 import datastore.Relation;
 import datastore.exceptions.EntityException;

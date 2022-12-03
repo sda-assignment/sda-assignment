@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import datastore.Relation;
 import payments.entities.Transaction;
 
-public class UserTransactionController {
+public class TransactionController {
     private Relation<Transaction> transactionRelation;
     private LogInSession logInSession;
 
-    public UserTransactionController(Relation<Transaction> transactionRelation, LogInSession logInSession) {
+    public TransactionController(Relation<Transaction> transactionRelation, LogInSession logInSession) {
         this.transactionRelation = transactionRelation;
     }
 

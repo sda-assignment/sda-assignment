@@ -3,12 +3,14 @@ Notes
 - HandlerFactory uses factory
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
-- The concept of "handlers" if factory
+- The concept of "handlers" is strategy
 
 TODO
-- Proxy pattern in front of authorized controller (?)
-- Strategy pattern for choosing payment method
-- Command pattern in UI choices/input
+- Recharge wallet
 - Decorator pattern to accumulate the discounts
+- Make return Relation array list immutable
+- Change lambdas to actual classes (?)
+- Proxy pattern in front of authorized controller (?)
+- Command pattern in UI choices/input
 - Split response and handler response?
 - Abstract factory with Handlers (?)

@@ -1,5 +1,5 @@
 package datastore;
 
-public interface RecordFilter<T> {
+public interface RecordFilterStrategy<T> {
     boolean apply(T obj);
 }

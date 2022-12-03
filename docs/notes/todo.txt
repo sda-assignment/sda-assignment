@@ -4,6 +4,7 @@ Notes
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
 - The concept of "handlers" is strategy
+- PaymentStrategy uses strategy pattern
 
 TODO
 - Decorator pattern to accumulate the discounts
@@ -11,5 +12,3 @@ TODO
 - Change lambdas to actual classes (?)
 - Proxy pattern in front of authorized controller (?)
 - Command pattern in UI choices/input
-- Split response and handler response?
-- Abstract factory with Handlers (?)

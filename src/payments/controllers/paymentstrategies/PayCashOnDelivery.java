@@ -1,10 +1,10 @@
-package payments.controllers.paymentprocessor;
+package payments.controllers.paymentstrategies;
 
 import payments.common.Response;
 
 public class PayCashOnDelivery implements PaymentStrategy {
     public Response pay(double amount) {
-        System.out.println("Paying cash on delivery");
+        System.out.println("[DEBUG]: Paying cash on delivery");
         return new Response(true, "Payment successful");
     }
 }

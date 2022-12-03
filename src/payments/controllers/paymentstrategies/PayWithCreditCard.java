@@ -1,4 +1,4 @@
-package payments.controllers.paymentprocessor;
+package payments.controllers.paymentstrategies;
 
 import common.Util;
 import payments.common.Response;
@@ -11,7 +11,7 @@ public class PayWithCreditCard implements PaymentStrategy {
     }
 
     public Response pay(double amount) {
-        System.out.println("Paying using credit card: " + cardNumber);
+        System.out.println("[DEBUG]: Paying using credit card: " + cardNumber);
         if (!Util.isPositiveInt(cardNumber))
             return new Response(false, "Invalid card number");
         return new Response(true, "Payment successful");

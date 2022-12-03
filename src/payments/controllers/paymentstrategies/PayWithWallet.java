@@ -1,4 +1,4 @@
-package payments.controllers.paymentprocessor;
+package payments.controllers.paymentstrategies;
 
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;

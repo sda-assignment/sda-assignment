@@ -6,7 +6,6 @@ Notes
 - The concept of "handlers" is strategy
 
 TODO
-- Recharge wallet
 - Decorator pattern to accumulate the discounts
 - Make return Relation array list immutable
 - Change lambdas to actual classes (?)

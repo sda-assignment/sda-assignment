@@ -27,7 +27,7 @@ public class AuthController {
 
     public Response logIn(String email, String password) {
         ArrayList<User> users = relation.select(u -> u.email.equals(email) && u.password.equals(password));
-        if (users.size() >= 0) {
+        if (users.size() > 0) {
             logInSession.setLoggedInUser(users.get(0));
             return new Response(true, "Logged in Successfully");
         }

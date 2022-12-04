@@ -11,8 +11,9 @@ import payments.entities.User;
 import payments.entities.builders.RefundRequestBuilder;
 import payments.entities.builders.TransactionBuilder;
 import payments.entities.builders.UserBuilder;
-import payments.boundaries.AdminRefundBoundary;
+import payments.boundaries.AdminRefundView;
 import payments.boundaries.Router;
+import payments.controllers.AdminRefundController;
 
 public class App {
     public static void main(String[] args) throws EntityException, EntitySaveException, EntityLoadException {
@@ -56,8 +57,9 @@ public class App {
         // "ahmedwaelwanas@gmail.com"));
         // refundRelation.insert(new RefundRequest(2, 2, RefundRequestStatus.PENDING,
         // "waelwanas@gmail.com"));
-
-        AdminRefundBoundary adminView = new AdminRefundBoundary(refundRelation, userRelation, transactionRelation);
+        AdminRefundController adminRefundController = new AdminRefundController(refundRelation, userRelation,
+                transactionRelation);
+        AdminRefundView adminView = new AdminRefundView(adminRefundController);
         Router r = new Router(adminView);
         r.execute();
 

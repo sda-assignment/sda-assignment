@@ -5,22 +5,17 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 import payments.entities.RefundRequest;
-import payments.common.Response;
 import payments.controllers.AdminRefundController;
-import payments.entities.Transaction;
-import datastore.Relation;
 import datastore.exceptions.EntityException;
-import payments.entities.User;
 
-public class AdminRefundBoundary extends Frame {
+public class AdminRefundView extends Frame {
     private AdminRefundController aRefund;
     private int refundRequestStatus;
     private int requestId;
     private Scanner adminInput;
 
-    public AdminRefundBoundary(Relation<RefundRequest> refundRelation, Relation<User> userRelation,
-            Relation<Transaction> transactionRelation) {
-        this.aRefund = new AdminRefundController(refundRelation, userRelation, transactionRelation);
+    public AdminRefundView(AdminRefundController aRefund) {
+        this.aRefund = aRefund;
     }
 
     public void display() {
@@ -37,15 +32,15 @@ public class AdminRefundBoundary extends Frame {
         System.out.println(fmt);
     }
 
-    public Response input() {
+    public boolean input() {
 
         adminInput = new Scanner(System.in);
         System.out.println("which Request do you want to handle");
         System.out.print("Enter Request id: ");
         String input = adminInput.nextLine();
 
-        if (input.equals("#b")) {
-            return new Response(false, "Return");
+        if (goHome(input)) {
+            return false;
         } else {
             requestId = Integer.valueOf(input);
 
@@ -53,7 +48,7 @@ public class AdminRefundBoundary extends Frame {
             System.out.println("1- Accepted\n2- Rejected");
             refundRequestStatus = adminInput.nextInt();
 
-            return new Response(true, "");
+            return true;
 
         }
 

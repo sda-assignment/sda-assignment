@@ -12,6 +12,6 @@ public class TransactionBuilder implements EntityBuilder<Transaction> {
         int i = 0;
         return new Transaction(Integer.parseInt(splitted[i++]), splitted[i++], LocalDateTime.parse(splitted[i++]),
                 Integer.parseInt(splitted[i++]),
-                TransactionType.valueOf(splitted[i++]));
+                TransactionType.valueOf(splitted[i++]), splitted[i++], splitted[i++]);
     }
 }

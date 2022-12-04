@@ -9,6 +9,6 @@ public class DiscountBuilder implements EntityBuilder<Discount> {
         String[] splitted = discount.split(":");
         int i = 0;
         return new Discount(Integer.parseInt(splitted[i++]), DiscountType.valueOf(splitted[i++]),
-                Double.parseDouble(splitted[i++]));
+                Double.parseDouble(splitted[i++]), splitted[i++]);
     }
 }

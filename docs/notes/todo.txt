@@ -7,8 +7,8 @@ Notes
 - PaymentStrategy uses strategy pattern
 
 TODO
-- Decorator pattern to accumulate the discounts
+- Decorator pattern to accumulate the discounts (?)
 - Make return Relation array list immutable
 - Change lambdas to actual classes (?)
 - Proxy pattern in front of authorized controller (?)
-- Command pattern in UI choices/input
+- Command pattern in UI choices/input (?)

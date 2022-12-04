@@ -16,25 +16,26 @@ import payments.controllers.paymentstrategies.PayCashOnDelivery;
 import payments.controllers.paymentstrategies.PayWithCreditCard;
 import payments.controllers.paymentstrategies.PayWithWallet;
 import payments.controllers.paymentstrategies.PaymentStrategy;
+import payments.entities.Discount;
 import payments.entities.Provider;
-import payments.entities.ServiceProviderTransaction;
 import payments.entities.Transaction;
 import payments.entities.User;
 
 public class PaymentController {
     private Relation<Provider> providerRelation;
     private Relation<Transaction> transactionRelation;
-    private Relation<ServiceProviderTransaction> spTransactionRelation;
     private Relation<User> userRelation;
+    private DiscountController discountController;
     private LogInSession logInSession;
 
     public PaymentController(Relation<Provider> providerRelation, Relation<Transaction> transactionRelation,
-            Relation<ServiceProviderTransaction> spTransactionRelation, Relation<User> userRelation,
+            Relation<User> userRelation,
+            DiscountController discountController,
             LogInSession logInSession) {
         this.providerRelation = providerRelation;
         this.transactionRelation = transactionRelation;
-        this.spTransactionRelation = spTransactionRelation;
         this.userRelation = userRelation;
+        this.discountController = discountController;
         this.logInSession = logInSession;
     }
 
@@ -51,20 +52,31 @@ public class PaymentController {
         if (!handlerRes.success)
             return new Response(false,
                     "An error has occurred please contact an administrator:\n" + handlerRes.errorMessage);
+
         double amountToDeduct = handlerRes.amount;
-        // TODO: account for discounts
+        ArrayList<Discount> discounts = discountController.getDiscountsForService(serviceName);
+        for (Discount discount : discounts) {
+            amountToDeduct = amountToDeduct - amountToDeduct * discount.percentage;
+        }
+
         Response paymentRes = paymentStrategy.pay(amountToDeduct);
         if (!paymentRes.success)
             return paymentRes;
+
         Transaction transactionToInsert = new Transaction(
                 Util.incrementOrInitialize(transactionRelation.selectMax(t -> t.id)),
                 logInSession.getLoggedInUser().email,
-                LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT);
+                LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
         transactionRelation
                 .insert(transactionToInsert);
-        spTransactionRelation.insert(
-                new ServiceProviderTransaction(transactionToInsert.id, provider.serviceName, provider.name));
-        return paymentRes;
+
+        for (Discount discount : discounts) {
+            Response useDiscountRes = discountController.useDiscount(discount.id);
+            if (!useDiscountRes.success)
+                return useDiscountRes;
+        }
+
+        return new Response(true, "Paid " + amountToDeduct + "$ to " + providerName + " " + serviceName);
     }
 
     public Response payUsingWallet(String serviceName, String providerName, HashMap<String, String> request)

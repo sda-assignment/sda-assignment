@@ -1,0 +1,382 @@
+@startuml Domain Model
+skinparam style strictuml
+skinparam style DefaultFontName Arial
+skinparam DefaultFontSize 16
+skinparam DefaultFontStyle bold
+skinparam ArrowThickness 2.2
+skinparam ArrowColor #grey
+hide empty members
+
+
+package datastore <<Folder>>{
+    interface Entity {
+        storify(): String
+    }
+    interface EntityBuilder<T>{
+        fromString(String string): T
+    }
+    interface RecordFilterStrategy<T>   {
+        apply(T obj): boolean
+    }
+    interface RecordProjectStrategy<T,B>   {
+        apply(T obj): B
+    }
+    interface RecordUpdateStrategy<T extends Entity>   {
+        apply(T obj): T
+    }
+    class Relation<T>{
+        - DATA_PATH: String {readOnly}
+        - path: String
+        - records: ArrayList<T>
+        - recordBuilder: EntityBuilder<T>
+        --
+        + Relation(String fileName, EntityBuilder<T> recordBuilder)
+        + save(): void
+        - load(): void
+        + insert(T record): void
+        + selectMax(RecordProjectStrategy<T, B> RecordProject): <B extends Comparable<B>> B
+    }
+}
+
+package handlers <<folder>>{
+    abstract class Handler   {
+        --
+        + {abstract} getHandlerName(): HandlerName
+        + {abstract} getRequestKeys(): String[]
+        + {abstract} getConstrains(): String
+        # {abstract} handleRequestAndGetAmount(HasMap<String, String> request): HandlerResponse
+        # requestContainsAllKeys(HashMap<String, String> request): boolean
+        + validateAndHandleRequest(HasMap<String, String> request): request
+    }
+    class HandlerFactory  {
+        + getHandler: Handler
+    }
+    enum HandlerName   {
+        VODAFONE_RECHARGE
+        WE_RECHARGE
+        ORANGE_RECHARGE
+        VODAFONE_INTERNET
+        ETISALAT_RECHARGE
+        WE_INTERNET
+        ETISALAT_INTERNET
+        ORANGE_INTERNET
+        QUARTERLY_LANDLINE
+        MONTHLY_LANDLINE
+        NGO_DONATION
+        CANCER_HOSPITAL_DONATION
+        SCHOOL_DONATION
+        PROXY
+        ERRONEOUS
+    }
+    class HandlerResponse   {
+        + success: boolean {readOnly}
+        + errorMessage: String {readOnly}
+        + amount: Double {readOnly}
+    }
+
+    package handlers.concrete{
+        class CancerHospitalDonationHandler extends Handler{
+            - {static} TYPES_PRICES: Map<String, Double>
+        }
+        class ErroneousHandler extends Handler {
+
+        }
+        class EtisalatInternetHandler extends Handler{
+            + {static} allowedBandwidth: Set<String>
+        }
+        class EtisalatRechargeHandler extends Handler{
+        }
+        class MonthlyLandlineHandler extends Handler{
+            - MONTHLY_PRICE: Double
+        }
+        class NgoDonationHandler extends Handler{
+
+        }
+        class OrangeInternetHandler extends Handler{
+            - {static} allowedBandwidth: Set<String> {readOnly}
+        }
+        class OrangeRechargeHandler extends Handler{
+
+        }
+        class QuarterlyLandlineHandler extends Handler{
+            - {static} QUARTERLY_PRICE: double
+        }
+        class SchoolDonationHandler extends Handler{
+
+        }
+        class VodafoneInternetHandler extends Handler{
+            - {static} allowedBandwidth: Set<String> {readOnly}
+        }
+        class VodafoneRechargeHandler extends Handler{
+
+        }
+        class WeInternetHandler extends Handler{
+
+        }
+        class WeRechargeHandler extends Handler{
+
+        }
+
+    }
+}
+
+package payments{
+    package payments.boundaries{
+        class AdminRefundBoundary   {
+
+        }
+        class Frame   {
+
+        }
+        class Router   {
+
+        }
+    }
+    package payments.common{
+        class Response   {
+            + success: boolean {readOnly}
+            + value: String {readOnly}
+        }
+        package payments.common.enums{
+            enum DiscountType {
+                OVERALL
+                SPECIFIC
+            }
+            enum FormElementType   {
+                TEXT_FIELD
+                DROP_DOWN_FIELD
+            }
+            enum RefundRequestStatus   {
+                ACCEPTED
+                REJECTED
+                PENDING
+            }
+            enum TransactionType   {
+                PAYMEN
+                ADD_TO_WALLET
+                REFUND
+            }
+        }
+
+    }
+    package payments.controllers{
+
+        package payments.controllers.admin{
+            AdminDiscountController o-- Relation
+            class AdminDiscountController   {
+                - discountRelation: Relation<Discount>
+                --
+                - addDiscount(DiscountType discountType, double percentage, String serviceName): void
+                + addOverallDiscount(double percentage): Response
+                + addSpecificDiscount(String serviceName, double percentage)
+            }
+            class AdminFormElementController   {
+                - formElementRelation: Relation<FormElement>
+                --
+                + addFormElement(DiscountType discountType, double percentage, String serviceName): Response
+            }
+            class AdminProviderController   {
+                - providerRelation: Relation<Provider>
+                - formElementRelation: Relation<FormElement>
+                --
+                + addProvider(String serviceName, String name, boolean cashOnDelivery,
+                HandlerName handlerName): Response
+                + searchForProviders(String serviceName, String name, boolean cashOnDelivery,
+                HandlerName handlerName): ArrayList<Provider>
+                + getProviderForService(String serviceName): ArrayList<Provider>
+                + getProviderFormElements(String serviceName, String providerName): ArrayList<FormElement>
+            }
+            class AdminRefundController   {
+                - refundRelation: Relation<RefundRequest>
+                - userRelation: Relation<User>
+                - transactionRelation: Relation<Transaction>
+                --
+                + getRefundRequest(): ArrayList<RefundRequest>
+                + acceptRefund(int rid): Response
+                + rejectRefund(int rid): Response
+            }
+            class AdminServiceController   {
+                - serviceRelation: Relation<Service>
+                --
+                + addService(String serviceName): Response
+            }
+            class AdminTransactionController   {
+                - relation: Relation<Transaction>
+                --
+                + getAllTransactions(): ArrayList<Transaction>
+            }
+            class AdminUserController {
+                - relation: Relation<User>
+                --
+                + setAdmin(String email): Response
+            }
+        }
+
+        package payments.controllers.paymentstrategies{
+            interface PaymentStrategy   {
+                pay(double amount): Response
+            }
+            class PayCashOnDelivery  implements PaymentStrategy {
+
+            }
+            class PayWithCreditCard  implements PaymentStrategy {
+                - cardNumber: String
+            }
+            class PayWithWallet  implements PaymentStrategy {
+                - payingUser: User
+                - userRelation: Relation<User>
+            }
+        }
+
+        class AuthController   {
+            - relation: Relation<User>
+            - logInSession: LogInSession
+            --
+            + signUp(String email, String userName, String password): Response
+            + logIn(String email, String password): Response
+            + logOut(): Response
+        }
+        class DiscountController   {
+            - discountRelation: Relation<Discount>
+            - usedDiscountRelation: Relation<UsedDiscount>
+            - logInSession: LogInSession
+            --
+            - getEffectiveDiscounts(ArrayList<Discount> discounts): ArrayList<Discount>
+            + getDiscountsForService(String serviceName): ArrayList<Discount>
+            + getAllDiscounts(): ArrayList<Discount>
+            + useDiscount(int discountId): Response
+        }
+        class LogInSession   {
+            - loggedInUser: User
+            --
+            + setLoggedinUser(User user): void
+            + getLoggedInUser(): User
+        }
+        class PaymentController   {
+            - providerRelation: Relation<Provider>
+            - transactionRelation: Relation<Transaction>
+            - userRelation: Relation<User>
+            - discountController: DiscountController
+            - logInSession: LogInSession
+            --
+            - payToProvider(String serviceName, String providerName,
+            HashMap<String, String> request, PaymentStrategy paymentStrategy): Response
+            + payUsingWallet(String serviceName, String providerName,
+            HashMap<String, String> request): Response
+            + payUsingCreditCard(String serviceName, String providerName, HashMap<String,
+            String> request, String cardNumber): Response
+            + payCashOnDelivery(String serviceName, String providerName,
+            HashMap<String, String> request): Response
+        }
+        class RefundController   {
+            - refundRequestRelation: Relation<RefudRequest>
+            - logInSession: LogInSession
+            --
+            + requestRefund(int transactionId): Response
+
+        }
+        class ServiceController   {
+            - ServiceRelation: Relation<Service>
+            --
+            + getAllServices(): ArrayList<Service>
+        }
+        class TransactionController   {
+            - transactionRelation: Relation<Transaction>
+            - logInSession: LogInSession
+            --
+            + getTransactionForUser(): ArrayList<Transaction>
+        }
+        class UserController   {
+            - userRelation: Relation<User>
+            - logInSession: LogInSession
+            --
+            + rechargeWallet(double amount, String cardNumber): Response
+        }
+
+
+    }
+
+
+    package payments.entities{
+        package payments.entities.builders{
+            class DiscountBuilder implements EntityBuilder  {
+
+            }
+            class FormElementBuilder implements EntityBuilder  {
+
+            }
+            class ProviderBuilder implements EntityBuilder  {
+
+            }
+            class RefundRequestBuilder implements EntityBuilder  {
+
+            }
+            class ServiceBuilder implements EntityBuilder  {
+
+            }
+            class TransactionBuilder implements EntityBuilder  {
+
+            }
+            class UsedDiscountBuilder implements EntityBuilder  {
+
+            }
+            class UserBuilder implements EntityBuilder  {
+
+            }
+        }
+
+        class Discount implements Entity  {
+            + id: int {readOnly}
+            + type: DiscountType {readOnly}
+            + percentage: double {readOnly}
+            + serviceName: String {readOnly}
+        }
+        class FormElement implements Entity  {
+            + name: String {readOnly}
+            + serviceName: String {readOnly}
+            + providerName: String {readOnly}
+            + type: FormElementType {readOnly}
+            + info: String {readOnly}
+        }
+        class Provider implements Entity  {
+            + serviceName: String {readOnly}
+            + name: String {readOnly}
+            + cashOnDelivery: boolean {readOnly}
+            + handlerName: HandlerName {readOnly}
+        }
+        class RefundRequest implements Entity  {
+            + id: int {readOnly}
+            + transactionId: int {readOnly}
+            + status: RefundRequestStatus {readOnly}
+            + userEmail: String {readOnly}
+        }
+        class Service implements Entity  {
+            + name: String {readOnly}
+        }
+        class Transaction implements Entity  {
+            + id: int {readOnly}
+            + userEmail: String {readOnly}
+            + timestamp: LocalDateTime {readOnly}
+            + amount: double {readOnly}
+            + type: TransactionType {readOnly}
+            + serviceName: String {readOnly}
+            + providerName: String {readOnly}
+        }
+        class UsedDiscount implements Entity  {
+            + email: String {readOnly}
+            + discountID: int {readOnly}
+        }
+        class User implements Entity  {
+            + email: String {readOnly}
+            + username: String {readOnly}
+            + password: String {readOnly}
+            + isAdmin: boolean {readOnly}
+            + wallet: double {readOnly}
+        }
+
+    }
+}
+
+
+
+@enduml

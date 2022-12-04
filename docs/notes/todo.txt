@@ -1,13 +1,14 @@
 Notes
 - Handler uses Template method pattern
-- HandlerBus uses proxy
+- HandlerFactory uses factory
 - Relation (update, select, selectMax) uses Strategy pattern
 - EntityBuilder uses Builder pattern
+- The concept of "handlers" is strategy
+- PaymentStrategy uses strategy pattern
 
 TODO
-- Proxy pattern in front of authorized controller (?)
-- Strategy pattern for choosing payment method
-- Command pattern in UI choices/input
 - Decorator pattern to accumulate the discounts
-- Split response and handler response?
-- Abstract factory with Handlers (?)
+- Make return Relation array list immutable
+- Change lambdas to actual classes (?)
+- Proxy pattern in front of authorized controller (?)
+- Command pattern in UI choices/input

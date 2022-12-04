@@ -2,9 +2,6 @@ package handlers;
 
 import java.util.HashMap;
 
-import common.HandlerName;
-import common.HandlerResponse;
-
 public abstract class Handler {
     public abstract HandlerName getHandlerName();
 
@@ -23,7 +20,7 @@ public abstract class Handler {
         return true;
     }
 
-    public HandlerResponse handleRequestAndReturnAmount(HashMap<String, String> request) {
+    public HandlerResponse validateAndHandleRequest(HashMap<String, String> request) {
         if (!requestContainsAllKeys(request))
             return new HandlerResponse("The request does not contain all the required information");
         HandlerResponse res = handleRequestAndGetAmount(request);

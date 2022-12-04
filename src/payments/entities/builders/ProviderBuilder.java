@@ -1,8 +1,8 @@
 package payments.entities.builders;
 
-import common.HandlerName;
 import common.Util;
 import datastore.EntityBuilder;
+import handlers.HandlerName;
 import payments.entities.Provider;
 
 public class ProviderBuilder implements EntityBuilder<Provider> {

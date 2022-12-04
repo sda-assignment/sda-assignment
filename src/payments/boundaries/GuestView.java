@@ -1,28 +1,37 @@
 package payments.boundaries;
 
-import datastore.exceptions.EntityException;
+import payments.boundaries.EnumViews.FrameName;
+import payments.controllers.AuthController;
+
 import java.util.Scanner;
 
 public class GuestView extends Frame {
 
-    @Override
-    public void display() {
-        System.out.println(frameName + " \n");
+    String option;
+    AuthController controller;
+
+    public GuestView(AuthController controller) {
+        this.controller = controller;
+        frameName = "Guest";
+    }
+
+    public FrameName display() { 
+        System.out.println("Guest \n");
         System.out.println("1- Sign In \n 2- Sign Up");
-        String userInput = new Scanner(System.in);
-
-    }
-
-    @Override
-    public boolean input() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void execute() throws EntityException {
-        // TODO Auto-generated method stub
-
+        Scanner userInput = new Scanner(System.in);
+        String option = userInput.nextLine();
+        userInput.close();
+        if (option.equals("1")) {
+            return FrameName.signIn;
+        } else if (option.equals("2")) {
+            return FrameName.signUp;
+        } else if (option.equals("#")) {
+            // a view that handles user error and returns him to same screen he was in
+            // before error
+            return FrameName.guestView;
+        } else {
+            return FrameName.error;
+        }
     }
 
 }

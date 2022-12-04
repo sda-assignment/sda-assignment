@@ -55,7 +55,7 @@ public class Relation<T extends Entity> {
         save();
     }
 
-    public <B extends Comparable<B>> B selectMax(RecordProject<T, B> RecordProject) {
+    public <B extends Comparable<B>> B selectMax(RecordProjectStrategy<T, B> RecordProject) {
         if (records.size() == 0) {
             return null;
         }
@@ -69,7 +69,7 @@ public class Relation<T extends Entity> {
         return max;
     }
 
-    public ArrayList<T> select(RecordFilter<T> filter) {
+    public ArrayList<T> select(RecordFilterStrategy<T> filter) {
         ArrayList<T> result = new ArrayList<T>();
         for (T record : records) {
             if (filter.apply(record)) {
@@ -79,12 +79,12 @@ public class Relation<T extends Entity> {
         return result;
     }
 
-    public boolean recordExists(RecordFilter<T> filter) {
+    public boolean recordExists(RecordFilterStrategy<T> filter) {
         ArrayList<T> result = select(filter);
         return result.size() > 0;
     }
 
-    public ArrayList<T> update(RecordUpdate<T> updater, RecordFilter<T> filter) throws EntitySaveException {
+    public ArrayList<T> update(RecordUpdateStrategy<T> updater, RecordFilterStrategy<T> filter) throws EntitySaveException {
         ArrayList<T> result = new ArrayList<T>();
         for (int i = 0; i < records.size(); i++) {
             if (filter.apply(records.get(i))) {

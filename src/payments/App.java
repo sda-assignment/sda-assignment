@@ -1,10 +1,9 @@
 package payments;
 
-import common.Util;
-import datastore.Relation;
 import datastore.exceptions.EntityException;
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
+<<<<<<< HEAD
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 import payments.entities.User;
@@ -63,5 +62,11 @@ public class App {
         Router r = new Router(adminView);
         r.execute();
 
+=======
+
+public class App {
+    public static void main(String[] args) throws EntityException, EntitySaveException, EntityLoadException {
+        System.out.println("Hello World!");
+>>>>>>> 63d4acafcce674d138ffc1a49f6059ca4246fe1d
     }
 }

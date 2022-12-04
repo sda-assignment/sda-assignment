@@ -1,14 +1,11 @@
 package payments.boundaries;
 
-import payments.common.Response;
 import datastore.exceptions.EntityException;
+import payments.boundaries.EnumViews.FrameName;
 
 public abstract class Frame {
 
     protected String frameName;
-
-    // protected Frame next;
-    // protected Frame previous;
 
     public void setFrameName(String Name) {
         frameName = Name;
@@ -18,14 +15,6 @@ public abstract class Frame {
         return frameName;
     }
 
-    public abstract void display();
-
-    public abstract boolean input();
-
-    public abstract void execute() throws EntityException;
-
-    public boolean goHome(String input) {
-        return (input.equals("#"));
-    }
+    public abstract FrameName display() throws EntityException;
 
 }

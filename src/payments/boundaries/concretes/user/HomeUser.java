@@ -27,7 +27,7 @@ public class HomeUser extends Frame {
     {
         System.out.println("home");
         System.out.println("Wallet: " + currentUser.wallet);
-        System.out.println("1. List all and pay for a service\n2. Search and pay for a service\n3.Request a refund\n4. Add to wallet\n5. Check Discounts \n6. Sign Out \n");
+        System.out.println("1. List all and search services\n2. Pay for a service\n3.Request a refund\n4. Add to wallet\n5. Check Discounts \n6. Sign Out \n");
         System.out.print("Choice: ");
 
         Scanner input = new Scanner(System.in);

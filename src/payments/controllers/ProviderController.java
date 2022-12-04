@@ -31,4 +31,13 @@ public class ProviderController {
         return formElementRelation
                 .select(fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName));
     }
+
+    public boolean supportsCashOnDelivery(String serviceName, String providerName) {
+        ArrayList<Provider> providers = providerRelation
+                .select(p -> p.serviceName == serviceName && p.name == providerName);
+        if (providers.size() == 0) {
+            return false;
+        }
+        return providers.get(0).cashOnDelivery;
+    }
 }

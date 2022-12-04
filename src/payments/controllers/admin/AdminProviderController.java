@@ -1,17 +1,13 @@
 package payments.controllers.admin;
 
-import java.util.ArrayList;
-
 import datastore.Relation;
 import datastore.exceptions.EntitySaveException;
 import handlers.HandlerName;
 import payments.common.Response;
-import payments.entities.FormElement;
 import payments.entities.Provider;
 
 public class AdminProviderController {
     private Relation<Provider> providerRelation;
-    private Relation<FormElement> formElementRelation;
 
     public Response addProvider(String serviceName, String name, boolean cashOnDelivery, HandlerName handlerName)
             throws EntitySaveException {

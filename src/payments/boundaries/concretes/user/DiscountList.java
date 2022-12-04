@@ -1,0 +1,41 @@
+package payments.boundaries.concretes.user;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import datastore.exceptions.EntityException;
+import payments.boundaries.Frame;
+import payments.boundaries.FrameName;
+import payments.controllers.DiscountController;
+import payments.entities.Discount;
+
+public class DiscountList extends Frame {
+    private DiscountController discountController;
+
+    public DiscountList(DiscountController discountController) {
+        this.discountController = discountController;
+    }
+
+    public FrameName getFrameName() {
+        return FrameName.ADD_AMOUNT_TO_WALLET;
+    }
+
+    @Override
+    protected FrameName display() throws EntityException {
+
+        ArrayList <Discount> array = discountController.getAllDiscounts();
+        System.out.println("Current discounts : ");
+        for (Discount element : array)
+        {
+            System.out.println("id : "+ element.id +" type : "+element.type+" percentage : "+ element.percentage+" serviceName : " + element.serviceName);
+        }
+
+        System.out.println("choice (you can only go back, press anything) : ");
+        Scanner input = new Scanner(System.in);
+        String option = input.next();
+        input.close();
+        return FrameName.HOME_USER;
+
+    }
+    
+}

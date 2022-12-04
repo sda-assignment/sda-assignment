@@ -38,4 +38,10 @@ public class AuthController {
         logInSession.setLoggedInUser(null);
         return new Response(true, null);
     }
+
+    public boolean isAdmin ()
+    {
+        return logInSession.getLoggedInUser() != null && logInSession.getLoggedInUser().isAdmin ;
+        
+    }
 }

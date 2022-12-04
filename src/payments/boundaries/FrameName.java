@@ -1,30 +1,35 @@
-package payments.boundaries.EnumViews;
+package payments.boundaries;
 
 public enum FrameName {
-    error,
-    guestView,
-    signIn,
-    signUp,
+    ERROR,
+    GUEST_VIEW,
+    SIGN_IN,
+    SIGN_UP,
     // ----------------------------
 
-    homeUser,
+    HOME_USER,
 
-    searchServiceProvider,
-    specificServiceProviderScreen,
-    paymentmethodScreen,
+    SEARCH_SERVICE_PROVIDER,
+    LIST_ALL_PROVIDERS,
+    LIST_PROVIDERS,
+    SPECIFIC_SERVICE_PROVIDER,
+    PAYMENT_METHOD,
     // ********************************
-    refundRequestScreen,
+    REFUND_REQUEST,
     // ********************************
-    addAmounttoWallet,
-    addingResultscreen,
+    ADD_AMOUNT_TO_WALLET,
+    ADDING_RESULT,
     // ********************************
-    discountScreen,
+    DISCOUNT,
 
     // ------------------------------
 
-    homeAdmin,
+    HOME_ADMIN,
 
-    // Choose Service of Sp to add Screen (#13)
+    ADD_PROVIDER,
+    ADD_DISCOUNT,
+    ADMIN_LIST_TRANSACTION,
+    ADMIN_LIST_REFUNDS,
     // Enter provider details Screen (#14)
     // Enter form elements for provider (#15)
     // Service provider addition result scree (#16)
@@ -36,6 +41,6 @@ public enum FrameName {
     // **********************************
     // List Transactions screen (#21)
     // ***********************************
-    adminRefundView
+    ADMIN_REFUND
 
 }

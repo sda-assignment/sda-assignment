@@ -1,6 +1,7 @@
-package payments.boundaries;
+package payments.boundaries.concretes.common;
 
-import payments.boundaries.EnumViews.FrameName;
+import payments.boundaries.Frame;
+import payments.boundaries.FrameName;
 import payments.controllers.AuthController;
 
 import java.util.Scanner;
@@ -12,25 +13,30 @@ public class GuestView extends Frame {
 
     public GuestView(AuthController controller) {
         this.controller = controller;
-        frameName = "Guest";
     }
 
-    public FrameName display() { 
+    public FrameName getFrameName ()
+    {
+        return FrameName.GUEST_VIEW;
+    }
+
+    protected FrameName display() { 
         System.out.println("Guest \n");
         System.out.println("1- Sign In \n 2- Sign Up");
         Scanner userInput = new Scanner(System.in);
         String option = userInput.nextLine();
         userInput.close();
         if (option.equals("1")) {
-            return FrameName.signIn;
+            return FrameName.SIGN_IN;
         } else if (option.equals("2")) {
-            return FrameName.signUp;
+            return FrameName.SIGN_UP;
         } else if (option.equals("#")) {
             // a view that handles user error and returns him to same screen he was in
             // before error
-            return FrameName.guestView;
+            return FrameName.GUEST_VIEW;
         } else {
-            return FrameName.error;
+            System.out.println("Please enter valid input ");
+            return FrameName.GUEST_VIEW;
         }
     }
 

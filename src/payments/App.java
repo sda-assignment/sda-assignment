@@ -10,8 +10,8 @@ import payments.entities.User;
 import payments.entities.builders.RefundRequestBuilder;
 import payments.entities.builders.TransactionBuilder;
 import payments.entities.builders.UserBuilder;
-import payments.boundaries.AdminRefundView;
 import payments.boundaries.Router;
+import payments.boundaries.AdminFrames.AdminRefundView;
 import payments.controllers.AdminRefundController;
 
 public class App {

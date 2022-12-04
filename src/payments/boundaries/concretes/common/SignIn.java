@@ -1,9 +1,10 @@
-package payments.boundaries;
+package payments.boundaries.concretes.common;
 
 import java.util.Scanner;
 
 import datastore.exceptions.EntityException;
-import payments.boundaries.EnumViews.FrameName;
+import payments.boundaries.Frame;
+import payments.boundaries.FrameName;
 import payments.common.Response;
 import payments.controllers.AuthController;
 
@@ -13,29 +14,40 @@ public class SignIn extends Frame {
 
     public SignIn(AuthController controller) {
         this.controller = controller;
-        frameName = "signIn";
+    }
+
+    public FrameName getFrameName ()
+    {
+        return FrameName.SIGN_IN;
     }
 
     @Override
-    public FrameName display() throws EntityException {
+    protected FrameName display() throws EntityException {
         Scanner input = new Scanner(System.in);
         System.out.println("Sign in \n");
         System.out.println("email : ");
         String email = input.nextLine();
+        
+        // TODO: try to encapsulate the # check for all classes in the parent classes
         if (email.equals("#")) {
             input.close();
-            return FrameName.guestView;
+            return FrameName.GUEST_VIEW;
         }
+        
         System.out.println("password : ");
         String password = input.nextLine();
         input.close();
         Response result = controller.logIn(email, password);
         System.out.println(result.value);
+        
         if (result.success) {
-            // how to know if home admin
-            return FrameName.homeUser;
+           if (controller.isAdmin())
+            return FrameName.HOME_ADMIN;
+           else 
+            return FrameName.HOME_USER;
         } else {
-            return FrameName.signIn;
+            System.out.println(result.value);
+            return FrameName.SIGN_IN;
         }
     }
 

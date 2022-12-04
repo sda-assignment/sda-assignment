@@ -20,18 +20,4 @@ public class AdminProviderController {
         providerRelation.insert(new Provider(serviceName, name, cashOnDelivery, handlerName));
         return new Response(true, "Provider created successfully");
     }
-
-    public ArrayList<Provider> searchForProviders(String serviceNameAndProviderName) {
-        return providerRelation.select(
-                p -> p.serviceName.contains(serviceNameAndProviderName) || p.name.contains(serviceNameAndProviderName));
-    }
-
-    public ArrayList<Provider> getProvidersForService(String serviceName) {
-        return providerRelation.select(p -> p.serviceName.equals(serviceName));
-    }
-
-    public ArrayList<FormElement> getProviderFormElements(String serviceName, String providerName) {
-        return formElementRelation
-                .select(fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName));
-    }
 }

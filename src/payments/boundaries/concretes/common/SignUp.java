@@ -1,9 +1,10 @@
-package payments.boundaries;
+package payments.boundaries.concretes.common;
 
 import java.util.Scanner;
 
 import datastore.exceptions.EntityException;
-import payments.boundaries.EnumViews.FrameName;
+import payments.boundaries.Frame;
+import payments.boundaries.FrameName;
 import payments.common.Response;
 import payments.controllers.AuthController;
 
@@ -13,11 +14,15 @@ public class SignUp extends Frame {
 
     public SignUp(AuthController controller) {
         this.controller = controller;
-        frameName = "signUp";
+    }
+
+    public FrameName getFrameName ()
+    {
+        return FrameName.SIGN_UP;
     }
 
     @Override
-    public FrameName display() throws EntityException {
+    protected FrameName display() throws EntityException {
         
         Scanner input = new Scanner(System.in);
         System.out.println("Sign up \n");
@@ -27,7 +32,7 @@ public class SignUp extends Frame {
         if (email.equals("#")) 
         {
             input.close();
-            return FrameName.guestView;
+            return FrameName.GUEST_VIEW;
         }
         
         System.out.println("username : ");
@@ -41,11 +46,12 @@ public class SignUp extends Frame {
         
         if (result.success) 
         {
-            return FrameName.homeUser;
+            return FrameName.HOME_USER;
         } 
         else 
         {
-            return FrameName.signUp;
+            System.out.println(result.value);
+            return FrameName.SIGN_UP;
         }
     }
 

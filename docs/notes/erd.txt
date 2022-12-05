@@ -32,8 +32,11 @@ FormElement
 - providerName (PK, FK)
 - type: FormElementType
 - info: String
-(there must only be one FormElement per serviceName and providerName that his this field set to true.
-Also when set to true, the info must be an integer that is going to be deducted from the wallet)
+
+FormElementChoice (Only for dropdown)
+- info (PK)
+- serviceName (PK, FK)
+- providerName (PK, FK)
 
 Discounts
 - id (PK)

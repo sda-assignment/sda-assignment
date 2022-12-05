@@ -16,20 +16,18 @@ public class SignUp extends Frame {
         this.controller = controller;
     }
 
-    public FrameName getFrameName ()
-    {
+    public FrameName getFrameName() {
         return FrameName.SIGN_UP;
     }
 
     @Override
     protected FrameName display(Scanner input) throws EntityException {
 
-        System.out.format("%15s","Sign up \n");
+        System.out.format("%15s", "Sign up \n");
         System.out.println("email : ");
         String email = input.nextLine();
 
-        if (email.equals("#"))
-        {
+        if (email.equals("#")) {
             return FrameName.GUEST_VIEW;
         }
 
@@ -38,15 +36,12 @@ public class SignUp extends Frame {
         System.out.println("password : ");
         String password = input.nextLine();
 
-        Response result = controller.signUp(email,username,password);
+        Response result = controller.signUp(email, username, password);
         System.out.println(result.value);
 
-        if (result.success)
-        {
-            return FrameName.HOME_USER;
-        }
-        else
-        {
+        if (result.success) {
+            return FrameName.BECOME_ADMIN;
+        } else {
             System.out.println(result.value);
             return FrameName.SIGN_UP;
         }

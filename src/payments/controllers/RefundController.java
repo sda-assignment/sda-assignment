@@ -28,7 +28,7 @@ public class RefundController {
             return new Response(false, "You already have a refund request on this transaction");
         ArrayList<Transaction> targetTransactions = transactionRelation.select(t -> t.id == transactionId);
         if (targetTransactions.size() == 0)
-            return new Response(false, "An error has occurred");
+            return new Response(false, "Transaction not found");
         Transaction targetTransaction = targetTransactions.get(0);
         if (targetTransaction.type == TransactionType.REFUND)
             return new Response(false, "Can't request a refund to a refund transaction");

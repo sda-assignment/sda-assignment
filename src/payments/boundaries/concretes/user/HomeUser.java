@@ -22,7 +22,7 @@ public class HomeUser extends Frame {
         System.out.format("%15s", "HOME : User \n");
         System.out.println("Wallet: " + authController.getLoggedInUser().wallet);
         System.out.println(
-                "1. List all and search services\n2. Pay for a service\n3.Request a refund\n4. Add to wallet\n5. Check Discounts \n6. Sign Out \n");
+                "1. List all and search services\n2. Pay for a service\n3. Request a refund\n4. Add to wallet\n5. Check Discounts \n6. Sign Out \n");
         System.out.println("Choice: ");
 
         String option = input.nextLine();
@@ -35,7 +35,7 @@ public class HomeUser extends Frame {
         } else if (option.equals("1")) {
             return FrameName.LIST_ALL_PROVIDERS;
         } else if (option.equals("2")) {
-            return FrameName.SEARCH_SERVICE_PROVIDER;
+            return FrameName.PAYMENT_METHOD;
 
         } else if (option.equals("3")) {
             return FrameName.REFUND_REQUEST;

@@ -23,6 +23,7 @@ public class Router {
             FrameName fName = currentFrame.displayWithInstruction(scanner);
             currentFrame = frames.get(fName);
         }
+        System.out.println("Exiting");
         scanner.close();
 
     }

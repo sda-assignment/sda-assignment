@@ -35,6 +35,7 @@ public enum FrameName {
     // **********************************
     LIST_ALL_TRANSACTIONS,
     // ***********************************
-    ADMIN_REFUND
+    ADMIN_REFUND,
+    BECOME_ADMIN
 
 }

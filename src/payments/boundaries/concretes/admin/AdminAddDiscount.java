@@ -40,10 +40,10 @@ public class AdminAddDiscount extends Frame {
 
         if (option.equals("1")) {
             System.out.format("%15s", "Overall discount ");
-            System.out.println("\nEnter amount : ");
+            System.out.println("\nEnter percentage: ");
             option = input.nextLine();
             while (!Util.isPositiveFloat(option)) {
-                System.out.println("Please enter a valid amount ");
+                System.out.println("Please enter a valid percentage");
                 option = input.nextLine();
             }
             double amount = Double.parseDouble(option);

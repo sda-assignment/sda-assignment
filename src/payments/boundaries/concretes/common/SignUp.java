@@ -42,7 +42,6 @@ public class SignUp extends Frame {
         if (result.success) {
             return FrameName.BECOME_ADMIN;
         } else {
-            System.out.println(result.value);
             return FrameName.SIGN_UP;
         }
     }

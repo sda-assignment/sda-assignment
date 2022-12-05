@@ -31,6 +31,7 @@ import payments.boundaries.concretes.common.GuestView;
 import payments.boundaries.concretes.common.SignIn;
 import payments.boundaries.concretes.common.SignUp;
 import payments.boundaries.concretes.user.AddToWallet;
+import payments.boundaries.concretes.user.BecomeAdmin;
 import payments.boundaries.concretes.user.DiscountList;
 import payments.boundaries.concretes.user.HomeUser;
 import payments.boundaries.concretes.user.ListAllProviders;
@@ -48,6 +49,7 @@ import payments.controllers.UserController;
 import payments.controllers.admin.AdminDiscountController;
 import payments.controllers.admin.AdminRefundController;
 import payments.controllers.admin.AdminTransactionController;
+import payments.controllers.admin.AdminUserController;
 
 public class App {
     public static void main(String[] args) throws EntityException, EntitySaveException, EntityLoadException {
@@ -79,6 +81,7 @@ public class App {
                 userRelation, transactionRelation);
         AdminTransactionController adminTransactionController = new AdminTransactionController(
                 transactionRelation);
+        AdminUserController adminUserController = new AdminUserController(userRelation);
         Frame currentFrame = new GuestView();
         Frame[] frameArr = new Frame[] { currentFrame, new SignIn(authController), new SignUp(authController),
                 new HomeUser(session, authController), new DiscountList(discountController),
@@ -88,7 +91,8 @@ public class App {
                 new HomeAdmin(authController),
                 new AdminAddDiscount(adminDiscountController, serviceController),
                 new AdminRefund(adminRefundController),
-                new ListAllTransactions(adminTransactionController) };
+                new ListAllTransactions(adminTransactionController),
+                new BecomeAdmin(adminUserController, authController) };
         Router router = new Router(frameArr, currentFrame);
         router.mainLoop();
     }

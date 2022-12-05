@@ -22,7 +22,7 @@ public class AdminDiscountController {
     }
 
     public Response addOverallDiscount(double percentage) throws EntitySaveException {
-        addDiscount(DiscountType.OVERALL, percentage, "");
+        addDiscount(DiscountType.OVERALL, percentage, "None");
         return new Response(true, "Discount added successfully");
     }
 

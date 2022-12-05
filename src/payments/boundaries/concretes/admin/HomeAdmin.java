@@ -22,11 +22,10 @@ public class HomeAdmin extends Frame {
     }
 
     protected FrameName display(Scanner input) throws EntityException {
-        System.out.format("%15s", "HOME : Admin");
-        System.out.println("\n1. Add a service provider");
-        System.out.println("2. Add a discount");
-        System.out.println("3. List user transaction");
-        System.out.println("4. View refund request");
+        System.out.format("%15s", "HOME : Admin\n");
+        System.out.println("1. Add a discount");
+        System.out.println("2. List user transaction");
+        System.out.println("3. View refund request");
         System.out.println("choice: ");
 
         String option = input.nextLine();
@@ -36,14 +35,14 @@ public class HomeAdmin extends Frame {
             System.out.println(obj.value);
             return FrameName.GUEST_VIEW;
 
-        } else if (option.equals("2")) {
+        } else if (option.equals("1")) {
             return FrameName.ADD_DISCOUNT;
 
-        } else if (option.equals("3")) {
+        } else if (option.equals("2")) {
             return FrameName.ADMIN_LIST_TRANSACTION;
 
-        } else if (option.equals("4")) {
-            return FrameName.ADMIN_LIST_REFUNDS;
+        } else if (option.equals("3")) {
+            return FrameName.ADMIN_REFUND;
 
         }
 

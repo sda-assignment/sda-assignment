@@ -13,8 +13,6 @@ import payments.common.Response;
 
 public class AdminRefund extends Frame {
     private AdminRefundController aRefund;
-    private int refundRequestStatus;
-    private int requestId;
 
     public AdminRefund(AdminRefundController aRefund) {
         this.aRefund = aRefund;
@@ -45,12 +43,12 @@ public class AdminRefund extends Frame {
         if (input.equals("#")) {
             return FrameName.HOME_ADMIN;
         }
-        requestId = Integer.valueOf(input);
+        int requestId = Integer.valueOf(input);
 
         System.out.println("enter the response for the refund request");
         System.out.println("1- Accepted\n2- Rejected");
-        refundRequestStatus = adminInput.nextInt();
-        if (refundRequestStatus == 1) {
+        String refundRequestStatus = adminInput.nextLine();
+        if (refundRequestStatus == "1") {
             Response object = aRefund.acceptRefund(requestId);
             System.out.println(object.value);
             if (object.success) {
@@ -58,7 +56,7 @@ public class AdminRefund extends Frame {
             }
             return FrameName.ADMIN_REFUND;
 
-        } else if (refundRequestStatus == 2) {
+        } else if (refundRequestStatus == "2") {
             Response object = aRefund.rejectRefund(requestId);
             System.out.println(object.value);
             if (object.success) {

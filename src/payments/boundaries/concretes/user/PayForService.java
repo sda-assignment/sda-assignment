@@ -16,8 +16,7 @@ public class PayForService extends Frame {
     PaymentController paymentController;
     ProviderController providerController;
 
-    public PayForService(PaymentController paymentController, ProviderController providerController)
-    {
+    public PayForService(PaymentController paymentController, ProviderController providerController) {
         this.paymentController = paymentController;
         this.providerController = providerController;
     }
@@ -29,7 +28,7 @@ public class PayForService extends Frame {
 
     @Override
     protected FrameName display(Scanner input) throws EntityException {
-        System.out.format("%15s","Pay For Service \n");
+        System.out.format("%15s", "Pay For Service \n");
         System.out.println("Enter the name of the service you want to pay (case sensitive): ");
         String serviceName = input.nextLine();
         if (serviceName.equals("#")) {
@@ -40,7 +39,7 @@ public class PayForService extends Frame {
 
         ArrayList<FormElement> fe = providerController.getProviderFormElements(serviceName, providerName);
         if (fe.size() == 0) {
-            System.out.println("Service name doesn't exist");
+            System.out.println("No form for this service was found");
             return FrameName.HOME_USER;
         }
 
@@ -64,8 +63,7 @@ public class PayForService extends Frame {
         } else if (option.equals("3")) {
             Response response = paymentController.payCashOnDelivery(serviceName, providerName, request);
             System.out.println(response.value);
-        }
-        else {
+        } else {
             System.out.println("Enter credit card number:");
             String cardNumber = input.nextLine();
             Response response = paymentController.payUsingCreditCard(serviceName, providerName, request, cardNumber);

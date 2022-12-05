@@ -30,8 +30,6 @@ public class DiscountList extends Frame {
                     + " - serviceName: " + element.serviceName);
         }
 
-        System.out.println("choice (you can only go back, press anything): ");
-        input.nextLine();
         return FrameName.HOME_USER;
 
     }

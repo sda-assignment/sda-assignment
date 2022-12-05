@@ -33,8 +33,6 @@ public class ListAllTransactions extends Frame{
             " Service Name: " + element.serviceName + "Provider Name: " + element.providerName + " \n");
         }
 
-        System.out.println("Go Back to home (only option, press any key ):  ");
-        input.nextLine();
         return FrameName.HOME_ADMIN;
     }
 

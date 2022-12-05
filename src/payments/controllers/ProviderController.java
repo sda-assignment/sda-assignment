@@ -16,7 +16,8 @@ public class ProviderController {
 
     public ArrayList<Provider> searchForProviders(String serviceNameAndProviderName) {
         return providerRelation.select(
-                p -> p.serviceName.contains(serviceNameAndProviderName) || p.name.contains(serviceNameAndProviderName));
+                p -> p.serviceName.toLowerCase().contains(serviceNameAndProviderName.toLowerCase())
+                        || p.name.toLowerCase().contains(serviceNameAndProviderName.toLowerCase()));
     }
 
     public ArrayList<Provider> getProvidersForService(String serviceName) {
@@ -34,7 +35,7 @@ public class ProviderController {
 
     public boolean supportsCashOnDelivery(String serviceName, String providerName) {
         ArrayList<Provider> providers = providerRelation
-                .select(p -> p.serviceName == serviceName && p.name == providerName);
+                .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
         if (providers.size() == 0) {
             return false;
         }

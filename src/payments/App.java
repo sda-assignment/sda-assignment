@@ -4,7 +4,7 @@ import datastore.Relation;
 import datastore.exceptions.EntityException;
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
-
+import handlers.HandlerName;
 import payments.entities.Discount;
 import payments.entities.FormElement;
 import payments.entities.RefundRequest;
@@ -94,6 +94,35 @@ public class App {
                 new ListAllTransactions(adminTransactionController),
                 new BecomeAdmin(adminUserController, authController) };
         Router router = new Router(frameArr, currentFrame);
+
+        serviceRelation.removeAll();
+        providerRelation.removeAll();
+        for (String serviceName : new String[] { "Mobile Recharge Service", "Internet Payment Service",
+                "Landline Service", "Donation" }) {
+            serviceRelation.insert(new Service(serviceName));
+        }
+        providerRelation.insert(new Provider("Mobile Recharge Service", "Orange", false, HandlerName.ORANGE_RECHARGE));
+        providerRelation.insert(new Provider("Mobile Recharge Service", "We", false, HandlerName.WE_RECHARGE));
+        providerRelation
+                .insert(new Provider("Mobile Recharge Service", "Etisalat", false, HandlerName.ETISALAT_RECHARGE));
+        providerRelation
+                .insert(new Provider("Mobile Recharge Service", "Vodafone", false, HandlerName.VODAFONE_RECHARGE));
+
+        providerRelation.insert(new Provider("Internet Payment Service", "Orange", false, HandlerName.ORANGE_INTERNET));
+        providerRelation.insert(new Provider("Internet Payment Service", "We", false, HandlerName.WE_INTERNET));
+        providerRelation
+                .insert(new Provider("Internet Payment Service", "Etisalat", false, HandlerName.ETISALAT_INTERNET));
+        providerRelation
+                .insert(new Provider("Internet Payment Service", "Vodafone", false, HandlerName.VODAFONE_INTERNET));
+
+        providerRelation.insert(new Provider("Landline Service", "Monthly", false, HandlerName.MONTHLY_LANDLINE));
+        providerRelation.insert(new Provider("Landline Service", "Quarterly", false, HandlerName.QUARTERLY_LANDLINE));
+
+        providerRelation
+                .insert(new Provider("Donation", "Cancer Hospital", true, HandlerName.CANCER_HOSPITAL_DONATION));
+        providerRelation.insert(new Provider("Donation", "Schools", true, HandlerName.SCHOOL_DONATION));
+        providerRelation.insert(new Provider("Donation", "NGO", true, HandlerName.NGO_DONATION));
+
         router.mainLoop();
     }
 }

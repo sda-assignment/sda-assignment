@@ -19,8 +19,9 @@ public class ListProviders extends Frame {
     }
 
     public FrameName display(Scanner input) {
-        for (int i = 1; i < providers.size(); ++i) {
-            System.out.println(i + ". " + providers.get(i).name + " " + providers.get(i).serviceName + " service");
+        for (int i = 0; i < providers.size(); ++i) {
+            System.out.println(i + ". Provider Name: " + providers.get(i).name + " - Service Name: "
+                    + providers.get(i).serviceName);
         }
         return FrameName.ERROR;
     }

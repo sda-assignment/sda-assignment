@@ -4,9 +4,9 @@ import common.Util;
 import datastore.Entity;
 
 public class FormElementChoice implements Entity {
-    private String info;
-    private String serviceName;
-    private String providerName;
+    public final String info;
+    public final String serviceName;
+    public final String providerName;
 
     public FormElementChoice(String info, String serviceName, String providerName) {
         this.info = info;

@@ -22,14 +22,12 @@ public class SignIn extends Frame {
 
     @Override
     protected FrameName display(Scanner input) throws EntityException {
-        input = new Scanner(System.in);
         System.out.format("%15s", "Sign in \n");
         System.out.println("email : ");
         String email = input.nextLine();
 
         // TODO: try to encapsulate the # check for all classes in the parent classes
         if (email.equals("#")) {
-            input.close();
             return FrameName.GUEST_VIEW;
         }
 

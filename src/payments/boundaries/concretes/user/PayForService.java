@@ -28,13 +28,11 @@ public class PayForService extends Frame {
     }
 
     @Override
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s","Pay For Service \n");
         System.out.println("Enter the name of the service you want to pay (case sensitive): ");
-        Scanner input = new Scanner(System.in);
         String serviceName = input.nextLine();
         if (serviceName.equals("#")) {
-            input.close();
             return FrameName.HOME_USER;
         }
         System.out.println("Enter the name of the service provider you want to pay to (case sensitive): ");
@@ -43,7 +41,6 @@ public class PayForService extends Frame {
         ArrayList<FormElement> fe = providerController.getProviderFormElements(serviceName, providerName);
         if (fe.size() == 0) {
             System.out.println("Service name doesn't exist");
-            input.close();
             return FrameName.HOME_USER;
         }
 
@@ -74,8 +71,7 @@ public class PayForService extends Frame {
             Response response = paymentController.payUsingCreditCard(serviceName, providerName, request, cardNumber);
             System.out.println(response.value);
         }
-        
-        input.close();
+
         return FrameName.HOME_USER;
     }
 

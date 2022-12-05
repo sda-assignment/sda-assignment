@@ -25,7 +25,7 @@ public class UserRefundRequest extends Frame {
         return FrameName.HOME_USER;
     }
 
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner input) throws EntityException {
         ArrayList<Transaction> array = transactionController.getTransactionsForUser();
         System.out.format("%15s","All Transactions \n");
         for (Transaction element : array) {
@@ -35,9 +35,7 @@ public class UserRefundRequest extends Frame {
         }
 
         System.out.println("enter  id : ");
-        Scanner input = new Scanner(System.in);
         String option = input.nextLine();
-        input.close();
 
         for (Transaction element : array)
         {
@@ -47,10 +45,10 @@ public class UserRefundRequest extends Frame {
                 {
                     System.out.println("Error : Can't refund a transaction of type (refund) ");
                     return this.getFrameName();
-                    
+
                 }
             }
-        } 
+        }
 
         if (option.equals("#")) {
             return FrameName.HOME_USER;

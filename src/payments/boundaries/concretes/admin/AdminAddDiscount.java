@@ -27,16 +27,14 @@ public class AdminAddDiscount extends Frame {
     }
 
     @Override
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s", "Add A Discount");
         System.out.println("\nEnter Discount type");
         System.out.println("1- Overall \n2- Specific");
         System.out.println("choice : ");
-        Scanner input = new Scanner(System.in);
         String option = input.nextLine();
 
         if (option.equals("#")) {
-            input.close();
             return FrameName.HOME_ADMIN;
         }
 
@@ -51,7 +49,6 @@ public class AdminAddDiscount extends Frame {
             double amount = Double.parseDouble(option);
             Response response = adminDiscountController.addOverallDiscount(amount);
             System.out.println(response.value);
-            input.close();
             return FrameName.ADD_DISCOUNT;
 
         } else if (option.equals("2")) {
@@ -80,10 +77,8 @@ public class AdminAddDiscount extends Frame {
             double amount = Double.parseDouble(option);
             Response response = adminDiscountController.addSpecificDiscount(serviceName, amount);
             System.out.println(response.value);
-            input.close();
             return FrameName.ADD_DISCOUNT;
         } else {
-            input.close();
             System.out.println("invalid input");
             return FrameName.ADD_DISCOUNT;
 

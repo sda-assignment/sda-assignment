@@ -21,17 +21,15 @@ public class HomeAdmin extends Frame {
         return FrameName.HOME_ADMIN;
     }
 
-    protected FrameName display() throws EntityException {
-        System.out.format("%15s","HOME : Admin");
+    protected FrameName display(Scanner input) throws EntityException {
+        System.out.format("%15s", "HOME : Admin");
         System.out.println("\n1. Add a service provider");
         System.out.println("2. Add a discount");
         System.out.println("3. List user transaction");
         System.out.println("4. View refund request");
         System.out.println("choice: ");
 
-        Scanner input = new Scanner(System.in);
         String option = input.nextLine();
-        input.close();
 
         if (option.equals("#")) {
             Response obj = authcontroller.logOut();

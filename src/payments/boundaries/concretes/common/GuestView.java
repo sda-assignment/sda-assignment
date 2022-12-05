@@ -20,12 +20,10 @@ public class GuestView extends Frame {
         return FrameName.GUEST_VIEW;
     }
 
-    protected FrameName display() { 
+    protected FrameName display(Scanner userInput) {
         System.out.format("%15s","Guest \n");
         System.out.println("1- Sign In \n2- Sign Up");
-        Scanner userInput = new Scanner(System.in);
         String option = userInput.nextLine();
-        userInput.close();
         if (option.equals("1")) {
             return FrameName.SIGN_IN;
         } else if (option.equals("2")) {

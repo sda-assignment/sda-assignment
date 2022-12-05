@@ -21,22 +21,20 @@ public class ListAllProviders extends Frame {
     }
 
     @Override
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s","Providers \n");
         System.out.println("avaliable providers : ");
         ArrayList<Provider> providers = providerController.getAllProviders();
         ListProviders listProviders = new ListProviders(providers);
-        listProviders.displayWithInstruction();
+        listProviders.displayWithInstruction(input);
         System.out.println("enter search : ");
-        Scanner input = new Scanner(System.in);
         String option = input.nextLine();
-        input.close();
         if (option.equals("#")) {
             return FrameName.HOME_USER;
         }
         ArrayList<Provider> filteredProviders = providerController.searchForProviders(option);
         ListProviders filteredListProviders = new ListProviders(filteredProviders);
-        filteredListProviders.displayWithInstruction();
+        filteredListProviders.displayWithInstruction(input);
         return FrameName.HOME_USER;
     }
 

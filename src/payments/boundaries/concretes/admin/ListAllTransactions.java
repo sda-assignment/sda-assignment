@@ -23,7 +23,7 @@ public class ListAllTransactions extends Frame{
     //int id, String email, LocalDateTime timestamp, double amount, TransactionType type,
     //String serviceName, String providerName
     @Override
-    protected FrameName display() {
+    protected FrameName display(Scanner input) {
         System.out.format("%15s","List all transactions ");
         System.out.println();
         ArrayList <Transaction> transactions = adminTransactionController.getAllTransactions();
@@ -34,11 +34,9 @@ public class ListAllTransactions extends Frame{
         }
 
         System.out.println("Go Back to home (only option, press any key ) :  ");
-        Scanner input = new Scanner(System.in);
         input.nextLine();
-        input.close();
         return FrameName.HOME_ADMIN;
     }
-    
-    
+
+
 }

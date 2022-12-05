@@ -15,7 +15,6 @@ public class AdminRefund extends Frame {
     private AdminRefundController aRefund;
     private int refundRequestStatus;
     private int requestId;
-    private Scanner adminInput;
 
     public AdminRefund(AdminRefundController aRefund) {
         this.aRefund = aRefund;
@@ -25,7 +24,7 @@ public class AdminRefund extends Frame {
         return FrameName.ADMIN_REFUND;
     }
 
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner adminInput) throws EntityException {
 
         ArrayList<RefundRequest> refundRequests = aRefund.getRefundRequests();
         Formatter fmt = new Formatter();
@@ -39,7 +38,6 @@ public class AdminRefund extends Frame {
         }
         System.out.println(fmt);
 
-        adminInput = new Scanner(System.in);
         System.out.println("which Request do you want to handle");
         System.out.println("Enter Request id: ");
         String input = adminInput.nextLine();
@@ -52,7 +50,6 @@ public class AdminRefund extends Frame {
         System.out.println("enter the response for the refund request");
         System.out.println("1- Accepted\n2- Rejected");
         refundRequestStatus = adminInput.nextInt();
-        adminInput.close();
         if (refundRequestStatus == 1) {
             Response object = aRefund.acceptRefund(requestId);
             System.out.println(object.value);

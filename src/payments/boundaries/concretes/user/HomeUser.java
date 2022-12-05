@@ -15,25 +15,23 @@ public class HomeUser extends Frame {
     public HomeUser(LogInSession S, AuthController authController) {
         currentUser = S.getLoggedInUser();
         this.authcontroller = authController;
-        
+
     }
-    
+
     public FrameName getFrameName ()
     {
         return FrameName.HOME_USER;
     }
 
-    protected FrameName display()
+    protected FrameName display(Scanner input)
     {
         System.out.format("%15s","HOME : User \n");
         System.out.println("Wallet: " + currentUser.wallet);
         System.out.println("1. List all and search services\n2. Pay for a service\n3.Request a refund\n4. Add to wallet\n5. Check Discounts \n6. Sign Out \n");
         System.out.println("Choice: ");
 
-        Scanner input = new Scanner(System.in);
         String option = input.nextLine();
-        input.close();
-        
+
         if(option.equals("#") || option.equals("6"))
         {
             Response obj = authcontroller.logOut();
@@ -70,5 +68,5 @@ public class HomeUser extends Frame {
         return FrameName.HOME_USER;
     }
 
-    
+
 }

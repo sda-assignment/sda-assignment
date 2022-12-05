@@ -23,19 +23,16 @@ public class AddToWallet extends Frame {
     }
 
     @Override
-    protected FrameName display() throws EntityException {
-        Scanner input = new Scanner(System.in);
+    protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s","Add Amount To Wallet \n");
         System.out.println("credit card : ");
         String creditCard = input.nextLine();
         if (creditCard.equals("#")) {
-            input.close();
             return FrameName.HOME_USER;
         }
 
         System.out.println("amount : ");
         String amount = input.nextLine();
-        input.close();
 
         if (!Util.isPositiveFloat(amount)) {
             System.out.println("Please enter a valid amount");

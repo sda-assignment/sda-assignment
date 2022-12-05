@@ -21,7 +21,7 @@ public class DiscountList extends Frame {
     }
 
     @Override
-    protected FrameName display() throws EntityException {
+    protected FrameName display(Scanner input) throws EntityException {
 
         ArrayList <Discount> array = discountController.getAllDiscounts();
         System.out.format("%15s","Current discounts \n");
@@ -31,11 +31,9 @@ public class DiscountList extends Frame {
         }
 
         System.out.println("choice (you can only go back, press anything) : ");
-        Scanner input = new Scanner(System.in);
         input.nextLine();
-        input.close();
         return FrameName.HOME_USER;
 
     }
-    
+
 }

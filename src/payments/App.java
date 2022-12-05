@@ -78,13 +78,13 @@ public class App {
                 new FormElementChoiceBuilder());
         AuthController authController = new AuthController(userRelation, session);
         DiscountController discountController = new DiscountController(discountRelation, usedDiscount, session);
-        UserController userController = new UserController(userRelation, session);
+        UserController userController = new UserController(userRelation, session, transactionRelation);
         ProviderController providerController = new ProviderController(providerRelation, formElementRelation);
         PaymentController paymentController = new PaymentController(providerRelation, transactionRelation,
                 userRelation, discountController, authController);
         RefundController refundController = new RefundController(refundRequestRelation, transactionRelation,
                 session);
-        TransactionController transactionController = new TransactionController(transactionRelation, session);
+        TransactionController transactionController = new TransactionController(transactionRelation, authController);
         ServiceController serviceController = new ServiceController(serviceRelation);
         AdminDiscountController adminDiscountController = new AdminDiscountController(discountRelation);
         AdminRefundController adminRefundController = new AdminRefundController(refundRequestRelation,

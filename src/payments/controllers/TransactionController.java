@@ -7,13 +7,14 @@ import payments.entities.Transaction;
 
 public class TransactionController {
     private Relation<Transaction> transactionRelation;
-    private LogInSession logInSession;
+    private AuthController authController;
 
-    public TransactionController(Relation<Transaction> transactionRelation, LogInSession logInSession) {
+    public TransactionController(Relation<Transaction> transactionRelation, AuthController authController) {
         this.transactionRelation = transactionRelation;
+        this.authController = authController;
     }
 
     public ArrayList<Transaction> getTransactionsForUser() {
-        return transactionRelation.select(t -> t.userEmail.equals(logInSession.getLoggedInUser().email));
+        return transactionRelation.select(t -> t.userEmail.equals(authController.getLoggedInUser().email));
     }
 }

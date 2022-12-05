@@ -56,7 +56,7 @@ public class PaymentController {
         double amountToDeduct = handlerRes.amount;
         ArrayList<Discount> discounts = discountController.getDiscountsForService(serviceName);
         for (Discount discount : discounts) {
-            amountToDeduct = amountToDeduct - amountToDeduct * discount.percentage;
+            amountToDeduct = amountToDeduct - amountToDeduct * (discount.percentage / 100);
         }
 
         Response paymentRes = paymentStrategy.pay(amountToDeduct);

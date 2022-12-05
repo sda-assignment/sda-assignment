@@ -17,17 +17,17 @@ public class DiscountList extends Frame {
     }
 
     public FrameName getFrameName() {
-        return FrameName.ADD_AMOUNT_TO_WALLET;
+        return FrameName.DISCOUNT;
     }
 
     @Override
     protected FrameName display(Scanner input) throws EntityException {
 
-        ArrayList <Discount> array = discountController.getAllDiscounts();
-        System.out.format("%15s","Current discounts \n");
-        for (Discount element : array)
-        {
-            System.out.println("id : "+ element.id +" type : "+element.type+" percentage : "+ element.percentage+" serviceName : " + element.serviceName);
+        ArrayList<Discount> array = discountController.getAllDiscounts();
+        System.out.format("%15s", "Current discounts \n");
+        for (Discount element : array) {
+            System.out.println("id : " + element.id + " type : " + element.type + " percentage : " + element.percentage
+                    + " serviceName : " + element.serviceName);
         }
 
         System.out.println("choice (you can only go back, press anything) : ");

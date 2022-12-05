@@ -22,12 +22,12 @@ public class UserRefundRequest extends Frame {
     }
 
     public FrameName getFrameName() {
-        return FrameName.HOME_USER;
+        return FrameName.REFUND_REQUEST;
     }
 
     protected FrameName display(Scanner input) throws EntityException {
         ArrayList<Transaction> array = transactionController.getTransactionsForUser();
-        System.out.format("%15s","All Transactions \n");
+        System.out.format("%15s", "All Transactions \n");
         for (Transaction element : array) {
             System.out.println("id : " + element.id + " userEmail : " + element.userEmail +
                     " timestamp : " + element.timestamp + " amount : " + element.amount + " $ type : " + element.type
@@ -37,12 +37,9 @@ public class UserRefundRequest extends Frame {
         System.out.println("enter  id : ");
         String option = input.nextLine();
 
-        for (Transaction element : array)
-        {
-            if (element.id == Integer.parseInt(option))
-            {
-                if (element.type == TransactionType.REFUND)
-                {
+        for (Transaction element : array) {
+            if (element.id == Integer.parseInt(option)) {
+                if (element.type == TransactionType.REFUND) {
                     System.out.println("Error : Can't refund a transaction of type (refund) ");
                     return this.getFrameName();
 

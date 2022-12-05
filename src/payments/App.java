@@ -79,7 +79,7 @@ public class App {
                 userRelation, transactionRelation);
         AdminTransactionController adminTransactionController = new AdminTransactionController(
                 transactionRelation);
-        Frame currentFrame = new GuestView(authController);
+        Frame currentFrame = new GuestView();
         Frame[] frameArr = new Frame[] { currentFrame, new SignIn(authController), new SignUp(authController),
                 new HomeUser(session, authController), new DiscountList(discountController),
                 new AddToWallet(userController), new ListAllProviders(providerController),

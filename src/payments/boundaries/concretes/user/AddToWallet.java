@@ -24,7 +24,7 @@ public class AddToWallet extends Frame {
 
     @Override
     protected FrameName display(Scanner input) throws EntityException {
-        System.out.format("%15s","Add Amount To Wallet \n");
+        System.out.format("%15s", "Add Amount To Wallet \n");
         System.out.println("credit card : ");
         String creditCard = input.nextLine();
         if (creditCard.equals("#")) {

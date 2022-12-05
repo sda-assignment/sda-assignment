@@ -39,9 +39,12 @@ public class AuthController {
         return new Response(true, null);
     }
 
-    public boolean isAdmin ()
-    {
-        return logInSession.getLoggedInUser() != null && logInSession.getLoggedInUser().isAdmin ;
-        
+    public boolean isAdmin() {
+        return logInSession.getLoggedInUser() != null && logInSession.getLoggedInUser().isAdmin;
+
+    }
+
+    public User getLoggedInUser() {
+        return logInSession.getLoggedInUser();
     }
 }

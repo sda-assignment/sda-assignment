@@ -2,26 +2,16 @@ package payments.boundaries.concretes.common;
 
 import payments.boundaries.Frame;
 import payments.boundaries.FrameName;
-import payments.controllers.AuthController;
 
 import java.util.Scanner;
 
 public class GuestView extends Frame {
-
-    String option;
-    AuthController controller;
-
-    public GuestView(AuthController controller) {
-        this.controller = controller;
-    }
-
-    public FrameName getFrameName ()
-    {
+    public FrameName getFrameName() {
         return FrameName.GUEST_VIEW;
     }
 
     protected FrameName display(Scanner userInput) {
-        System.out.format("%15s","Guest \n");
+        System.out.format("%15s", "Guest \n");
         System.out.println("1- Sign In \n2- Sign Up");
         String option = userInput.nextLine();
         if (option.equals("1")) {

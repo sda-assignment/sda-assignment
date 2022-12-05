@@ -21,7 +21,7 @@ public class UserController {
         if (amount < 0)
             return new Response(false, "Invalid amount");
         userRelation.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + amount),
-                u -> u.email == logInSession.getLoggedInUser().email);
+                u -> u.email.equals(logInSession.getLoggedInUser().email));
         return new Response(true, "Wallet recharged successfully");
     }
 }

@@ -37,7 +37,7 @@ public class DiscountController {
 
     public ArrayList<Discount> getDiscountsForService(String serviceName) {
         ArrayList<Discount> discounts = discountRelation.select(d -> d.type == DiscountType.OVERALL
-                || (d.type == DiscountType.SPECIFIC && d.serviceName == serviceName));
+                || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName)));
         return getEffectiveDiscounts(discounts);
     }
 

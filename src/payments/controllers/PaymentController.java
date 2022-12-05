@@ -26,17 +26,17 @@ public class PaymentController {
     private Relation<Transaction> transactionRelation;
     private Relation<User> userRelation;
     private DiscountController discountController;
-    private LogInSession logInSession;
+    private AuthController authController;
 
     public PaymentController(Relation<Provider> providerRelation, Relation<Transaction> transactionRelation,
             Relation<User> userRelation,
             DiscountController discountController,
-            LogInSession logInSession) {
+            AuthController authController) {
         this.providerRelation = providerRelation;
         this.transactionRelation = transactionRelation;
         this.userRelation = userRelation;
         this.discountController = discountController;
-        this.logInSession = logInSession;
+        this.authController = authController;
     }
 
     private Response payToProvider(String serviceName, String providerName, HashMap<String, String> request,
@@ -65,7 +65,7 @@ public class PaymentController {
 
         Transaction transactionToInsert = new Transaction(
                 Util.incrementOrInitialize(transactionRelation.selectMax(t -> t.id)),
-                logInSession.getLoggedInUser().email,
+                authController.getLoggedInUser().email,
                 LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
         transactionRelation
                 .insert(transactionToInsert);
@@ -81,7 +81,7 @@ public class PaymentController {
 
     public Response payUsingWallet(String serviceName, String providerName, HashMap<String, String> request)
             throws EntitySaveException {
-        PaymentStrategy payWithWalletStrategy = new PayWithWallet(userRelation, logInSession.getLoggedInUser());
+        PaymentStrategy payWithWalletStrategy = new PayWithWallet(userRelation, authController.getLoggedInUser());
         return payToProvider(serviceName, providerName, request, payWithWalletStrategy);
     }
 

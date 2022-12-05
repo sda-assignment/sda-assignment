@@ -21,7 +21,7 @@ public class GuestView extends Frame {
     }
 
     protected FrameName display() { 
-        System.out.println("Guest \n");
+        System.out.format("%15s","Guest \n");
         System.out.println("1- Sign In \n 2- Sign Up");
         Scanner userInput = new Scanner(System.in);
         String option = userInput.nextLine();
@@ -31,8 +31,6 @@ public class GuestView extends Frame {
         } else if (option.equals("2")) {
             return FrameName.SIGN_UP;
         } else if (option.equals("#")) {
-            // a view that handles user error and returns him to same screen he was in
-            // before error
             return FrameName.GUEST_VIEW;
         } else {
             System.out.println("Please enter valid input ");

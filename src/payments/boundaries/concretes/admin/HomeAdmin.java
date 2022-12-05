@@ -22,8 +22,8 @@ public class HomeAdmin extends Frame {
     }
 
     protected FrameName display() throws EntityException {
-        System.out.println("home");
-        System.out.println("1. Add a service provider");
+        System.out.format("%15s","HOME : Admin");
+        System.out.println("\n1. Add a service provider");
         System.out.println("2. Add a discount");
         System.out.println("3. List user transaction");
         System.out.println("4. View refund request");
@@ -38,8 +38,6 @@ public class HomeAdmin extends Frame {
             System.out.println(obj.value);
             return FrameName.GUEST_VIEW;
 
-        } else if (option.equals("1")) {
-            return FrameName.ADD_PROVIDER;
         } else if (option.equals("2")) {
             return FrameName.ADD_DISCOUNT;
 

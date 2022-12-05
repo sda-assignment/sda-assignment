@@ -25,7 +25,7 @@ public class SignUp extends Frame {
     protected FrameName display() throws EntityException {
         
         Scanner input = new Scanner(System.in);
-        System.out.println("Sign up \n");
+        System.out.format("%15s","Sign up \n");
         System.out.println("email : ");
         String email = input.nextLine();
         

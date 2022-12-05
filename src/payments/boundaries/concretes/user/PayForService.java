@@ -16,6 +16,12 @@ public class PayForService extends Frame {
     PaymentController paymentController;
     ProviderController providerController;
 
+    public PayForService(PaymentController paymentController, ProviderController providerController)
+    {
+        this.paymentController = paymentController;
+        this.providerController = providerController;
+    }
+
     @Override
     public FrameName getFrameName() {
         return FrameName.PAYMENT_METHOD;
@@ -23,6 +29,7 @@ public class PayForService extends Frame {
 
     @Override
     protected FrameName display() throws EntityException {
+        System.out.format("%15s","Pay For Service \n");
         System.out.println("Enter the name of the service you want to pay (case sensitive): ");
         Scanner input = new Scanner(System.in);
         String serviceName = input.nextLine();
@@ -35,7 +42,7 @@ public class PayForService extends Frame {
 
         ArrayList<FormElement> fe = providerController.getProviderFormElements(serviceName, providerName);
         if (fe.size() == 0) {
-            System.out.println("DUDE PLEASE");
+            System.out.println("Service name doesn't exist");
             input.close();
             return FrameName.HOME_USER;
         }
@@ -50,8 +57,9 @@ public class PayForService extends Frame {
 
         System.out.println("Enter a payment method :\n1. Credit Card\n2. Wallet");
         if (providerController.supportsCashOnDelivery(serviceName, providerName)) {
-            System.out.println("3. Cash on delivery (better prepare the money bro)");
+            System.out.println("3. Cash on delivery \n");
         }
+        System.out.println("choice : ");
         String option = input.nextLine();
         if (option.equals("2")) {
             Response response = paymentController.payUsingWallet(serviceName, providerName, request);

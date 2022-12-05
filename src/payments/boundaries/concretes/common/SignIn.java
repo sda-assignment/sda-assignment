@@ -24,7 +24,7 @@ public class SignIn extends Frame {
     @Override
     protected FrameName display() throws EntityException {
         Scanner input = new Scanner(System.in);
-        System.out.println("Sign in \n");
+        System.out.format("%15s","Sign in \n");
         System.out.println("email : ");
         String email = input.nextLine();
         

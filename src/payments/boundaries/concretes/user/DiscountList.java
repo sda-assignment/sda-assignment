@@ -24,7 +24,7 @@ public class DiscountList extends Frame {
     protected FrameName display() throws EntityException {
 
         ArrayList <Discount> array = discountController.getAllDiscounts();
-        System.out.println("Current discounts : ");
+        System.out.format("%15s","Current discounts \n");
         for (Discount element : array)
         {
             System.out.println("id : "+ element.id +" type : "+element.type+" percentage : "+ element.percentage+" serviceName : " + element.serviceName);

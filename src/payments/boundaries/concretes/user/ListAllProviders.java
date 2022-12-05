@@ -22,7 +22,7 @@ public class ListAllProviders extends Frame {
 
     @Override
     protected FrameName display() throws EntityException {
-        System.out.print("Providers");
+        System.out.format("%15s","Providers \n");
         System.out.println("avaliable providers : ");
         ArrayList<Provider> providers = providerController.getAllProviders();
         ListProviders listProviders = new ListProviders(providers);

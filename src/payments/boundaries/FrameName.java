@@ -25,21 +25,15 @@ public enum FrameName {
     // ------------------------------
 
     HOME_ADMIN,
-
-    ADD_PROVIDER,
     ADD_DISCOUNT,
     ADMIN_LIST_TRANSACTION,
     ADMIN_LIST_REFUNDS,
     // Enter provider details Screen (#14)
     // Enter form elements for provider (#15)
     // Service provider addition result scree (#16)
-    // ********************************
-    // Add discount screen (#17)
-    // Overall discount follow up screen (#18)
-    // Specific discount follow up screen (#19)
-    // discount result screen (#20)
+    // *******************************
     // **********************************
-    // List Transactions screen (#21)
+    LIST_ALL_TRANSACTIONS,
     // ***********************************
     ADMIN_REFUND
 

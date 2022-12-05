@@ -12,11 +12,11 @@ import payments.entities.Transaction;
 import payments.boundaries.Frame;
 import payments.boundaries.FrameName;
 
-public class RefundRequest extends Frame {
+public class UserRefundRequest extends Frame {
     private RefundController refundController;
     private TransactionController transactionController;
 
-    public RefundRequest(RefundController refundController, TransactionController transactionController) {
+    public UserRefundRequest(RefundController refundController, TransactionController transactionController) {
         this.refundController = refundController;
         this.transactionController = transactionController;
     }
@@ -27,6 +27,7 @@ public class RefundRequest extends Frame {
 
     protected FrameName display() throws EntityException {
         ArrayList<Transaction> array = transactionController.getTransactionsForUser();
+        System.out.format("%15s","All Transactions \n");
         for (Transaction element : array) {
             System.out.println("id : " + element.id + " userEmail : " + element.userEmail +
                     " timestamp : " + element.timestamp + " amount : " + element.amount + " $ type : " + element.type

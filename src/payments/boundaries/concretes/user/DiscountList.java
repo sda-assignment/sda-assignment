@@ -32,7 +32,7 @@ public class DiscountList extends Frame {
 
         System.out.println("choice (you can only go back, press anything) : ");
         Scanner input = new Scanner(System.in);
-        String option = input.next();
+        input.nextLine();
         input.close();
         return FrameName.HOME_USER;
 

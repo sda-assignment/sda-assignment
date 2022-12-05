@@ -22,7 +22,7 @@ public class GuestView extends Frame {
 
     protected FrameName display() { 
         System.out.format("%15s","Guest \n");
-        System.out.println("1- Sign In \n 2- Sign Up");
+        System.out.println("1- Sign In \n2- Sign Up");
         Scanner userInput = new Scanner(System.in);
         String option = userInput.nextLine();
         userInput.close();

@@ -27,7 +27,7 @@ public class HomeAdmin extends Frame {
         System.out.println("2. Add a discount");
         System.out.println("3. List user transaction");
         System.out.println("4. View refund request");
-        System.out.print("choice: ");
+        System.out.println("choice: ");
 
         Scanner input = new Scanner(System.in);
         String option = input.nextLine();

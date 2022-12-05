@@ -41,7 +41,7 @@ public class AdminRefund extends Frame {
 
         adminInput = new Scanner(System.in);
         System.out.println("which Request do you want to handle");
-        System.out.print("Enter Request id: ");
+        System.out.println("Enter Request id: ");
         String input = adminInput.nextLine();
 
         if (input.equals("#")) {

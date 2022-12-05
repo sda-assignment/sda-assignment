@@ -1,6 +1,8 @@
 package payments.boundaries;
 
 import java.util.HashMap;
+import java.util.Scanner;
+
 import datastore.exceptions.EntityException;
 
 public class Router {
@@ -8,6 +10,7 @@ public class Router {
     private Frame currentFrame;
 
     public Router(Frame[] frameArr, Frame currentFrame) {
+        frames = new HashMap<FrameName, Frame>();
         for (Frame frame : frameArr) {
             frames.put(frame.getFrameName(), frame);
         }
@@ -15,10 +18,12 @@ public class Router {
     }
 
     public void mainLoop() throws EntityException {
-        while (true) {
-            FrameName fName = currentFrame.displayWithInstruction();
+        Scanner scanner = new Scanner(System.in);
+        while (currentFrame != null) {
+            FrameName fName = currentFrame.displayWithInstruction(scanner);
             currentFrame = frames.get(fName);
         }
+        scanner.close();
 
     }
 

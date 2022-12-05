@@ -42,7 +42,6 @@ public class SignIn extends Frame {
             else
                 return FrameName.HOME_USER;
         } else {
-            System.out.println(result.value);
             return FrameName.SIGN_IN;
         }
     }

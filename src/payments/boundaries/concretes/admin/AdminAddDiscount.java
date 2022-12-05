@@ -62,11 +62,6 @@ public class AdminAddDiscount extends Frame {
             // is validation needed here ?
             System.out.println("\nEnter choice (service name): ");
             option = input.nextLine();
-            if (!option.chars().allMatch(Character::isDigit)) {
-                System.out.println("Please enter a valid amount ");
-                option = input.nextLine();
-
-            }
             String serviceName = option;
             System.out.println("Enter amount : ");
             option = input.nextLine();

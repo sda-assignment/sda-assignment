@@ -26,7 +26,6 @@ public enum FrameName {
 
     HOME_ADMIN,
     ADD_DISCOUNT,
-    ADMIN_LIST_TRANSACTION,
     // Enter provider details Screen (#14)
     // Enter form elements for provider (#15)
     // Service provider addition result scree (#16)

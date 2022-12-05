@@ -48,7 +48,7 @@ public class AdminRefund extends Frame {
         System.out.println("enter the response for the refund request");
         System.out.println("1- Accepted\n2- Rejected");
         String refundRequestStatus = adminInput.nextLine();
-        if (refundRequestStatus == "1") {
+        if (refundRequestStatus.equals("1")) {
             Response object = aRefund.acceptRefund(requestId);
             System.out.println(object.value);
             if (object.success) {
@@ -56,7 +56,7 @@ public class AdminRefund extends Frame {
             }
             return FrameName.ADMIN_REFUND;
 
-        } else if (refundRequestStatus == "2") {
+        } else if (refundRequestStatus.equals("2")) {
             Response object = aRefund.rejectRefund(requestId);
             System.out.println(object.value);
             if (object.success) {

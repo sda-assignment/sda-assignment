@@ -39,7 +39,7 @@ public class HomeAdmin extends Frame {
             return FrameName.ADD_DISCOUNT;
 
         } else if (option.equals("2")) {
-            return FrameName.ADMIN_LIST_TRANSACTION;
+            return FrameName.LIST_ALL_TRANSACTIONS;
 
         } else if (option.equals("3")) {
             return FrameName.ADMIN_REFUND;

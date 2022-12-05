@@ -521,7 +521,7 @@ package payments{
 
         Relation <|.. "Relation<FormElementChoice>"
         "Relation<FormElementChoice>" -d- FormElementChoice
-'----------------------------------------------------------
+        '----------------------------------------------------------
         LogInSession o-- User
 
         "Relation<User>" --o AuthController

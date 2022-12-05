@@ -1,14 +1,18 @@
 package payments.boundaries;
 
-import payments.common.Response;
+import java.util.Scanner;
+
 import datastore.exceptions.EntityException;
 
 public abstract class Frame {
 
-    public abstract void display();
+    public abstract FrameName getFrameName();
 
-    public abstract Response input();
+    protected abstract FrameName display(Scanner scanner) throws EntityException;
 
-    public abstract void execute() throws EntityException;
+    public FrameName displayWithInstruction(Scanner scanner) throws EntityException {
+        System.out.println("press # in the first entry field to go back to home ");
+        return display(scanner);
+    }
 
 }

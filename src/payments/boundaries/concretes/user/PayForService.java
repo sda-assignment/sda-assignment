@@ -56,7 +56,7 @@ public class PayForService extends Frame {
         if (providerController.supportsCashOnDelivery(serviceName, providerName)) {
             System.out.println("3. Cash on delivery \n");
         }
-        System.out.println("choice : ");
+        System.out.println("choice: ");
         String option = input.nextLine();
         if (option.equals("2")) {
             Response response = paymentController.payUsingWallet(serviceName, providerName, request);

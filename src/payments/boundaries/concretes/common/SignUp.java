@@ -24,16 +24,16 @@ public class SignUp extends Frame {
     protected FrameName display(Scanner input) throws EntityException {
 
         System.out.format("%15s", "Sign up \n");
-        System.out.println("email : ");
+        System.out.println("email: ");
         String email = input.nextLine();
 
         if (email.equals("#")) {
             return FrameName.GUEST_VIEW;
         }
 
-        System.out.println("username : ");
+        System.out.println("username: ");
         String username = input.nextLine();
-        System.out.println("password : ");
+        System.out.println("password: ");
         String password = input.nextLine();
 
         Response result = controller.signUp(email, username, password);

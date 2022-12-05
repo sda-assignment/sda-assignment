@@ -22,7 +22,7 @@ public class HomeAdmin extends Frame {
     }
 
     protected FrameName display(Scanner input) throws EntityException {
-        System.out.format("%15s", "HOME : Admin\n");
+        System.out.format("%15s", "HOME: Admin\n");
         System.out.println("1. Add a discount");
         System.out.println("2. List user transaction");
         System.out.println("3. View refund request");

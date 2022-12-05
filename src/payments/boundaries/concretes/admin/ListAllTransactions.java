@@ -29,11 +29,11 @@ public class ListAllTransactions extends Frame{
         ArrayList <Transaction> transactions = adminTransactionController.getAllTransactions();
         for (Transaction element : transactions)
         {
-            System.out.println("Id : " + element.id + " Email : "+ element.userEmail +" Time Stamp : " + element.timestamp + " Amount : " + element.amount + " type : " + element.type +
-            " Service Name : " + element.serviceName + "Provider Name : " + element.providerName + " \n");
+            System.out.println("Id: " + element.id + " Email: "+ element.userEmail +" Time Stamp: " + element.timestamp + " Amount: " + element.amount + " type: " + element.type +
+            " Service Name: " + element.serviceName + "Provider Name: " + element.providerName + " \n");
         }
 
-        System.out.println("Go Back to home (only option, press any key ) :  ");
+        System.out.println("Go Back to home (only option, press any key ):  ");
         input.nextLine();
         return FrameName.HOME_ADMIN;
     }

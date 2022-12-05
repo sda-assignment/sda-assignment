@@ -8,7 +8,7 @@ public class Util {
     public static int incrementOrInitialize(Integer integer) {
         if (integer == null)
             return 0;
-        return integer++;
+        return integer + 1;
     }
 
     public static String separateWithColons(Object[] objs) {

@@ -23,7 +23,7 @@ public class SignIn extends Frame {
     @Override
     protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s", "Sign in \n");
-        System.out.println("email : ");
+        System.out.println("email: ");
         String email = input.nextLine();
 
         // TODO: try to encapsulate the # check for all classes in the parent classes
@@ -31,7 +31,7 @@ public class SignIn extends Frame {
             return FrameName.GUEST_VIEW;
         }
 
-        System.out.println("password : ");
+        System.out.println("password: ");
         String password = input.nextLine();
         Response result = controller.logIn(email, password);
         System.out.println(result.value);

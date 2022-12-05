@@ -31,7 +31,7 @@ public class AdminAddDiscount extends Frame {
         System.out.format("%15s", "Add A Discount");
         System.out.println("\nEnter Discount type");
         System.out.println("1- Overall \n2- Specific");
-        System.out.println("choice : ");
+        System.out.println("choice: ");
         String option = input.nextLine();
 
         if (option.equals("#")) {
@@ -63,7 +63,7 @@ public class AdminAddDiscount extends Frame {
             System.out.println("\nEnter choice (service name): ");
             option = input.nextLine();
             String serviceName = option;
-            System.out.println("Enter amount : ");
+            System.out.println("Enter amount: ");
             option = input.nextLine();
             while (!Util.isPositiveFloat(option)) {
                 System.out.println("Please enter a valid amount ");

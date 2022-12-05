@@ -23,11 +23,11 @@ public class ListAllProviders extends Frame {
     @Override
     protected FrameName display(Scanner input) throws EntityException {
         System.out.format("%15s","Providers \n");
-        System.out.println("avaliable providers : ");
+        System.out.println("avaliable providers: ");
         ArrayList<Provider> providers = providerController.getAllProviders();
         ListProviders listProviders = new ListProviders(providers);
         listProviders.displayWithInstruction(input);
-        System.out.println("enter search : ");
+        System.out.println("enter search: ");
         String option = input.nextLine();
         if (option.equals("#")) {
             return FrameName.HOME_USER;

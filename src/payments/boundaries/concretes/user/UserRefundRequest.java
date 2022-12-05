@@ -29,18 +29,18 @@ public class UserRefundRequest extends Frame {
         ArrayList<Transaction> array = transactionController.getTransactionsForUser();
         System.out.format("%15s", "All Transactions \n");
         for (Transaction element : array) {
-            System.out.println("id : " + element.id + " userEmail : " + element.userEmail +
-                    " timestamp : " + element.timestamp + " amount : " + element.amount + " $ type : " + element.type
-                    + " serviceName : " + element.serviceName + " provider Name : " + element.providerName);
+            System.out.println("id: " + element.id + " userEmail: " + element.userEmail +
+                    " timestamp: " + element.timestamp + " amount: " + element.amount + " $ type: " + element.type
+                    + " serviceName: " + element.serviceName + " provider Name: " + element.providerName);
         }
 
-        System.out.println("enter  id : ");
+        System.out.println("enter  id: ");
         String option = input.nextLine();
 
         for (Transaction element : array) {
             if (element.id == Integer.parseInt(option)) {
                 if (element.type == TransactionType.REFUND) {
-                    System.out.println("Error : Can't refund a transaction of type (refund) ");
+                    System.out.println("Error: Can't refund a transaction of type (refund) ");
                     return this.getFrameName();
 
                 }

@@ -1,5 +1,8 @@
 @startuml Domain Model
-
+skinparam nodesep 20
+skinparam linetype ortho
+skinparam ranksep 150
+left to right direction
 skinparam style strictuml
 skinparam style DefaultFontName Arial
 skinparam DefaultFontSize 16
@@ -25,7 +28,7 @@ package datastore <<Folder>>{
     interface RecordUpdateStrategy<T extends Entity>   {
         apply(T obj): T
     }
-    class Relation<T>{
+    class  Relation<T>{
         - DATA_PATH: String {readOnly}
         - path: String
         - records: ArrayList<T>
@@ -40,7 +43,7 @@ package datastore <<Folder>>{
 }
 
 package handlers <<folder>>{
-    abstract class Handler   {
+    abstract class  Handler   {
         --
         + {abstract} getHandlerName(): HandlerName
         + {abstract} getRequestKeys(): String[]
@@ -49,7 +52,7 @@ package handlers <<folder>>{
         # requestContainsAllKeys(HashMap<String, String> request): boolean
         + validateAndHandleRequest(HasMap<String, String> request): request
     }
-    class HandlerFactory  {
+    class  HandlerFactory  {
         + getHandler: Handler
     }
     enum HandlerName   {
@@ -69,52 +72,52 @@ package handlers <<folder>>{
         PROXY
         ERRONEOUS
     }
-    class HandlerResponse   {
+    class  HandlerResponse   {
         + success: boolean {readOnly}
         + errorMessage: String {readOnly}
         + amount: Double {readOnly}
     }
 
     package handlers.concrete{
-        class CancerHospitalDonationHandler extends Handler{
+        class  CancerHospitalDonationHandler extends Handler{
             - {static} TYPES_PRICES: Map<String, Double>
         }
-        class ErroneousHandler extends Handler {
+        class  ErroneousHandler extends Handler {
 
         }
-        class EtisalatInternetHandler extends Handler{
+        class  EtisalatInternetHandler extends Handler{
             + {static} allowedBandwidth: Set<String>
         }
-        class EtisalatRechargeHandler extends Handler{
+        class  EtisalatRechargeHandler extends Handler{
         }
-        class MonthlyLandlineHandler extends Handler{
+        class  MonthlyLandlineHandler extends Handler{
             - MONTHLY_PRICE: Double
         }
-        class NgoDonationHandler extends Handler{
+        class  NgoDonationHandler extends Handler{
 
         }
-        class OrangeInternetHandler extends Handler{
+        class  OrangeInternetHandler extends Handler{
             - {static} allowedBandwidth: Set<String> {readOnly}
         }
-        class OrangeRechargeHandler extends Handler{
+        class  OrangeRechargeHandler extends Handler{
 
         }
-        class QuarterlyLandlineHandler extends Handler{
+        class  QuarterlyLandlineHandler extends Handler{
             - {static} QUARTERLY_PRICE: double
         }
-        class SchoolDonationHandler extends Handler{
+        class  SchoolDonationHandler extends Handler{
 
         }
-        class VodafoneInternetHandler extends Handler{
+        class  VodafoneInternetHandler extends Handler{
             - {static} allowedBandwidth: Set<String> {readOnly}
         }
-        class VodafoneRechargeHandler extends Handler{
+        class  VodafoneRechargeHandler extends Handler{
 
         }
-        class WeInternetHandler extends Handler{
+        class  WeInternetHandler extends Handler{
 
         }
-        class WeRechargeHandler extends Handler{
+        class  WeRechargeHandler extends Handler{
 
         }
 
@@ -123,18 +126,114 @@ package handlers <<folder>>{
 
 package payments{
     package payments.boundaries{
-        class AdminRefundBoundary   {
+        abstract class  Frame{
+            + {abstract} getFrameName(): FrameName
+            # {abstract} display(Scanner scanner): FrameName
+            + displayWithInstruction(Scanner scanner): FrameName
+        }
+        enum FrameName {
+            ERROR
+            GUEST_VIEW
+            SIGN_IN
+            SIGN_UP
+            HOME_USER
+            SEARCH_SERVICE_PROVIDER
+            LIST_ALL_PROVIDERS
+            LIST_PROVIDERS
+            SPECIFIC_SERVICE_PROVIDER
+            PAYMENT_METHOD
+            REFUND_REQUEST
+            ADD_AMOUNT_TO_WALLET
+            ADDING_RESULT
+            DISCOUNT
+            HOME_ADMIN
+            ADD_DISCOUNT
+            ADMIN_LIST_TRANSACTION
+            ADMIN_LIST_REFUNDS
+            LIST_ALL_TRANSACTIONS
+            ADMIN_REFUND
+        }
+        class  Router{
+            - frames: HashMap<FrameName, Frame>
+            - currentFrame: Frame
+            --
+            + mainLoop(): void
+        }
+
+        Router o-- Frame
+
+
+        package payments.boundaries.concretes{
+            package payments.boundaries.concretes.admin{
+                class  AddServiceProvider extends Frame  {
+                    + display(): HandlerName
+                    + getFrameName(): FrameName
+                }
+                class  AdminAddDiscount extends Frame  {
+                    - adminDiscountController: AdminDiscountController
+                    - serviceController: ServiceController
+                }
+                class  AdminRefund extends Frame   {
+                    - aRefund: AdminRefundController
+                    - refundRequestStatus: int
+                    - requestId: int
+                }
+                class  HomeAdmin extends Frame   {
+                    - authController: AuthController
+                }
+                class  ListAllTransactions extends Frame   {
+                    - adminTransactionController: AdminTransactionController
+                }
+            }
+
+            package payments.boundaries.concretes.common{
+                class  GuestView extends Frame   {
+
+                }
+                class  SignIn extends Frame  {
+                    - controller: AuthController
+                }
+                class  SignUp extends Frame  {
+                    - controller: AuthController
+                }
+            }
+            package payments.boundaries.concretes.user{
+                class  AddToWallet extends Frame   {
+                    - userController: UserController
+                }
+                class  DiscountList extends Frame    {
+                    - discountController: DiscountController
+                }
+                class  HomeUser extends Frame    {
+                    - currentUser: User
+                    - authController: AuthController
+                }
+                class  ListAllProviders extends Frame    {
+                    - providerController: ProviderController
+                }
+                class  ListProviders extends Frame   {
+                    - providers: ArrayList<Providers>
+                }
+                class  PayForService extends Frame   {
+                    - paymentController: PaymentController
+                    - providerController: ProviderController
+                }
+                class  UserRefundRequest extends Frame   {
+                    - refundController: RefundController
+                    - transactionController: TransactionController
+                }
+            }
+
+
+
+
+
 
         }
-        class Frame   {
 
-        }
-        class Router   {
-
-        }
     }
     package payments.common{
-        class Response   {
+        class  Response   {
             + success: boolean {readOnly}
             + value: String {readOnly}
         }
@@ -163,20 +262,20 @@ package payments{
     package payments.controllers{
 
         package payments.controllers.admin{
-            AdminDiscountController o-- Relation
-            class AdminDiscountController   {
+
+            class  AdminDiscountController   {
                 - discountRelation: Relation<Discount>
                 --
                 - addDiscount(DiscountType discountType, double percentage, String serviceName): void
                 + addOverallDiscount(double percentage): Response
                 + addSpecificDiscount(String serviceName, double percentage)
             }
-            class AdminFormElementController   {
+            class  AdminFormElementController   {
                 - formElementRelation: Relation<FormElement>
                 --
                 + addFormElement(DiscountType discountType, double percentage, String serviceName): Response
             }
-            class AdminProviderController   {
+            class  AdminProviderController   {
                 - providerRelation: Relation<Provider>
                 - formElementRelation: Relation<FormElement>
                 --
@@ -187,7 +286,7 @@ package payments{
                 + getProviderForService(String serviceName): ArrayList<Provider>
                 + getProviderFormElements(String serviceName, String providerName): ArrayList<FormElement>
             }
-            class AdminRefundController   {
+            class  AdminRefundController   {
                 - refundRelation: Relation<RefundRequest>
                 - userRelation: Relation<User>
                 - transactionRelation: Relation<Transaction>
@@ -196,17 +295,17 @@ package payments{
                 + acceptRefund(int rid): Response
                 + rejectRefund(int rid): Response
             }
-            class AdminServiceController   {
+            class  AdminServiceController   {
                 - serviceRelation: Relation<Service>
                 --
                 + addService(String serviceName): Response
             }
-            class AdminTransactionController   {
+            class  AdminTransactionController   {
                 - relation: Relation<Transaction>
                 --
                 + getAllTransactions(): ArrayList<Transaction>
             }
-            class AdminUserController {
+            class  AdminUserController {
                 - relation: Relation<User>
                 --
                 + setAdmin(String email): Response
@@ -217,19 +316,19 @@ package payments{
             interface PaymentStrategy   {
                 pay(double amount): Response
             }
-            class PayCashOnDelivery  implements PaymentStrategy {
+            class  PayCashOnDelivery  implements PaymentStrategy {
 
             }
-            class PayWithCreditCard  implements PaymentStrategy {
+            class  PayWithCreditCard  implements PaymentStrategy {
                 - cardNumber: String
             }
-            class PayWithWallet  implements PaymentStrategy {
+            class  PayWithWallet  implements PaymentStrategy {
                 - payingUser: User
                 - userRelation: Relation<User>
             }
         }
 
-        class AuthController   {
+        class  AuthController   {
             - relation: Relation<User>
             - logInSession: LogInSession
             --
@@ -237,7 +336,7 @@ package payments{
             + logIn(String email, String password): Response
             + logOut(): Response
         }
-        class DiscountController   {
+        class  DiscountController   {
             - discountRelation: Relation<Discount>
             - usedDiscountRelation: Relation<UsedDiscount>
             - logInSession: LogInSession
@@ -247,13 +346,13 @@ package payments{
             + getAllDiscounts(): ArrayList<Discount>
             + useDiscount(int discountId): Response
         }
-        class LogInSession   {
+        class  LogInSession   {
             - loggedInUser: User
             --
             + setLoggedinUser(User user): void
             + getLoggedInUser(): User
         }
-        class PaymentController   {
+        class  PaymentController   {
             - providerRelation: Relation<Provider>
             - transactionRelation: Relation<Transaction>
             - userRelation: Relation<User>
@@ -269,92 +368,106 @@ package payments{
             + payCashOnDelivery(String serviceName, String providerName,
             HashMap<String, String> request): Response
         }
-        class RefundController   {
+        class  RefundController   {
             - refundRequestRelation: Relation<RefudRequest>
             - logInSession: LogInSession
             --
             + requestRefund(int transactionId): Response
-
         }
-        class ServiceController   {
+        class  ServiceController   {
             - ServiceRelation: Relation<Service>
             --
             + getAllServices(): ArrayList<Service>
         }
-        class TransactionController   {
+        class  TransactionController   {
             - transactionRelation: Relation<Transaction>
             - logInSession: LogInSession
             --
             + getTransactionForUser(): ArrayList<Transaction>
         }
-        class UserController   {
+        class  UserController   {
             - userRelation: Relation<User>
             - logInSession: LogInSession
             --
             + rechargeWallet(double amount, String cardNumber): Response
         }
-
-
+        class  ProviderController    {
+            - providerRelation: Relation<Provider>
+            - formElementRelation: Relation<FormElement>
+            --
+            + searchforProviders(String serviceNameAndProviderName)
+            + getProvidersForService(String serviceName)
+            + getAllProviders(): ArrayList<Provider>
+            + getProviderFormElements(String serviceName, String providerName): ArrayList<FormElement>
+            + supportsCashOnDelivery(String serviceName, String providerName): boolean
+        }
+        AuthController o-- LogInSession
+        DiscountController o-- LogInSession
+        PaymentController o-- LogInSession
+        PaymentController o-- DiscountController
     }
 
 
     package payments.entities{
         package payments.entities.builders{
-            class DiscountBuilder implements EntityBuilder  {
+            class  DiscountBuilder implements EntityBuilder  {
 
             }
-            class FormElementBuilder implements EntityBuilder  {
+            class  FormElementBuilder implements EntityBuilder  {
 
             }
-            class ProviderBuilder implements EntityBuilder  {
+            class  ProviderBuilder implements EntityBuilder  {
 
             }
-            class RefundRequestBuilder implements EntityBuilder  {
+            class  RefundRequestBuilder implements EntityBuilder  {
 
             }
-            class ServiceBuilder implements EntityBuilder  {
+            class  ServiceBuilder implements EntityBuilder  {
 
             }
-            class TransactionBuilder implements EntityBuilder  {
+            class  TransactionBuilder implements EntityBuilder  {
 
             }
-            class UsedDiscountBuilder implements EntityBuilder  {
+            class  UsedDiscountBuilder implements EntityBuilder  {
 
             }
-            class UserBuilder implements EntityBuilder  {
+            class  UserBuilder implements EntityBuilder  {
+
+            }
+            class  FormElementChoiceBuilder implements EntityBuilder  {
 
             }
         }
 
-        class Discount implements Entity  {
+        class  Discount implements Entity  {
             + id: int {readOnly}
             + type: DiscountType {readOnly}
             + percentage: double {readOnly}
             + serviceName: String {readOnly}
         }
-        class FormElement implements Entity  {
+        class  FormElement implements Entity  {
             + name: String {readOnly}
             + serviceName: String {readOnly}
             + providerName: String {readOnly}
             + type: FormElementType {readOnly}
             + info: String {readOnly}
         }
-        class Provider implements Entity  {
+        class  Provider implements Entity  {
             + serviceName: String {readOnly}
             + name: String {readOnly}
             + cashOnDelivery: boolean {readOnly}
             + handlerName: HandlerName {readOnly}
         }
-        class RefundRequest implements Entity  {
+        class  RefundRequest implements Entity  {
             + id: int {readOnly}
             + transactionId: int {readOnly}
             + status: RefundRequestStatus {readOnly}
             + userEmail: String {readOnly}
         }
-        class Service implements Entity  {
+        class  Service implements Entity  {
             + name: String {readOnly}
         }
-        class Transaction implements Entity  {
+        class  Transaction implements Entity  {
             + id: int {readOnly}
             + userEmail: String {readOnly}
             + timestamp: LocalDateTime {readOnly}
@@ -363,18 +476,208 @@ package payments{
             + serviceName: String {readOnly}
             + providerName: String {readOnly}
         }
-        class UsedDiscount implements Entity  {
+        class  UsedDiscount implements Entity  {
             + email: String {readOnly}
             + discountID: int {readOnly}
         }
-        class User implements Entity  {
+        class  User implements Entity  {
             + email: String {readOnly}
             + username: String {readOnly}
             + password: String {readOnly}
             + isAdmin: boolean {readOnly}
             + wallet: double {readOnly}
         }
+        class  FormElementChoice implements Entity   {
+            + info: String {readOnly}
+            + serviceName: String {readOnly}
+            + providerName: String {readOnly}
+        }
 
+        Relation <|.. "Relation<User>"
+        "Relation<User>" -d- User
+
+        Relation <|.. "Relation<Transaction>"
+        "Relation<Transaction>" -d- Transaction
+
+        Relation <|.. "Relation<Service>"
+        "Relation<Service>" -d- Service
+
+        Relation <|.. "Relation<RefundRequest>"
+        "Relation<RefundRequest>" -d- RefundRequest
+
+        Relation <|.. "Relation<Provider>"
+        "Relation<Provider>" -d- Provider
+
+        Relation <|.. "Relation<Discount>"
+        "Relation<Discount>" -d- Discount
+
+
+        Relation <|.. "Relation<UsedDiscount>"
+        "Relation<UsedDiscount>" -d- UsedDiscount
+
+
+        Relation <|.. "Relation<FormElement>"
+        "Relation<FormElement>" -d- FormElement
+
+        Relation <|.. "Relation<FormElementChoice>"
+        "Relation<FormElementChoice>" -d- FormElementChoice
+'----------------------------------------------------------
+        LogInSession o-- User
+
+        "Relation<User>" --o AuthController
+
+        "Relation<Transaction>" --o PaymentController
+        "Relation<Provider>" --o PaymentController
+        "Relation<User>" --o PaymentController
+
+        "Relation<Discount>" --o DiscountController
+        "Relation<UsedDiscount>" --o DiscountController
+
+        "Relation<FormElement>" --o ProviderController
+        "Relation<Provider>" --o ProviderController
+
+        "Relation<RefundRequest>" --o RefundController
+        RefundController o-- LogInSession
+
+        "Relation<Service>" --o ServiceController
+
+        "Relation<Transaction>" --o TransactionController
+        TransactionController o-- LogInSession
+
+        "Relation<User>" --o UserController
+        UserController o-- LogInSession
+
+        "Relation<Discount>" --o AdminDiscountController
+
+        "Relation<FormElement>" --o AdminFormElementController
+        "Relation<FormElementChoice>" --o AdminFormElementController
+
+        "Relation<Provider>" --o AdminProviderController
+
+        "Relation<RefundRequest>" --o AdminRefundController
+        "Relation<User>" --o AdminRefundController
+        "Relation<Transaction>" --o AdminRefundController
+
+        "Relation<Service>" --o AdminServiceController
+
+        "Relation<Transaction>" --o AdminTransactionController
+
+        "Relation<User>" --o AdminUserController
+
+        AdminAddDiscount o-- AdminDiscountController
+        AdminAddDiscount o-- ServiceController
+
+        AdminRefund o-- AdminRefundController
+
+        HomeAdmin o-- AuthController
+
+        ListAllTransactions o-- AdminTransactionController
+
+        SignIn o-- AuthController
+        SignUp o-- AuthController
+
+        AddToWallet o-- UserController
+
+        DiscountList o-- DiscountController
+
+        HomeUser o-- User
+        HomeUser o-- AuthController
+
+        ListAllProviders o-- ProviderController
+
+        ListProviders o-- Provider
+
+        PayForService o-- PaymentController
+        PayForService o-- ProviderController
+
+        UserRefundRequest o-- RefundController
+        UserRefundRequest o-- TransactionController
+
+        HandlerFactory o-- Handler
+        HandlerFactory o-- HandlerName
+
+        HandlerFactory -- CancerHospitalDonationHandler
+        HandlerFactory -- ErroneousHandler
+        HandlerFactory -- EtisalatInternetHandler
+        HandlerFactory -- EtisalatRechargeHandler
+        HandlerFactory -- MonthlyLandlineHandler
+        HandlerFactory -- NgoDonationHandler
+        HandlerFactory -- OrangeInternetHandler
+        HandlerFactory -- OrangeRechargeHandler
+        HandlerFactory -- QuarterlyLandlineHandler
+        HandlerFactory -- SchoolDonationHandler
+        HandlerFactory -- VodafoneInternetHandler
+        HandlerFactory -- VodafoneRechargeHandler
+        HandlerFactory -- WeInternetHandler
+        HandlerFactory -- WeRechargeHandler
+
+
+        EntityBuilder <|.. "EntityBuilder<Discount>"
+        EntityBuilder <|.. "EntityBuilder<FormElement>"
+        EntityBuilder <|.. "EntityBuilder<Provider>"
+        EntityBuilder <|.. "EntityBuilder<RefundRequest>"
+        EntityBuilder <|.. "EntityBuilder<Service>"
+        EntityBuilder <|.. "EntityBuilder<Transaction>"
+        EntityBuilder <|.. "EntityBuilder<UsedDiscount>"
+        EntityBuilder <|.. "EntityBuilder<User>"
+        EntityBuilder <|.. "EntityBuilder<FormElementChoice>"
+
+        "EntityBuilder<Discount>" -- Discount
+        "EntityBuilder<FormElement>" -- FormElement
+        "EntityBuilder<Provider>" -- Provider
+        "EntityBuilder<RefundRequest>" -- RefundRequest
+        "EntityBuilder<Service>" -- Service
+        "EntityBuilder<Transaction>" -- Transaction
+        "EntityBuilder<UsedDiscount>" -- UsedDiscount
+        "EntityBuilder<User>" -- User
+        "EntityBuilder<FormElementChoice>" -- FormElementChoice
+
+        DiscountBuilder ..|> "EntityBuilder<Discount>"
+        FormElementBuilder ..|> "EntityBuilder<FormElement>"
+        ProviderBuilder ..|> "EntityBuilder<Provider>"
+        RefundRequestBuilder ..|> "EntityBuilder<RefundRequest>"
+        ServiceBuilder ..|> "EntityBuilder<Service>"
+        TransactionBuilder ..|> "EntityBuilder<Transaction>"
+        UsedDiscountBuilder ..|> "EntityBuilder<UsedDiscount>"
+        UserBuilder ..|> "EntityBuilder<User>"
+        FormElementChoiceBuilder ..|> "EntityBuilder<FormElementChoice>"
+
+        AdminDiscountController -- Response
+        AdminFormElementController -- Response
+        AdminProviderController -- Response
+        AdminRefundContrller -- Response
+        AdminServiceController -- Response
+        AdminUserController -- Response
+        PaymentStrategy -- Response
+        AuthController -- Response
+        DiscountController -- Response
+        PaymentController -- Response
+        RefundController -- Response
+        ServiceController -- Response
+        UserController -- Response
+
+        Discount -- DiscountType
+        Discount -- AdminFormElementController
+        Discount -- AdminDiscountController
+
+        FormElementType -- FormElement
+
+        RefundRequestStatus -- AdminRefund
+        RefundRequestStatus -- RefundRequest
+
+        TransactionType -- Transaction
+
+        PaymentController -- Handler
+        PaymentController -- HandlerFactory
+        PaymentController -- HandlerResponse
+
+        AdminProviderController -- HandlerName
+
+        Provider -- HandlerName
+
+        ProviderBuilder -- HandlerName
+
+        Frame -- FrameName
     }
 }
 

@@ -44,7 +44,6 @@ package datastore <<Folder>>{
 
 package handlers <<folder>>{
     abstract class  Handler   {
-        --
         + {abstract} getHandlerName(): HandlerName
         + {abstract} getRequestKeys(): String[]
         + {abstract} getConstrains(): String
@@ -53,6 +52,8 @@ package handlers <<folder>>{
         + validateAndHandleRequest(HasMap<String, String> request): request
     }
     class  HandlerFactory  {
+        - handlers: Map<HandlerName, Handler>
+        --
         + getHandler: Handler
     }
     enum HandlerName   {
@@ -86,12 +87,12 @@ package handlers <<folder>>{
 
         }
         class  EtisalatInternetHandler extends Handler{
-            + {static} allowedBandwidth: Set<String>
+            + {static} allowedBandwidth: Set<String> {readOnly}
         }
         class  EtisalatRechargeHandler extends Handler{
         }
         class  MonthlyLandlineHandler extends Handler{
-            - MONTHLY_PRICE: Double
+            - {static} MONTHLY_PRICE: Double
         }
         class  NgoDonationHandler extends Handler{
 
@@ -148,10 +149,9 @@ package payments{
             DISCOUNT
             HOME_ADMIN
             ADD_DISCOUNT
-            ADMIN_LIST_TRANSACTION
-            ADMIN_LIST_REFUNDS
             LIST_ALL_TRANSACTIONS
             ADMIN_REFUND
+            BECOME_ADMIN
         }
         class  Router{
             - frames: HashMap<FrameName, Frame>
@@ -160,15 +160,8 @@ package payments{
             + mainLoop(): void
         }
 
-        Router o-- Frame
-
-
         package payments.boundaries.concretes{
             package payments.boundaries.concretes.admin{
-                class  AddServiceProvider extends Frame  {
-                    + display(): HandlerName
-                    + getFrameName(): FrameName
-                }
                 class  AdminAddDiscount extends Frame  {
                     - adminDiscountController: AdminDiscountController
                     - serviceController: ServiceController
@@ -201,6 +194,10 @@ package payments{
                 class  AddToWallet extends Frame   {
                     - userController: UserController
                 }
+                class BecomeAdmin extends Frame {
+                    - AdminUserController: AdminUserController
+                    - authController: AuthController
+                }
                 class  DiscountList extends Frame    {
                     - discountController: DiscountController
                 }
@@ -223,14 +220,7 @@ package payments{
                     - transactionController: TransactionController
                 }
             }
-
-
-
-
-
-
         }
-
     }
     package payments.common{
         class  Response   {
@@ -257,7 +247,6 @@ package payments{
                 REFUND
             }
         }
-
     }
     package payments.controllers{
 
@@ -272,19 +261,16 @@ package payments{
             }
             class  AdminFormElementController   {
                 - formElementRelation: Relation<FormElement>
+                - formElementChoiceRelation: Relation<FormElementChoice>
                 --
                 + addFormElement(DiscountType discountType, double percentage, String serviceName): Response
+                + addFormElementChoice(String info, String serviceName, String providerName): Response
             }
             class  AdminProviderController   {
                 - providerRelation: Relation<Provider>
-                - formElementRelation: Relation<FormElement>
                 --
                 + addProvider(String serviceName, String name, boolean cashOnDelivery,
                 HandlerName handlerName): Response
-                + searchForProviders(String serviceName, String name, boolean cashOnDelivery,
-                HandlerName handlerName): ArrayList<Provider>
-                + getProviderForService(String serviceName): ArrayList<Provider>
-                + getProviderFormElements(String serviceName, String providerName): ArrayList<FormElement>
             }
             class  AdminRefundController   {
                 - refundRelation: Relation<RefundRequest>
@@ -335,6 +321,8 @@ package payments{
             + signUp(String email, String userName, String password): Response
             + logIn(String email, String password): Response
             + logOut(): Response
+            + getLoggedUnUser(): User
+            + isAdmin(): boolean
         }
         class  DiscountController   {
             - discountRelation: Relation<Discount>
@@ -369,7 +357,8 @@ package payments{
             HashMap<String, String> request): Response
         }
         class  RefundController   {
-            - refundRequestRelation: Relation<RefudRequest>
+            - refundRequestRelation: Relation<RefundRequest>
+            - transactionRelation: Relation<Transaction>
             - logInSession: LogInSession
             --
             + requestRefund(int transactionId): Response
@@ -395,16 +384,12 @@ package payments{
             - providerRelation: Relation<Provider>
             - formElementRelation: Relation<FormElement>
             --
-            + searchforProviders(String serviceNameAndProviderName)
-            + getProvidersForService(String serviceName)
+            + searchforProviders(String serviceNameAndProviderName): ArrayList<Provider>
+            + getProvidersForService(String serviceName): ArrayList<Provider>
             + getAllProviders(): ArrayList<Provider>
             + getProviderFormElements(String serviceName, String providerName): ArrayList<FormElement>
             + supportsCashOnDelivery(String serviceName, String providerName): boolean
         }
-        AuthController o-- LogInSession
-        DiscountController o-- LogInSession
-        PaymentController o-- LogInSession
-        PaymentController o-- DiscountController
     }
 
 
@@ -452,6 +437,11 @@ package payments{
             + type: FormElementType {readOnly}
             + info: String {readOnly}
         }
+        class  FormElementChoice implements Entity  {
+            + info: String {readOnly}
+            + serviceName: String {readOnly}
+            + providerName: String {readOnly}
+        }
         class  Provider implements Entity  {
             + serviceName: String {readOnly}
             + name: String {readOnly}
@@ -487,11 +477,6 @@ package payments{
             + isAdmin: boolean {readOnly}
             + wallet: double {readOnly}
         }
-        class  FormElementChoice implements Entity   {
-            + info: String {readOnly}
-            + serviceName: String {readOnly}
-            + providerName: String {readOnly}
-        }
 
         Relation <|.. "Relation<User>"
         "Relation<User>" -d- User
@@ -524,28 +509,33 @@ package payments{
         '----------------------------------------------------------
         LogInSession o-- User
 
-        "Relation<User>" --o AuthController
+        AuthController o-- "Relation<User>"
+        AuthController o-- LogInSession
 
-        "Relation<Transaction>" --o PaymentController
-        "Relation<Provider>" --o PaymentController
-        "Relation<User>" --o PaymentController
+        PaymentController o-- "Relation<Transaction>"
+        PaymentController o-- "Relation<Provider>"
+        PaymentController o-- "Relation<User>"
+        PaymentController o-- DiscountController
+        PaymentController o-- LogInSession
 
-        "Relation<Discount>" --o DiscountController
-        "Relation<UsedDiscount>" --o DiscountController
-
-        "Relation<FormElement>" --o ProviderController
-        "Relation<Provider>" --o ProviderController
-
-        "Relation<RefundRequest>" --o RefundController
+        RefundController o-- "Relation<RefundRequest>"
+        RefundController o-- "Relation<Transaction>"
         RefundController o-- LogInSession
 
-        "Relation<Service>" --o ServiceController
+        DiscountController o-- "Relation<Discount>"
+        DiscountController o-- "Relation<UsedDiscount>"
+        DiscountController o-- LogInSession
 
-        "Relation<Transaction>" --o TransactionController
+        ServiceController o-- "Relation<Service>"
+
+        TransactionController o-- "Relation<Transaction>"
         TransactionController o-- LogInSession
 
-        "Relation<User>" --o UserController
+        UserController o-- "Relation<User>"
         UserController o-- LogInSession
+
+        ProviderController o-- "Relation<FormElement>"
+        ProviderController o-- "Relation<Provider>"
 
         "Relation<Discount>" --o AdminDiscountController
 
@@ -563,6 +553,15 @@ package payments{
         "Relation<Transaction>" --o AdminTransactionController
 
         "Relation<User>" --o AdminUserController
+
+        Router o-- Frame
+        Router -- FrameName
+
+        AuthController o-- LogInSession
+
+        DiscountController o-- LogInSession
+
+
 
         AdminAddDiscount o-- AdminDiscountController
         AdminAddDiscount o-- ServiceController

@@ -1,20 +1,18 @@
 package payments.boundaries;
 
+import java.util.Scanner;
+
 import datastore.exceptions.EntityException;
-import payments.boundaries.EnumViews.FrameName;
 
 public abstract class Frame {
 
-    protected String frameName;
+    public abstract FrameName getFrameName();
 
-    public void setFrameName(String Name) {
-        frameName = Name;
+    protected abstract FrameName display(Scanner scanner) throws EntityException;
+
+    public FrameName displayWithInstruction(Scanner scanner) throws EntityException {
+        System.out.println("press # in the first entry field to go back to home ");
+        return display(scanner);
     }
-
-    public String getFrameName() {
-        return frameName;
-    }
-
-    public abstract FrameName display() throws EntityException;
 
 }

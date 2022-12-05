@@ -21,6 +21,16 @@ public class Relation<T extends Entity> {
         load();
     }
 
+    public void removeAll() throws EntitySaveException {
+        records.clear();
+        try {
+            FileWriter fileWriter = new FileWriter(path);
+            fileWriter.close();
+        } catch (Exception e) {
+            throw new EntitySaveException("Failed to write to file: " + path + "\n" + e.toString());
+        }
+    }
+
     public void save() throws EntitySaveException {
         String recordsStr = "";
         for (T record : records) {
@@ -84,7 +94,8 @@ public class Relation<T extends Entity> {
         return result.size() > 0;
     }
 
-    public ArrayList<T> update(RecordUpdateStrategy<T> updater, RecordFilterStrategy<T> filter) throws EntitySaveException {
+    public ArrayList<T> update(RecordUpdateStrategy<T> updater, RecordFilterStrategy<T> filter)
+            throws EntitySaveException {
         ArrayList<T> result = new ArrayList<T>();
         for (int i = 0; i < records.size(); i++) {
             if (filter.apply(records.get(i))) {

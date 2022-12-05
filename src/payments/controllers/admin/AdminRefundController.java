@@ -49,7 +49,7 @@ public class AdminRefundController {
             transactionRelation
                     .insert(new Transaction(Util.incrementOrInitialize(transactionRelation.selectMax(t -> t.id)),
                             updatedUser.email, LocalDateTime.now(), targetTransaction.amount,
-                            TransactionType.REFUND, "", ""));
+                            TransactionType.REFUND, "None", "None"));
         }
         return new Response(true, "Refund accepted");
     }

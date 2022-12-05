@@ -1,4 +1,5 @@
 @startuml Domain Model
+
 skinparam style strictuml
 skinparam style DefaultFontName Arial
 skinparam DefaultFontSize 16

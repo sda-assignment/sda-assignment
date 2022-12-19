@@ -677,6 +677,11 @@ package payments{
         ProviderBuilder -- HandlerName
 
         Frame -- FrameName
+
+        Relation -- "RecordFilterStrategy"
+        Relation -- "RecordUpdateStrategy"
+        Relation -- "RecordProjectStrategy"
+        PaymentStrategy -- PaymentController
     }
 }
 

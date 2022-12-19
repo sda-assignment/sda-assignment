@@ -36,6 +36,9 @@ public class UserRefundRequest extends Frame {
 
         System.out.println("enter  id: ");
         String option = input.nextLine();
+        if (option.equals("#")) {
+            return FrameName.HOME_USER;
+        }
 
         for (Transaction element : array) {
             if (element.id == Integer.parseInt(option)) {
@@ -47,15 +50,13 @@ public class UserRefundRequest extends Frame {
             }
         }
 
-        if (option.equals("#")) {
-            return FrameName.HOME_USER;
-        } else if (Util.isPositiveInt(option)) {
+        if (Util.isPositiveInt(option)) {
             Response object = refundController.requestRefund(Integer.parseInt(option));
             System.out.println(object.value);
             if (object.success) {
-                return FrameName.REFUND_REQUEST;
+                return FrameName.HOME_USER;
             } else {
-                return FrameName.REFUND_REQUEST;
+                return FrameName.HOME_USER;
             }
 
         } else {

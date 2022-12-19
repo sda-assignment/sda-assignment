@@ -7,6 +7,7 @@ Notes
 - PaymentStrategy uses strategy pattern
 
 TODO
+- Change all usages of logInSession outside of AuthController to AuthController
 - Decorator pattern to accumulate the discounts (?)
 - Make return Relation array list immutable
 - Change lambdas to actual classes (?)

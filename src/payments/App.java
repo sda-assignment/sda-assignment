@@ -1,12 +1,17 @@
 package payments;
 
+import java.util.ArrayList;
+
 import datastore.Relation;
 import datastore.exceptions.EntityException;
 import datastore.exceptions.EntityLoadException;
 import datastore.exceptions.EntitySaveException;
+import handlers.Handler;
+import handlers.HandlerFactory;
 import handlers.HandlerName;
 import payments.entities.Discount;
 import payments.entities.FormElement;
+import payments.entities.FormElementChoice;
 import payments.entities.RefundRequest;
 import payments.entities.Service;
 import payments.entities.Transaction;
@@ -15,6 +20,7 @@ import payments.entities.User;
 import payments.entities.Provider;
 import payments.entities.builders.DiscountBuilder;
 import payments.entities.builders.FormElementBuilder;
+import payments.entities.builders.FormElementChoiceBuilder;
 import payments.entities.builders.ProviderBuilder;
 import payments.entities.builders.RefundRequestBuilder;
 import payments.entities.builders.ServiceBuilder;
@@ -37,8 +43,10 @@ import payments.boundaries.concretes.user.HomeUser;
 import payments.boundaries.concretes.user.ListAllProviders;
 import payments.boundaries.concretes.user.PayForService;
 import payments.boundaries.concretes.user.UserRefundRequest;
+import payments.common.enums.FormElementType;
 import payments.controllers.AuthController;
 import payments.controllers.DiscountController;
+import payments.controllers.FormElementController;
 import payments.controllers.LogInSession;
 import payments.controllers.PaymentController;
 import payments.controllers.ProviderController;
@@ -66,15 +74,17 @@ public class App {
         Relation<FormElement> formElementRelation = new Relation<FormElement>("formElements",
                 new FormElementBuilder());
         Relation<Discount> discountRelation = new Relation<Discount>("discounts", new DiscountBuilder());
+        Relation<FormElementChoice> formElementChoiceRelation = new Relation<FormElementChoice>("formElementChoice",
+                new FormElementChoiceBuilder());
         AuthController authController = new AuthController(userRelation, session);
         DiscountController discountController = new DiscountController(discountRelation, usedDiscount, session);
-        UserController userController = new UserController(userRelation, session);
+        UserController userController = new UserController(userRelation, session, transactionRelation);
         ProviderController providerController = new ProviderController(providerRelation, formElementRelation);
         PaymentController paymentController = new PaymentController(providerRelation, transactionRelation,
-                userRelation, discountController, session);
+                userRelation, discountController, authController);
         RefundController refundController = new RefundController(refundRequestRelation, transactionRelation,
                 session);
-        TransactionController transactionController = new TransactionController(transactionRelation, session);
+        TransactionController transactionController = new TransactionController(transactionRelation, authController);
         ServiceController serviceController = new ServiceController(serviceRelation);
         AdminDiscountController adminDiscountController = new AdminDiscountController(discountRelation);
         AdminRefundController adminRefundController = new AdminRefundController(refundRequestRelation,
@@ -82,11 +92,12 @@ public class App {
         AdminTransactionController adminTransactionController = new AdminTransactionController(
                 transactionRelation);
         AdminUserController adminUserController = new AdminUserController(userRelation);
+        FormElementController formElementController = new FormElementController(formElementChoiceRelation);
         Frame currentFrame = new GuestView();
         Frame[] frameArr = new Frame[] { currentFrame, new SignIn(authController), new SignUp(authController),
                 new HomeUser(session, authController), new DiscountList(discountController),
                 new AddToWallet(userController), new ListAllProviders(providerController),
-                new PayForService(paymentController, providerController),
+                new PayForService(paymentController, providerController, formElementController),
                 new UserRefundRequest(refundController, transactionController),
                 new HomeAdmin(authController),
                 new AdminAddDiscount(adminDiscountController, serviceController),
@@ -97,6 +108,8 @@ public class App {
 
         serviceRelation.removeAll();
         providerRelation.removeAll();
+        formElementRelation.removeAll();
+        formElementChoiceRelation.removeAll();
         for (String serviceName : new String[] { "Mobile Recharge Service", "Internet Payment Service",
                 "Landline Service", "Donation" }) {
             serviceRelation.insert(new Service(serviceName));
@@ -123,6 +136,16 @@ public class App {
         providerRelation.insert(new Provider("Donation", "Schools", true, HandlerName.SCHOOL_DONATION));
         providerRelation.insert(new Provider("Donation", "NGO", true, HandlerName.NGO_DONATION));
 
+        HandlerFactory handlerFactory = new HandlerFactory();
+        ArrayList<Provider> allProviders = providerRelation.select(p -> true);
+        for (Provider provider : allProviders) {
+            Handler handler = handlerFactory.getHandler(provider.handlerName);
+            String[] requestKeys = handler.getRequestKeys();
+            for (String key : requestKeys) {
+                formElementRelation.insert(new FormElement(key, provider.serviceName, provider.name,
+                        FormElementType.TEXT_FIELD, key + " " + "(" + handler.getConstraints() + ")"));
+            }
+        }
         router.mainLoop();
     }
 }

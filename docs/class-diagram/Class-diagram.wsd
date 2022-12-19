@@ -34,11 +34,14 @@ package datastore <<Folder>>{
         - records: ArrayList<T>
         - recordBuilder: EntityBuilder<T>
         --
-        + Relation(String fileName, EntityBuilder<T> recordBuilder)
+        + removeAll(): void
         + save(): void
         - load(): void
         + insert(T record): void
         + selectMax(RecordProjectStrategy<T, B> RecordProject): <B extends Comparable<B>> B
+        + select(RecordFilterStrategy<T> filter): ArrayList<T>
+        + recordExists(RecordFilterStrategy<T> filter): boolean
+        + update(RecordUpdateStrategy<T> updater, RecordFilterStrategy<T> filter): ArrayList<T>
     }
 }
 
@@ -168,8 +171,6 @@ package payments{
                 }
                 class  AdminRefund extends Frame   {
                     - aRefund: AdminRefundController
-                    - refundRequestStatus: int
-                    - requestId: int
                 }
                 class  HomeAdmin extends Frame   {
                     - authController: AuthController
@@ -180,7 +181,7 @@ package payments{
             }
 
             package payments.boundaries.concretes.common{
-                class  GuestView extends Frame   {
+                class  GuestView extends Frame  {
 
                 }
                 class  SignIn extends Frame  {
@@ -195,7 +196,7 @@ package payments{
                     - userController: UserController
                 }
                 class BecomeAdmin extends Frame {
-                    - AdminUserController: AdminUserController
+                    - adminUserController: AdminUserController
                     - authController: AuthController
                 }
                 class  DiscountList extends Frame    {
@@ -395,31 +396,31 @@ package payments{
 
     package payments.entities{
         package payments.entities.builders{
-            class  DiscountBuilder implements EntityBuilder  {
+            class  DiscountBuilder {
 
             }
-            class  FormElementBuilder implements EntityBuilder  {
+            class  FormElementBuilder {
 
             }
-            class  ProviderBuilder implements EntityBuilder  {
+            class  ProviderBuilder {
 
             }
-            class  RefundRequestBuilder implements EntityBuilder  {
+            class  RefundRequestBuilder {
 
             }
-            class  ServiceBuilder implements EntityBuilder  {
+            class  ServiceBuilder {
 
             }
-            class  TransactionBuilder implements EntityBuilder  {
+            class  TransactionBuilder {
 
             }
-            class  UsedDiscountBuilder implements EntityBuilder  {
+            class  UsedDiscountBuilder {
 
             }
-            class  UserBuilder implements EntityBuilder  {
+            class  UserBuilder {
 
             }
-            class  FormElementChoiceBuilder implements EntityBuilder  {
+            class  FormElementChoiceBuilder {
 
             }
         }
@@ -478,6 +479,11 @@ package payments{
             + wallet: double {readOnly}
         }
 
+        '----------------------------------------------------------
+        Relation -- RecordProjectStrategy
+        Relation -- RecordFilterStrategy
+        Relation -- RecordUpdateStrategy
+
         Relation <|.. "Relation<User>"
         "Relation<User>" -d- User
 
@@ -496,21 +502,23 @@ package payments{
         Relation <|.. "Relation<Discount>"
         "Relation<Discount>" -d- Discount
 
-
         Relation <|.. "Relation<UsedDiscount>"
         "Relation<UsedDiscount>" -d- UsedDiscount
-
 
         Relation <|.. "Relation<FormElement>"
         "Relation<FormElement>" -d- FormElement
 
         Relation <|.. "Relation<FormElementChoice>"
         "Relation<FormElementChoice>" -d- FormElementChoice
-        '----------------------------------------------------------
-        LogInSession o-- User
 
         AuthController o-- "Relation<User>"
         AuthController o-- LogInSession
+
+        DiscountController o-- "Relation<Discount>"
+        DiscountController o-- "Relation<UsedDiscount>"
+        DiscountController o-- LogInSession
+
+        LogInSession o-- User
 
         PaymentController o-- "Relation<Transaction>"
         PaymentController o-- "Relation<Provider>"
@@ -521,10 +529,6 @@ package payments{
         RefundController o-- "Relation<RefundRequest>"
         RefundController o-- "Relation<Transaction>"
         RefundController o-- LogInSession
-
-        DiscountController o-- "Relation<Discount>"
-        DiscountController o-- "Relation<UsedDiscount>"
-        DiscountController o-- LogInSession
 
         ServiceController o-- "Relation<Service>"
 
@@ -537,31 +541,25 @@ package payments{
         ProviderController o-- "Relation<FormElement>"
         ProviderController o-- "Relation<Provider>"
 
-        "Relation<Discount>" --o AdminDiscountController
+        AdminDiscountController o-- "Relation<Discount>"
 
-        "Relation<FormElement>" --o AdminFormElementController
-        "Relation<FormElementChoice>" --o AdminFormElementController
+        AdminFormElementController o-- "Relation<FormElement>"
+        AdminFormElementController o-- "Relation<FormElementChoice>" 
 
-        "Relation<Provider>" --o AdminProviderController
+        AdminProviderController o-- "Relation<Provider>" 
 
-        "Relation<RefundRequest>" --o AdminRefundController
-        "Relation<User>" --o AdminRefundController
-        "Relation<Transaction>" --o AdminRefundController
+        AdminRefundController o-- "Relation<RefundRequest>" 
+        AdminRefundController o-- "Relation<User>" 
+        AdminRefundController o-- "Relation<Transaction>" 
 
-        "Relation<Service>" --o AdminServiceController
+        AdminServiceController o-- "Relation<Service>" 
 
-        "Relation<Transaction>" --o AdminTransactionController
+        AdminTransactionController o-- "Relation<Transaction>" 
 
-        "Relation<User>" --o AdminUserController
+        AdminUserController o-- "Relation<User>"
 
         Router o-- Frame
-        Router -- FrameName
-
-        AuthController o-- LogInSession
-
-        DiscountController o-- LogInSession
-
-
+        Router o-- FrameName
 
         AdminAddDiscount o-- AdminDiscountController
         AdminAddDiscount o-- ServiceController
@@ -577,6 +575,9 @@ package payments{
 
         AddToWallet o-- UserController
 
+        BecomeAdmin o-- AdminUserController
+        BecomeAdmin o-- AuthController
+
         DiscountList o-- DiscountController
 
         HomeUser o-- User
@@ -588,6 +589,9 @@ package payments{
 
         PayForService o-- PaymentController
         PayForService o-- ProviderController
+
+        PayWithWallet o-- User
+        PayWithWallet o-- "Relation<User>"
 
         UserRefundRequest o-- RefundController
         UserRefundRequest o-- TransactionController
@@ -644,7 +648,7 @@ package payments{
         AdminDiscountController -- Response
         AdminFormElementController -- Response
         AdminProviderController -- Response
-        AdminRefundContrller -- Response
+        AdminRefundController -- Response
         AdminServiceController -- Response
         AdminUserController -- Response
         PaymentStrategy -- Response
@@ -656,12 +660,11 @@ package payments{
         UserController -- Response
 
         Discount -- DiscountType
-        Discount -- AdminFormElementController
-        Discount -- AdminDiscountController
+        DiscountType -- AdminFormElementController
+        DiscountType -- AdminDiscountController
 
         FormElementType -- FormElement
 
-        RefundRequestStatus -- AdminRefund
         RefundRequestStatus -- RefundRequest
 
         TransactionType -- Transaction

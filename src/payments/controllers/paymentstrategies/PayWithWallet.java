@@ -19,7 +19,7 @@ public class PayWithWallet implements PaymentStrategy {
             return new Response(false, "You do not have enough money in the wallet for this payment");
         System.out.println("[DEBUG]: Paying with wallet");
         userRelation.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet - amount),
-                u -> u.email == payingUser.email);
+                u -> u.email.equals(payingUser.email));
         return new Response(true, "Payment successful");
     }
 }

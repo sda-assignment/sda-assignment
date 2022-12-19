@@ -18,7 +18,7 @@ public class Relation<T extends Entity> {
         this.path = DATA_PATH + fileName;
         this.recordBuilder = recordBuilder;
         this.records = new ArrayList<T>();
-        load();
+        // load();
     }
 
     public void removeAll() throws EntitySaveException {
@@ -31,7 +31,7 @@ public class Relation<T extends Entity> {
         }
     }
 
-    public void save() throws EntitySaveException {
+    private void save() throws EntitySaveException {
         String recordsStr = "";
         for (T record : records) {
             recordsStr = recordsStr.concat(record.storify()) + "\n";
@@ -62,7 +62,7 @@ public class Relation<T extends Entity> {
 
     public void insert(T record) throws EntitySaveException {
         this.records.add(record);
-        save();
+        // save();
     }
 
     public <B extends Comparable<B>> B selectMax(RecordProjectStrategy<T, B> RecordProject) {
@@ -103,7 +103,7 @@ public class Relation<T extends Entity> {
                 result.add(records.get(i));
             }
         }
-        save();
+        // save();
         return result;
     }
 }

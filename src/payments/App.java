@@ -27,22 +27,6 @@ import payments.entities.builders.ServiceBuilder;
 import payments.entities.builders.TransactionBuilder;
 import payments.entities.builders.UsedDiscountBuilder;
 import payments.entities.builders.UserBuilder;
-import payments.boundaries.Frame;
-import payments.boundaries.Router;
-import payments.boundaries.concretes.admin.AdminAddDiscount;
-import payments.boundaries.concretes.admin.AdminRefund;
-import payments.boundaries.concretes.admin.HomeAdmin;
-import payments.boundaries.concretes.admin.ListAllTransactions;
-import payments.boundaries.concretes.common.GuestView;
-import payments.boundaries.concretes.common.SignIn;
-import payments.boundaries.concretes.common.SignUp;
-import payments.boundaries.concretes.user.AddToWallet;
-import payments.boundaries.concretes.user.BecomeAdmin;
-import payments.boundaries.concretes.user.DiscountList;
-import payments.boundaries.concretes.user.HomeUser;
-import payments.boundaries.concretes.user.ListAllProviders;
-import payments.boundaries.concretes.user.PayForService;
-import payments.boundaries.concretes.user.UserRefundRequest;
 import payments.common.enums.FormElementType;
 import payments.controllers.AuthController;
 import payments.controllers.DiscountController;
@@ -93,18 +77,6 @@ public class App {
                 transactionRelation);
         AdminUserController adminUserController = new AdminUserController(userRelation);
         FormElementController formElementController = new FormElementController(formElementChoiceRelation);
-        Frame currentFrame = new GuestView();
-        Frame[] frameArr = new Frame[] { currentFrame, new SignIn(authController), new SignUp(authController),
-                new HomeUser(session, authController), new DiscountList(discountController),
-                new AddToWallet(userController), new ListAllProviders(providerController),
-                new PayForService(paymentController, providerController, formElementController),
-                new UserRefundRequest(refundController, transactionController),
-                new HomeAdmin(authController),
-                new AdminAddDiscount(adminDiscountController, serviceController),
-                new AdminRefund(adminRefundController),
-                new ListAllTransactions(adminTransactionController),
-                new BecomeAdmin(adminUserController, authController) };
-        Router router = new Router(frameArr, currentFrame);
 
         serviceRelation.removeAll();
         providerRelation.removeAll();
@@ -146,6 +118,5 @@ public class App {
                         FormElementType.TEXT_FIELD, key + " " + "(" + handler.getConstraints() + ")"));
             }
         }
-        router.mainLoop();
     }
 }

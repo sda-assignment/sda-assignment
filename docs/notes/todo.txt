@@ -8,8 +8,7 @@ Notes
 
 TODO
 - Change all usages of logInSession outside of AuthController to AuthController
-- Decorator pattern to accumulate the discounts (?)
 - Make return Relation array list immutable
+- Decorator pattern to accumulate the discounts (?)
 - Change lambdas to actual classes (?)
 - Proxy pattern in front of authorized controller (?)
-- Command pattern in UI choices/input (?)

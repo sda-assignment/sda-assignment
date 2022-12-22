@@ -1,10 +1,9 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 import payments.common.enums.DiscountType;
 
-public class Discount implements Entity {
+public class Discount {
     public final int id;
     public final DiscountType type;
     public final double percentage;

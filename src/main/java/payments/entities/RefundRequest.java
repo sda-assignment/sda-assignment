@@ -1,10 +1,9 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 import payments.common.enums.RefundRequestStatus;
 
-public class RefundRequest implements Entity {
+public class RefundRequest {
     public final int id;
     public final int transactionId;
     public final RefundRequestStatus status;

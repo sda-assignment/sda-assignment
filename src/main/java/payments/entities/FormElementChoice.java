@@ -1,9 +1,8 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 
-public class FormElementChoice implements Entity {
+public class FormElementChoice {
     public final String info;
     public final String serviceName;
     public final String providerName;

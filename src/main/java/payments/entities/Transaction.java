@@ -3,10 +3,9 @@ package payments.entities;
 import java.time.LocalDateTime;
 
 import common.Util;
-import datastore.Entity;
 import payments.common.enums.TransactionType;
 
-public class Transaction implements Entity {
+public class Transaction {
     public final int id;
     public final String userEmail;
     public final LocalDateTime timestamp;

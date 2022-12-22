@@ -1,8 +1,6 @@
 package payments.entities;
 
-import datastore.Entity;
-
-public class Service implements Entity {
+public class Service {
     public final String name;
 
     public Service(String name) {

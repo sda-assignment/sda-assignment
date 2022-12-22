@@ -1,10 +1,9 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 import handlers.HandlerName;
 
-public class Provider implements Entity {
+public class Provider {
     public final String serviceName;
     public final String name;
     public final boolean cashOnDelivery;

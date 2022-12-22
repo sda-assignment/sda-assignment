@@ -1,10 +1,9 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 import payments.common.enums.FormElementType;
 
-public class FormElement implements Entity {
+public class FormElement {
     public final String name;
     public final String serviceName;
     public final String providerName;

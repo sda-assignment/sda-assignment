@@ -1,9 +1,8 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 
-public class UsedDiscount implements Entity {
+public class UsedDiscount {
     public final String email;
     public final int discountId;
 

@@ -1,9 +1,8 @@
 package payments.entities;
 
 import common.Util;
-import datastore.Entity;
 
-public class User implements Entity {
+public class User {
     public final String email;
     public final String username;
     public final String password;

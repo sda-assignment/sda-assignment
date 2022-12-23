@@ -1,0 +1,6 @@
+- Handler uses Template method pattern
+- HandlerFactory uses factory
+- Relation (update, select, selectMax) uses Strategy pattern
+- EntityBuilder uses Builder pattern
+- The concept of "handlers" is strategy
+- PaymentStrategy uses strategy pattern

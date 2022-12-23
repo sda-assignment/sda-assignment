@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "25d9f0a5-cb57-4df2-8e0d-716c90daf949",
+		"name": "sda-assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "hello",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "test",
+							"type": "default"
+						},
+						{
+							"key": "pasword",
+							"value": "test",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "hello",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "test",
+							"type": "default"
+						},
+						{
+							"key": "pasword",
+							"value": "test",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/signup",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

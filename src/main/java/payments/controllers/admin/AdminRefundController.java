@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import common.Util;
 import datastore.Relation;
-import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
 import payments.common.enums.RefundRequestStatus;
 import payments.common.enums.TransactionType;
@@ -29,7 +28,7 @@ public class AdminRefundController {
         return refundRelation.select(r -> true);
     }
 
-    public Response acceptRefund(int rid) throws EntitySaveException {
+    public Response acceptRefund(int rid) {
         ArrayList<RefundRequest> refunds = refundRelation.update(
                 r -> new RefundRequest(r.id, r.transactionId, RefundRequestStatus.ACCEPTED, r.userEmail),
                 r -> r.id == rid);
@@ -54,7 +53,7 @@ public class AdminRefundController {
         return new Response(true, "Refund accepted");
     }
 
-    public Response rejectRefund(int rid) throws EntitySaveException {
+    public Response rejectRefund(int rid) {
         refundRelation.update(
                 r -> new RefundRequest(r.id, r.transactionId, RefundRequestStatus.REJECTED, r.userEmail),
                 r -> r.id == rid);

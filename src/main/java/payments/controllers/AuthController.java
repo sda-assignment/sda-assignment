@@ -2,11 +2,20 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import datastore.exceptions.EntitySaveException;
-import payments.common.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import payments.controllers.request.LogInInfo;
+import payments.controllers.request.SignUpInfo;
+import payments.controllers.response.Token;
 import payments.entities.User;
 import datastore.Relation;
 
+@RestController
 public class AuthController {
     private Relation<User> userRelation;
     private LogInSession logInSession;
@@ -16,39 +25,27 @@ public class AuthController {
         this.logInSession = logInSession;
     }
 
-    public Response signUp(String email, String userName, String password) throws EntitySaveException {
-        if (userRelation.recordExists(u -> u.email.equals(email)))
-            return new Response(false, "This email is already associated with an account");
-        userRelation.insert(new User(email, userName, password, false, 0));
-        logInSession.setLoggedInUser((new User(email, userName, password, false, 0)));
-
-        return new Response(true, "Signed up successfully");
+    @PostMapping("/signup")
+    public void signUp(@RequestBody SignUpInfo signupInfo) {
+        if (userRelation.recordExists(u -> u.email.equals(signupInfo.email)))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "This email is already associated with an account");
+        userRelation
+                .insert(new User(signupInfo.email, signupInfo.username, signupInfo.password,
+                        signupInfo.username.equals("admin")
+                                && signupInfo.password.equals("admin"),
+                        0));
     }
 
-    public Response logIn(String email, String password) {
-        ArrayList<User> users = userRelation.select(u -> u.email.equals(email) && u.password.equals(password));
+    @PostMapping("/login")
+    @ResponseBody
+    public Token logIn(@RequestBody LogInInfo logInInfo) {
+        ArrayList<User> users = userRelation
+                .select(u -> u.email.equals(logInInfo.email) && u.password.equals(logInInfo.password));
         if (users.size() > 0) {
-            logInSession.setLoggedInUser(users.get(0));
-            return new Response(true, "Logged in Successfully");
+            return new Token(logInSession.createJwt(users.get(0).email));
         }
-        return new Response(false, "Incorrect username or password");
-    }
-
-    public Response logOut() {
-        logInSession.setLoggedInUser(null);
-        return new Response(true, "Logged you out");
-    }
-
-    public User getLoggedInUser() {
-        User user = logInSession.getLoggedInUser();
-        logIn(user.email, user.password);
-        return logInSession.getLoggedInUser();
-    }
-
-    public boolean isAdmin() {
-        User user = getLoggedInUser();
-        return user != null && user.isAdmin;
-
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
     }
 
 }

@@ -1,6 +1,5 @@
 package payments.controllers.admin;
 
-import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
 import payments.common.enums.DiscountType;
 import payments.entities.Discount;
@@ -14,19 +13,18 @@ public class AdminDiscountController {
         this.discountRelation = relation;
     }
 
-    private void addDiscount(DiscountType discountType, double percentage, String serviceName)
-            throws EntitySaveException {
+    private void addDiscount(DiscountType discountType, double percentage, String serviceName) {
         Integer id = Util.incrementOrInitialize(discountRelation.selectMax(d -> d.id));
         Discount discountToInsert = new Discount(id, discountType, percentage, serviceName);
         discountRelation.insert(discountToInsert);
     }
 
-    public Response addOverallDiscount(double percentage) throws EntitySaveException {
+    public Response addOverallDiscount(double percentage) {
         addDiscount(DiscountType.OVERALL, percentage, "None");
         return new Response(true, "Discount added successfully");
     }
 
-    public Response addSpecificDiscount(String serviceName, double percentage) throws EntitySaveException {
+    public Response addSpecificDiscount(String serviceName, double percentage) {
         addDiscount(DiscountType.SPECIFIC, percentage, serviceName);
         return new Response(true, "Discount added successfully");
     }

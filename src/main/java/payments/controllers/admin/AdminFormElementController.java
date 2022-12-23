@@ -1,7 +1,6 @@
 package payments.controllers.admin;
 
 import datastore.Relation;
-import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
 import payments.common.enums.FormElementType;
 import payments.entities.FormElement;
@@ -12,7 +11,7 @@ public class AdminFormElementController {
     private Relation<FormElementChoice> formElementChoiceRelation;
 
     public Response addFormElement(String name, String serviceName, String providerName, FormElementType type,
-            String info) throws EntitySaveException {
+            String info) {
         if (formElementRelation.recordExists(
                 fe -> fe.name.equals(name) && fe.serviceName.equals(serviceName)
                         && fe.providerName.equals(providerName)))
@@ -23,7 +22,7 @@ public class AdminFormElementController {
     }
 
     public Response addFormElementChoice(String info, String serviceName, String providerName)
-            throws EntitySaveException {
+            {
         formElementChoiceRelation.insert(new FormElementChoice(info, serviceName, providerName));
         return new Response(true, "Added the form element choice");
     }

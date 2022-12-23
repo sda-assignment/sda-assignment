@@ -1,7 +1,6 @@
 package payments.controllers.paymentstrategies;
 
 import datastore.Relation;
-import datastore.exceptions.EntitySaveException;
 import payments.common.Response;
 import payments.entities.User;
 
@@ -14,7 +13,7 @@ public class PayWithWallet implements PaymentStrategy {
         this.payingUser = payingUser;
     }
 
-    public Response pay(double amount) throws EntitySaveException {
+    public Response pay(double amount) {
         if (payingUser.wallet < amount)
             return new Response(false, "You do not have enough money in the wallet for this payment");
         System.out.println("[DEBUG]: Paying with wallet");

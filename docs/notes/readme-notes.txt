@@ -1,0 +1,2 @@
+- Let the admin be hard-coded username and password
+- In order to get admin access sign in with username: admin and password: admin

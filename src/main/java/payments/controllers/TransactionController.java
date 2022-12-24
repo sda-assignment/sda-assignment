@@ -2,19 +2,19 @@
 
 // import java.util.ArrayList;
 
-// import datastore.Relation;
+// import datastore.Model;
 // import payments.entities.Transaction;
 
 // public class TransactionController {
-//     private Relation<Transaction> transactionRelation;
+//     private Model<Transaction> transactionModel;
 //     private AuthController authController;
 
-//     public TransactionController(Relation<Transaction> transactionRelation, AuthController authController) {
-//         this.transactionRelation = transactionRelation;
+//     public TransactionController(Model<Transaction> transactionModel, AuthController authController) {
+//         this.transactionModel = transactionModel;
 //         this.authController = authController;
 //     }
 
 //     public ArrayList<Transaction> getTransactionsForUser() {
-//         return transactionRelation.select(t -> t.userEmail.equals(authController.getLoggedInUser().email));
+//         return transactionModel.select(t -> t.userEmail.equals(authController.getLoggedInUser().email));
 //     }
 // }

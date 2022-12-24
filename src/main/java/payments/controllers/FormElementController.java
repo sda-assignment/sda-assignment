@@ -2,18 +2,18 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import datastore.Relation;
+import datastore.Model;
 import payments.entities.FormElementChoice;
 
 public class FormElementController {
-    private Relation<FormElementChoice> formElementChoiceRelation;
+    private Model<FormElementChoice> formElementChoiceModel;
 
-    public FormElementController(Relation<FormElementChoice> formElementChoiceRelation) {
-        this.formElementChoiceRelation = formElementChoiceRelation;
+    public FormElementController(Model<FormElementChoice> formElementChoiceModel) {
+        this.formElementChoiceModel = formElementChoiceModel;
     }
 
     public ArrayList<FormElementChoice> getChoicesForFormElement(String serviceName, String providerName) {
-        return formElementChoiceRelation
+        return formElementChoiceModel
                 .select(fec -> fec.serviceName.equals(serviceName) && fec.providerName.equals(providerName));
     }
 }

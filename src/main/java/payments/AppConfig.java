@@ -3,15 +3,15 @@ package payments;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import datastore.Relation;
+import datastore.Model;
 import payments.controllers.LogInSession;
 import payments.entities.User;
 
 @Configuration
 public class AppConfig {
     @Bean
-    public Relation<User> userRelation() {
-        return new Relation<User>();
+    public Model<User> userModel() {
+        return new Model<User>();
     }
 
     @Bean

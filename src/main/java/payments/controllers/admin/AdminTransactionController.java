@@ -3,16 +3,16 @@ package payments.controllers.admin;
 import java.util.ArrayList;
 
 import payments.entities.Transaction;
-import datastore.Relation;
+import datastore.Model;
 
 public class AdminTransactionController {
-    private Relation<Transaction> relation;
+    private Model<Transaction> model;
 
-    public AdminTransactionController(Relation<Transaction> relation) {
-        this.relation = relation;
+    public AdminTransactionController(Model<Transaction> model) {
+        this.model = model;
     }
 
     public ArrayList<Transaction> getAllTransactions() {
-        return relation.select(t -> true);
+        return model.select(t -> true);
     }
 }

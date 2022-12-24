@@ -2,10 +2,10 @@ package datastore;
 
 import java.util.ArrayList;
 
-public class Relation<T> {
+public class Model<T> {
     private ArrayList<T> records;
 
-    public Relation() {
+    public Model() {
         this.records = new ArrayList<T>();
     }
 

@@ -9,22 +9,22 @@
 // import payments.common.enums.DiscountType;
 // import payments.entities.Discount;
 // import payments.entities.UsedDiscount;
-// import datastore.Relation;
+// import datastore.Model;
 
 // public class DiscountController {
-//     private Relation<Discount> discountRelation;
-//     private Relation<UsedDiscount> usedDiscountRelation;
+//     private Model<Discount> discountModel;
+//     private Model<UsedDiscount> usedDiscountModel;
 //     private LogInSession logInSession;
 
-//     public DiscountController(Relation<Discount> relation, Relation<UsedDiscount> usedDiscountRelation,
+//     public DiscountController(Model<Discount> model, Model<UsedDiscount> usedDiscountModel,
 //             LogInSession logInSession) {
-//         this.discountRelation = relation;
-//         this.usedDiscountRelation = usedDiscountRelation;
+//         this.discountModel = model;
+//         this.usedDiscountModel = usedDiscountModel;
 //         this.logInSession = logInSession;
 //     }
 
 //     private ArrayList<Discount> getEffectiveDiscounts(ArrayList<Discount> discounts) {
-//         Collection<UsedDiscount> usedDiscounts = usedDiscountRelation
+//         Collection<UsedDiscount> usedDiscounts = usedDiscountModel
 //                 .select(d -> d.email.equals(logInSession.getLoggedInUser().email));
 //         Set<Integer> usedDiscountsIds = new HashSet<Integer>();
 //         for (UsedDiscount d : usedDiscounts) {
@@ -35,18 +35,18 @@
 //     }
 
 //     public ArrayList<Discount> getDiscountsForService(String serviceName) {
-//         ArrayList<Discount> discounts = discountRelation.select(d -> d.type == DiscountType.OVERALL
+//         ArrayList<Discount> discounts = discountModel.select(d -> d.type == DiscountType.OVERALL
 //                 || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName)));
 //         return getEffectiveDiscounts(discounts);
 //     }
 
 //     public ArrayList<Discount> getAllDiscounts() {
-//         ArrayList<Discount> discounts = discountRelation.select(d -> true);
+//         ArrayList<Discount> discounts = discountModel.select(d -> true);
 //         return getEffectiveDiscounts(discounts);
 //     }
 
 //     public Response useDiscount(int discountId) {
-//         usedDiscountRelation.insert(new UsedDiscount(logInSession.getLoggedInUser().email, discountId));
+//         usedDiscountModel.insert(new UsedDiscount(logInSession.getLoggedInUser().email, discountId));
 //         return new Response(true, "Discount used successfully");
 //     }
 // }

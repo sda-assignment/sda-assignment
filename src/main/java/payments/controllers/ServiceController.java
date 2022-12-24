@@ -2,17 +2,17 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import datastore.Relation;
+import datastore.Model;
 import payments.entities.Service;
 
 public class ServiceController {
-    private Relation<Service> serviceRelation;
+    private Model<Service> serviceModel;
 
-    public ServiceController(Relation<Service> serviceRelation) {
-        this.serviceRelation = serviceRelation;
+    public ServiceController(Model<Service> serviceModel) {
+        this.serviceModel = serviceModel;
     }
 
     public ArrayList<Service> getAllServices() {
-        return serviceRelation.select(s -> true);
+        return serviceModel.select(s -> true);
     }
 }

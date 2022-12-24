@@ -5,7 +5,7 @@
 // import java.util.HashMap;
 
 // import common.Util;
-// import datastore.Relation;
+// import datastore.Model;
 // import handlers.Handler;
 // import handlers.HandlerFactory;
 // import handlers.HandlerResponse;
@@ -21,26 +21,26 @@
 // import payments.entities.User;
 
 // public class PaymentController {
-//     private Relation<Provider> providerRelation;
-//     private Relation<Transaction> transactionRelation;
-//     private Relation<User> userRelation;
+//     private Model<Provider> providerModel;
+//     private Model<Transaction> transactionModel;
+//     private Model<User> userModel;
 //     private DiscountController discountController;
 //     private AuthController authController;
 
-//     public PaymentController(Relation<Provider> providerRelation, Relation<Transaction> transactionRelation,
-//             Relation<User> userRelation,
+//     public PaymentController(Model<Provider> providerModel, Model<Transaction> transactionModel,
+//             Model<User> userModel,
 //             DiscountController discountController,
 //             AuthController authController) {
-//         this.providerRelation = providerRelation;
-//         this.transactionRelation = transactionRelation;
-//         this.userRelation = userRelation;
+//         this.providerModel = providerModel;
+//         this.transactionModel = transactionModel;
+//         this.userModel = userModel;
 //         this.discountController = discountController;
 //         this.authController = authController;
 //     }
 
 //     private Response payToProvider(String serviceName, String providerName, HashMap<String, String> request,
 //             PaymentStrategy paymentStrategy) {
-//         ArrayList<Provider> providers = providerRelation
+//         ArrayList<Provider> providers = providerModel
 //                 .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
 //         if (providers.size() == 0)
 //             return new Response(false, "An error has occurred");
@@ -63,10 +63,10 @@
 //             return paymentRes;
 
 //         Transaction transactionToInsert = new Transaction(
-//                 Util.incrementOrInitialize(transactionRelation.selectMax(t -> t.id)),
+//                 Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
 //                 authController.getLoggedInUser().email,
 //                 LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
-//         transactionRelation
+//         transactionModel
 //                 .insert(transactionToInsert);
 
 //         for (Discount discount : discounts) {
@@ -80,7 +80,7 @@
 
 //     public Response payUsingWallet(String serviceName, String providerName, HashMap<String, String> request)
 //             {
-//         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userRelation, authController.getLoggedInUser());
+//         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel, authController.getLoggedInUser());
 //         return payToProvider(serviceName, providerName, request, payWithWalletStrategy);
 //     }
 

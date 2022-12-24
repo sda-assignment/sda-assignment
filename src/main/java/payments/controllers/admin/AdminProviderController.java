@@ -1,18 +1,18 @@
 package payments.controllers.admin;
 
-import datastore.Relation;
+import datastore.Model;
 import handlers.HandlerName;
 import payments.common.Response;
 import payments.entities.Provider;
 
 public class AdminProviderController {
-    private Relation<Provider> providerRelation;
+    private Model<Provider> providerModel;
 
     public Response addProvider(String serviceName, String name, boolean cashOnDelivery, HandlerName handlerName)
             {
-        if (providerRelation.recordExists(p -> p.serviceName.equals(serviceName) && p.name.equals(name)))
+        if (providerModel.recordExists(p -> p.serviceName.equals(serviceName) && p.name.equals(name)))
             return new Response(false, "The provider already exists");
-        providerRelation.insert(new Provider(serviceName, name, cashOnDelivery, handlerName));
+        providerModel.insert(new Provider(serviceName, name, cashOnDelivery, handlerName));
         return new Response(true, "Provider created successfully");
     }
 }

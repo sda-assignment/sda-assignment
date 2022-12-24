@@ -1,20 +1,20 @@
 package payments.controllers.admin;
 
-import datastore.Relation;
+import datastore.Model;
 import payments.common.Response;
 import payments.entities.Service;
 
 public class AdminServiceController {
-    private Relation<Service> serviceRelation;
+    private Model<Service> serviceModel;
 
-    public AdminServiceController(Relation<Service> serviceRelation) {
-        this.serviceRelation = serviceRelation;
+    public AdminServiceController(Model<Service> serviceModel) {
+        this.serviceModel = serviceModel;
     }
 
     public Response addService(String serviceName) {
-        if (serviceRelation.recordExists(s -> s.name.equals(serviceName)))
+        if (serviceModel.recordExists(s -> s.name.equals(serviceName)))
             return new Response(false, "Service already exists");
-        serviceRelation.insert(new Service(serviceName));
+        serviceModel.insert(new Service(serviceName));
         return new Response(true, "Service added successfully");
     }
 }

@@ -4,19 +4,19 @@ import payments.common.Response;
 import payments.common.enums.DiscountType;
 import payments.entities.Discount;
 import common.Util;
-import datastore.Relation;
+import datastore.Model;
 
 public class AdminDiscountController {
-    private Relation<Discount> discountRelation;
+    private Model<Discount> discountModel;
 
-    public AdminDiscountController(Relation<Discount> relation) {
-        this.discountRelation = relation;
+    public AdminDiscountController(Model<Discount> model) {
+        this.discountModel = model;
     }
 
     private void addDiscount(DiscountType discountType, double percentage, String serviceName) {
-        Integer id = Util.incrementOrInitialize(discountRelation.selectMax(d -> d.id));
+        Integer id = Util.incrementOrInitialize(discountModel.selectMax(d -> d.id));
         Discount discountToInsert = new Discount(id, discountType, percentage, serviceName);
-        discountRelation.insert(discountToInsert);
+        discountModel.insert(discountToInsert);
     }
 
     public Response addOverallDiscount(double percentage) {

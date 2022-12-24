@@ -1,4 +1,4 @@
-package payments.controllers.paymentstrategies;
+package payments.controllers.payment_strategies;
 
 import common.Util;
 import payments.common.Response;

@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.auth;
 
 public class Context {
     public final String email;

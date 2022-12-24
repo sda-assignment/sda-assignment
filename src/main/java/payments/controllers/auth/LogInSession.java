@@ -1,4 +1,4 @@
-package payments.controllers;
+package payments.controllers.auth;
 
 import java.security.Key;
 import java.time.Instant;

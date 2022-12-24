@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import payments.controllers.auth.LogInSession;
 import payments.controllers.request.LogInInfo;
 import payments.controllers.request.SignUpInfo;
 import payments.controllers.response.Token;

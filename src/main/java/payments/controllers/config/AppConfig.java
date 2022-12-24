@@ -1,10 +1,10 @@
-package payments;
+package payments.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import datastore.Model;
-import payments.controllers.LogInSession;
+import payments.controllers.auth.LogInSession;
 import payments.entities.User;
 
 @Configuration

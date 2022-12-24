@@ -22,7 +22,12 @@ public class LogInSession {
     private Key secretKey;
 
     public LogInSession() {
-        String secret = "ALSDAIOUOQWIR7987132KJHDASKDJH92391287KJSHDKAJHD12987391489631qjkASJHDG";
+        final String seed = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 64; ++i) {
+            sb.append(seed.charAt((int) (seed.length() * Math.random())));
+        }
+        String secret = sb.toString();
         secretKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS256.getJcaName());
     }
 
@@ -45,7 +50,7 @@ public class LogInSession {
                     .parseClaimsJws(jwt);
             return new Context(token.getBody().getSubject());
         } catch (JwtException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid token");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid auth token");
         }
     }
 

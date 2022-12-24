@@ -1,5 +1,5 @@
 TODO
-- Use JWT instead of LoginSession
+- Get rid of Response
 - Make return Relation array list immutable
 - Use H2 in memory database (?)
 - Decorator pattern to accumulate the discounts (?)

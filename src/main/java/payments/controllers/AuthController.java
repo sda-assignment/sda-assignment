@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import payments.controllers.auth.LogInSession;
-import payments.controllers.request.LogInInfo;
-import payments.controllers.request.SignUpInfo;
+import payments.controllers.request.LogInBody;
+import payments.controllers.request.SignUpBody;
 import payments.controllers.response.Token;
 import payments.entities.User;
 import datastore.Model;
@@ -27,22 +27,22 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void signUp(@RequestBody SignUpInfo signupInfo) {
-        if (userModel.recordExists(u -> u.email.equals(signupInfo.email)))
+    public void signUp(@RequestBody SignUpBody body) {
+        if (userModel.recordExists(u -> u.email.equals(body.email)))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "This email is already associated with an account");
         userModel
-                .insert(new User(signupInfo.email, signupInfo.username, signupInfo.password,
-                        signupInfo.username.equals("admin")
-                                && signupInfo.password.equals("admin"),
+                .insert(new User(body.email, body.username, body.password,
+                        body.username.equals("admin")
+                                && body.password.equals("admin"),
                         0));
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public Token logIn(@RequestBody LogInInfo logInInfo) {
+    public Token logIn(@RequestBody LogInBody body) {
         ArrayList<User> users = userModel
-                .select(u -> u.email.equals(logInInfo.email) && u.password.equals(logInInfo.password));
+                .select(u -> u.email.equals(body.email) && u.password.equals(body.password));
         if (users.size() > 0) {
             return new Token(logInSession.createJwt(users.get(0).email));
         }

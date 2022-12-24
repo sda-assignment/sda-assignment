@@ -1,98 +1,114 @@
-// package payments.controllers;
+package payments.controllers;
 
-// import java.time.LocalDateTime;
-// import java.util.ArrayList;
-// import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-// import common.Util;
-// import datastore.Model;
-// import handlers.Handler;
-// import handlers.HandlerFactory;
-// import handlers.HandlerResponse;
-// import payments.common.Response;
-// import payments.common.enums.TransactionType;
-// import payments.controllers.paymentstrategies.PayCashOnDelivery;
-// import payments.controllers.paymentstrategies.PayWithCreditCard;
-// import payments.controllers.paymentstrategies.PayWithWallet;
-// import payments.controllers.paymentstrategies.PaymentStrategy;
-// import payments.entities.Discount;
-// import payments.entities.Provider;
-// import payments.entities.Transaction;
-// import payments.entities.User;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-// public class PaymentController {
-//     private Model<Provider> providerModel;
-//     private Model<Transaction> transactionModel;
-//     private Model<User> userModel;
-//     private DiscountController discountController;
-//     private AuthController authController;
+import common.Util;
+import datastore.Model;
+import handlers.Handler;
+import handlers.HandlerFactory;
+import handlers.HandlerResponse;
+import payments.common.enums.TransactionType;
+import payments.controllers.auth.Context;
+import payments.controllers.auth.LogInSession;
+import payments.controllers.payment_strategies.PayCashOnDelivery;
+import payments.controllers.payment_strategies.PayWithCreditCard;
+import payments.controllers.payment_strategies.PayWithWallet;
+import payments.controllers.payment_strategies.PaymentStrategy;
+import payments.controllers.request.CreditCardPaymentBody;
+import payments.controllers.request.PaymentBody;
+import payments.entities.Discount;
+import payments.entities.Provider;
+import payments.entities.Transaction;
+import payments.entities.User;
 
-//     public PaymentController(Model<Provider> providerModel, Model<Transaction> transactionModel,
-//             Model<User> userModel,
-//             DiscountController discountController,
-//             AuthController authController) {
-//         this.providerModel = providerModel;
-//         this.transactionModel = transactionModel;
-//         this.userModel = userModel;
-//         this.discountController = discountController;
-//         this.authController = authController;
-//     }
+@RestController
+public class PaymentController {
+    private Model<Provider> providerModel;
+    private Model<Transaction> transactionModel;
+    private Model<User> userModel;
+    private DiscountController discountController;
+    private LogInSession logInSession;
 
-//     private Response payToProvider(String serviceName, String providerName, HashMap<String, String> request,
-//             PaymentStrategy paymentStrategy) {
-//         ArrayList<Provider> providers = providerModel
-//                 .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
-//         if (providers.size() == 0)
-//             return new Response(false, "An error has occurred");
-//         Provider provider = providers.get(0);
-//         HandlerFactory handlerFactory = new HandlerFactory();
-//         Handler handler = handlerFactory.getHandler(provider.handlerName);
-//         HandlerResponse handlerRes = handler.validateAndHandleRequest(request);
-//         if (!handlerRes.success)
-//             return new Response(false,
-//                     "An error has occurred please contact an administrator:\n" + handlerRes.errorMessage);
+    public PaymentController(Model<Provider> providerModel, Model<Transaction> transactionModel,
+            Model<User> userModel,
+            DiscountController discountController,
+            LogInSession logInSession) {
+        this.providerModel = providerModel;
+        this.transactionModel = transactionModel;
+        this.userModel = userModel;
+        this.discountController = discountController;
+        this.logInSession = logInSession;
+    }
 
-//         double amountToDeduct = handlerRes.amount;
-//         ArrayList<Discount> discounts = discountController.getDiscountsForService(serviceName);
-//         for (Discount discount : discounts) {
-//             amountToDeduct = amountToDeduct - amountToDeduct * (discount.percentage / 100);
-//         }
+    private void payToProvider(String email, String serviceName, String providerName, HashMap<String, String> request,
+            PaymentStrategy paymentStrategy) {
+        ArrayList<Provider> providers = providerModel
+                .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
+        if (providers.size() == 0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid service name or provider name");
 
-//         Response paymentRes = paymentStrategy.pay(amountToDeduct);
-//         if (!paymentRes.success)
-//             return paymentRes;
+        Provider provider = providers.get(0);
+        HandlerFactory handlerFactory = new HandlerFactory();
+        Handler handler = handlerFactory.getHandler(provider.handlerName);
+        HandlerResponse handlerRes = handler.validateAndHandleRequest(request);
 
-//         Transaction transactionToInsert = new Transaction(
-//                 Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
-//                 authController.getLoggedInUser().email,
-//                 LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
-//         transactionModel
-//                 .insert(transactionToInsert);
+        if (!handlerRes.success)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The form handler was not able to handle this request:\n" + handlerRes.errorMessage);
 
-//         for (Discount discount : discounts) {
-//             Response useDiscountRes = discountController.useDiscount(discount.id);
-//             if (!useDiscountRes.success)
-//                 return useDiscountRes;
-//         }
+        double amountToDeduct = handlerRes.amount;
+        ArrayList<Discount> discounts = discountController.getDiscountsForServiceForUser(email, serviceName);
+        for (Discount discount : discounts) {
+            amountToDeduct = amountToDeduct - amountToDeduct * (discount.percentage / 100);
+        }
 
-//         return new Response(true, "Paid " + amountToDeduct + "$ to " + providerName + " " + serviceName);
-//     }
+        paymentStrategy.pay(amountToDeduct);
 
-//     public Response payUsingWallet(String serviceName, String providerName, HashMap<String, String> request)
-//             {
-//         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel, authController.getLoggedInUser());
-//         return payToProvider(serviceName, providerName, request, payWithWalletStrategy);
-//     }
+        Transaction transactionToInsert = new Transaction(
+                Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
+                email,
+                LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
+        transactionModel
+                .insert(transactionToInsert);
 
-//     public Response payUsingCreditCard(String serviceName, String providerName, HashMap<String, String> request,
-//             String cardNumber) {
-//         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(cardNumber);
-//         return payToProvider(serviceName, providerName, request, payWithCreditCardStrategy);
-//     }
+        for (Discount discount : discounts) {
+            discountController.useDiscount(email, discount.id);
+        }
+    }
 
-//     public Response payCashOnDelivery(String serviceName, String providerName, HashMap<String, String> request)
-//             {
-//         PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
-//         return payToProvider(serviceName, providerName, request, cashOnDeliveryStrategy);
-//     }
-// }
+    @PostMapping("/pay-wallet")
+    public void payUsingWallet(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestBody PaymentBody body) {
+        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
+                userModel.select(u -> u.email.equals(ctx.email)).get(0));
+        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
+                payWithWalletStrategy);
+    }
+
+    @PostMapping("/pay-credit-card")
+    public void payUsingCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestBody CreditCardPaymentBody body) {
+        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
+        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy);
+    }
+
+    @PostMapping("/pay-cash")
+    public void payCashOnDelivery(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestBody PaymentBody body) {
+        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
+        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy);
+    }
+}

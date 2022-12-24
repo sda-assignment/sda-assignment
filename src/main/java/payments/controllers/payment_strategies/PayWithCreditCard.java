@@ -1,7 +1,9 @@
 package payments.controllers.payment_strategies;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import common.Util;
-import payments.common.Response;
 
 public class PayWithCreditCard implements PaymentStrategy {
     private String cardNumber;
@@ -10,10 +12,9 @@ public class PayWithCreditCard implements PaymentStrategy {
         this.cardNumber = cardNumber;
     }
 
-    public Response pay(double amount) {
+    public void pay(double amount) {
         System.out.println("[DEBUG]: Paying using credit card: " + cardNumber);
         if (!Util.isPositiveInt(cardNumber))
-            return new Response(false, "Invalid card number");
-        return new Response(true, "Payment successful");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid card number");
     }
 }

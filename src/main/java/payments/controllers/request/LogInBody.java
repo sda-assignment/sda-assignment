@@ -1,12 +1,10 @@
 package payments.controllers.request;
 
-public class SignUpInfo {
-    public final String username;
+public class LogInBody {
     public final String email;
     public final String password;
 
-    public SignUpInfo(String username, String email, String password) {
-        this.username = username;
+    public LogInBody(String email, String password) {
         this.email = email;
         this.password = password;
     }

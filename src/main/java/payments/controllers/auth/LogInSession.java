@@ -8,10 +8,15 @@ import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import payments.controllers.exceptions.InvalidAuthHeaderException;
 
 public class LogInSession {
     private Key secretKey;
@@ -32,11 +37,22 @@ public class LogInSession {
     }
 
     public Context getContextFromJwt(String jwt) {
-        Jws<Claims> token = Jwts
-                .parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(jwt);
-        return new Context(token.getBody().getSubject());
+        try {
+            Jws<Claims> token = Jwts
+                    .parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(jwt);
+            return new Context(token.getBody().getSubject());
+        } catch (JwtException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid token");
+        }
+    }
+
+    public Context getContextFromAuthHeader(String authHeader) throws InvalidAuthHeaderException {
+        if (!authHeader.startsWith("Bearer")) {
+            throw new InvalidAuthHeaderException();
+        }
+        return getContextFromJwt(authHeader.substring(7));
     }
 }

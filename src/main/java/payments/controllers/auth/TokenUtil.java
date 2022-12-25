@@ -22,10 +22,10 @@ public class TokenUtil {
     private Key secretKey;
 
     public TokenUtil() {
-        final String seed = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
+        final String pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 64; ++i) {
-            sb.append(seed.charAt((int) (seed.length() * Math.random())));
+            sb.append(pool.charAt((int) (pool.length() * Math.random())));
         }
         String secret = sb.toString();
         secretKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS256.getJcaName());

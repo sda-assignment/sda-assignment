@@ -1,20 +1,32 @@
-// package payments.controllers;
+package payments.controllers;
 
-// import java.util.ArrayList;
+import java.util.ArrayList;
 
-// import datastore.Model;
-// import payments.entities.Transaction;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-// public class TransactionController {
-//     private Model<Transaction> transactionModel;
-//     private AuthController authController;
+import datastore.Model;
+import payments.controllers.auth.Context;
+import payments.controllers.auth.TokenUtil;
+import payments.entities.Transaction;
 
-//     public TransactionController(Model<Transaction> transactionModel, AuthController authController) {
-//         this.transactionModel = transactionModel;
-//         this.authController = authController;
-//     }
+@RestController
+public class TransactionController {
+    private Model<Transaction> transactionModel;
+    private TokenUtil tokenUtil;
 
-//     public ArrayList<Transaction> getTransactionsForUser() {
-//         return transactionModel.select(t -> t.userEmail.equals(authController.getLoggedInUser().email));
-//     }
-// }
+    public TransactionController(Model<Transaction> transactionModel, TokenUtil tokenUtil) {
+        this.transactionModel = transactionModel;
+        this.tokenUtil = tokenUtil;
+    }
+
+    @GetMapping("/transactions")
+    @ResponseBody
+    public ArrayList<Transaction> getTransactionsForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        return transactionModel.select(t -> t.userEmail.equals(ctx.email));
+    }
+}

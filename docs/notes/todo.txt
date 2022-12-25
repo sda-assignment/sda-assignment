@@ -1,4 +1,6 @@
 TODO
+- Don't hardcode admin credentials but create an admin user
+- Create a postman script to automatically log in and update the token
 - Get rid of Response
 - Make return Relation array list immutable
 - Use H2 in memory database (?)

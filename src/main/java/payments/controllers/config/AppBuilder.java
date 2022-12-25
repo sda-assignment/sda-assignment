@@ -12,10 +12,12 @@ import payments.entities.UsedDiscount;
 import payments.entities.User;
 
 @Configuration
-public class ModelBuilder {
+public class AppBuilder {
     @Bean
     public Model<User> userModel() {
-        return new Model<User>();
+        Model<User> userModel = new Model<User>();
+        userModel.insert(new User("admin", "admin", "admin", true, 0));
+        return userModel;
     }
 
     @Bean

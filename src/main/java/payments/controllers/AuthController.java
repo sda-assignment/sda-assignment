@@ -31,11 +31,7 @@ public class AuthController {
         if (userModel.recordExists(u -> u.email.equals(body.email)))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "This email is already associated with an account");
-        userModel
-                .insert(new User(body.email, body.username, body.password,
-                        body.username.equals("admin")
-                                && body.password.equals("admin"),
-                        0));
+        userModel.insert(new User(body.email, body.username, body.password, false, 0));
     }
 
     @PostMapping("/login")

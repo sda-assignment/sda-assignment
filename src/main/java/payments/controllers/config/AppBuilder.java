@@ -7,6 +7,7 @@ import datastore.Model;
 import payments.controllers.auth.TokenUtil;
 import payments.entities.Discount;
 import payments.entities.Provider;
+import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 import payments.entities.UsedDiscount;
 import payments.entities.User;
@@ -38,6 +39,11 @@ public class AppBuilder {
     @Bean
     public Model<Transaction> transactionModel() {
         return new Model<Transaction>();
+    }
+
+    @Bean
+    public Model<RefundRequest> refundRequestModel() {
+        return new Model<RefundRequest>();
     }
 
     @Bean

@@ -1,40 +1,56 @@
-// package payments.controllers;
+package payments.controllers;
 
-// import java.util.ArrayList;
+import java.util.ArrayList;
 
-// import common.Util;
-// import datastore.Model;
-// import payments.common.Response;
-// import payments.common.enums.RefundRequestStatus;
-// import payments.common.enums.TransactionType;
-// import payments.entities.RefundRequest;
-// import payments.entities.Transaction;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-// public class RefundController {
-//     private Model<RefundRequest> refundRequestModel;
-//     private Model<Transaction> transactionModel;
-//     private TokenUtil tokenUtil;
+import common.Util;
+import datastore.Model;
+import payments.common.enums.RefundRequestStatus;
+import payments.common.enums.TransactionType;
+import payments.controllers.auth.Context;
+import payments.controllers.auth.TokenUtil;
+import payments.controllers.request.RefundRequestBody;
+import payments.entities.RefundRequest;
+import payments.entities.Transaction;
 
-//     public RefundController(Model<RefundRequest> refundRequestModel, Model<Transaction> transactionModel,
-//             TokenUtil tokenUtil) {
-//         this.refundRequestModel = refundRequestModel;
-//         this.transactionModel = transactionModel;
-//         this.tokenUtil = tokenUtil;
-//     }
+@RestController
+public class RefundController {
+    private Model<RefundRequest> refundRequestModel;
+    private Model<Transaction> transactionModel;
+    private TokenUtil tokenUtil;
 
-//     public Response requestRefund(int transactionId) {
-//         if (refundRequestModel.recordExists(r -> r.transactionId == transactionId))
-//             return new Response(false, "You already have a refund request on this transaction");
-//         ArrayList<Transaction> targetTransactions = transactionModel.select(t -> t.id == transactionId);
-//         if (targetTransactions.size() == 0)
-//             return new Response(false, "Transaction not found");
-//         Transaction targetTransaction = targetTransactions.get(0);
-//         if (targetTransaction.type == TransactionType.REFUND)
-//             return new Response(false, "Can't request a refund to a refund transaction");
+    public RefundController(Model<RefundRequest> refundRequestModel, Model<Transaction> transactionModel,
+            TokenUtil tokenUtil) {
+        this.refundRequestModel = refundRequestModel;
+        this.transactionModel = transactionModel;
+        this.tokenUtil = tokenUtil;
+    }
 
-//         refundRequestModel.insert(new RefundRequest(
-//                 Util.incrementOrInitialize(refundRequestModel.selectMax(r -> r.id)),
-//                 transactionId, RefundRequestStatus.PENDING, tokenUtil.getLoggedInUser().email));
-//         return new Response(true, "Refund requested");
-//     }
-// }
+    @PostMapping("/refund")
+    public void requestRefund(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestBody RefundRequestBody body) {
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+
+        if (refundRequestModel.recordExists(r -> r.transactionId == body.transactionId))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "You already have a refund request on this transaction");
+
+        ArrayList<Transaction> targetTransactions = transactionModel.select(t -> t.id == body.transactionId);
+        if (targetTransactions.size() == 0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaction not found");
+        Transaction targetTransaction = targetTransactions.get(0);
+        if (targetTransaction.type == TransactionType.REFUND)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't request a refund to a refund transaction");
+
+        refundRequestModel.insert(new RefundRequest(
+                Util.incrementOrInitialize(refundRequestModel.selectMax(r -> r.id)),
+                body.transactionId, RefundRequestStatus.PENDING, ctx.email));
+    }
+}

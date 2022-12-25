@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import payments.common.enums.DiscountType;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.LogInSession;
+import payments.controllers.auth.TokenUtil;
 import payments.entities.Discount;
 import payments.entities.UsedDiscount;
 import datastore.Model;
@@ -22,13 +22,13 @@ import datastore.Model;
 public class DiscountController {
     private Model<Discount> discountModel;
     private Model<UsedDiscount> usedDiscountModel;
-    private LogInSession logInSession;
+    private TokenUtil tokenUtil;
 
     public DiscountController(Model<Discount> model, Model<UsedDiscount> usedDiscountModel,
-            LogInSession logInSession) {
+            TokenUtil tokenUtil) {
         this.discountModel = model;
         this.usedDiscountModel = usedDiscountModel;
-        this.logInSession = logInSession;
+        this.tokenUtil = tokenUtil;
     }
 
     private ArrayList<Discount> getEffectiveDiscountsForUser(String email, ArrayList<Discount> discounts) {
@@ -51,14 +51,14 @@ public class DiscountController {
     @GetMapping("/services/discounts/{serviceName}")
     public ArrayList<Discount> getDiscountsForService(@PathVariable("serviceName") String serviceName,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
         return getDiscountsForServiceForUser(ctx.email, serviceName);
     }
 
     @GetMapping("/services/discounts")
     public ArrayList<Discount> getAllDiscounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         ArrayList<Discount> discounts = discountModel.select(d -> true);
-        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
         return getEffectiveDiscountsForUser(ctx.email, discounts);
     }
 

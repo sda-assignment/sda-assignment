@@ -18,10 +18,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import payments.controllers.exceptions.InvalidAuthHeaderException;
 
-public class LogInSession {
+public class TokenUtil {
     private Key secretKey;
 
-    public LogInSession() {
+    public TokenUtil() {
         final String seed = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 64; ++i) {

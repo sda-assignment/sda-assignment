@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import datastore.Model;
-import payments.controllers.auth.LogInSession;
+import payments.controllers.auth.TokenUtil;
 import payments.entities.Discount;
 import payments.entities.Provider;
 import payments.entities.Transaction;
@@ -39,7 +39,7 @@ public class ModelBuilder {
     }
 
     @Bean
-    public LogInSession loginSession() {
-        return new LogInSession();
+    public TokenUtil tokenUtil() {
+        return new TokenUtil();
     }
 }

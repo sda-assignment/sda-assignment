@@ -13,13 +13,13 @@
 // public class RefundController {
 //     private Model<RefundRequest> refundRequestModel;
 //     private Model<Transaction> transactionModel;
-//     private LogInSession logInSession;
+//     private TokenUtil tokenUtil;
 
 //     public RefundController(Model<RefundRequest> refundRequestModel, Model<Transaction> transactionModel,
-//             LogInSession logInSession) {
+//             TokenUtil tokenUtil) {
 //         this.refundRequestModel = refundRequestModel;
 //         this.transactionModel = transactionModel;
-//         this.logInSession = logInSession;
+//         this.tokenUtil = tokenUtil;
 //     }
 
 //     public Response requestRefund(int transactionId) {
@@ -34,7 +34,7 @@
 
 //         refundRequestModel.insert(new RefundRequest(
 //                 Util.incrementOrInitialize(refundRequestModel.selectMax(r -> r.id)),
-//                 transactionId, RefundRequestStatus.PENDING, logInSession.getLoggedInUser().email));
+//                 transactionId, RefundRequestStatus.PENDING, tokenUtil.getLoggedInUser().email));
 //         return new Response(true, "Refund requested");
 //     }
 // }

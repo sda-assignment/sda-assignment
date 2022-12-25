@@ -19,7 +19,7 @@ import handlers.HandlerFactory;
 import handlers.HandlerResponse;
 import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.LogInSession;
+import payments.controllers.auth.TokenUtil;
 import payments.controllers.payment_strategies.PayCashOnDelivery;
 import payments.controllers.payment_strategies.PayWithCreditCard;
 import payments.controllers.payment_strategies.PayWithWallet;
@@ -37,17 +37,17 @@ public class PaymentController {
     private Model<Transaction> transactionModel;
     private Model<User> userModel;
     private DiscountController discountController;
-    private LogInSession logInSession;
+    private TokenUtil tokenUtil;
 
     public PaymentController(Model<Provider> providerModel, Model<Transaction> transactionModel,
             Model<User> userModel,
             DiscountController discountController,
-            LogInSession logInSession) {
+            TokenUtil tokenUtil) {
         this.providerModel = providerModel;
         this.transactionModel = transactionModel;
         this.userModel = userModel;
         this.discountController = discountController;
-        this.logInSession = logInSession;
+        this.tokenUtil = tokenUtil;
     }
 
     private void payToProvider(String email, String serviceName, String providerName, HashMap<String, String> request,
@@ -89,7 +89,7 @@ public class PaymentController {
     @PostMapping("/pay-wallet")
     public void payUsingWallet(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody PaymentBody body) {
-        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
                 userModel.select(u -> u.email.equals(ctx.email)).get(0));
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
@@ -99,7 +99,7 @@ public class PaymentController {
     @PostMapping("/pay-credit-card")
     public void payUsingCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody CreditCardPaymentBody body) {
-        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy);
     }
@@ -107,7 +107,7 @@ public class PaymentController {
     @PostMapping("/pay-cash")
     public void payCashOnDelivery(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody PaymentBody body) {
-        Context ctx = logInSession.getContextFromAuthHeader(authHeader);
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
         PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy);
     }

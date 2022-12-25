@@ -11,13 +11,13 @@
 
 // public class UserController {
 //     private Model<User> userModel;
-//     private LogInSession logInSession;
+//     private TokenUtil tokenUtil;
 //     private Model<Transaction> transactionModel;
 
-//     public UserController(Model<User> userModel, LogInSession logInSession,
+//     public UserController(Model<User> userModel, TokenUtil tokenUtil,
 //             Model<Transaction> transactionModel) {
 //         this.userModel = userModel;
-//         this.logInSession = logInSession;
+//         this.tokenUtil = tokenUtil;
 //         this.transactionModel = transactionModel;
 //     }
 
@@ -27,9 +27,9 @@
 //         if (amount < 0)
 //             return new Response(false, "Invalid amount");
 //         userModel.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + amount),
-//                 u -> u.email.equals(logInSession.getLoggedInUser().email));
+//                 u -> u.email.equals(tokenUtil.getLoggedInUser().email));
 //         transactionModel.insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
-//                 logInSession.getLoggedInUser().email, LocalDateTime.now(), -amount, TransactionType.ADD_TO_WALLET,
+//                 tokenUtil.getLoggedInUser().email, LocalDateTime.now(), -amount, TransactionType.ADD_TO_WALLET,
 //                 "None", "None"));
 //         return new Response(true, "Wallet recharged successfully");
 //     }

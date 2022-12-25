@@ -24,6 +24,7 @@ import payments.controllers.payment_strategies.PayCashOnDelivery;
 import payments.controllers.payment_strategies.PayWithCreditCard;
 import payments.controllers.payment_strategies.PayWithWallet;
 import payments.controllers.payment_strategies.PaymentStrategy;
+import payments.controllers.payment_strategies.PaymentStrategyValidator;
 import payments.controllers.request.CreditCardPaymentBody;
 import payments.controllers.request.PaymentBody;
 import payments.entities.Discount;
@@ -51,13 +52,16 @@ public class PaymentController {
     }
 
     private void payToProvider(String email, String serviceName, String providerName, HashMap<String, String> request,
-            PaymentStrategy paymentStrategy) {
+            PaymentStrategy paymentStrategy, PaymentStrategyValidator validator) {
         ArrayList<Provider> providers = providerModel
                 .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
         if (providers.size() == 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid service name or provider name");
 
         Provider provider = providers.get(0);
+        if (!validator.validate(provider))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported payment method for this provider");
+
         HandlerFactory handlerFactory = new HandlerFactory();
         Handler handler = handlerFactory.getHandler(provider.handlerName);
         HandlerResponse handlerRes = handler.validateAndHandleRequest(request);
@@ -93,7 +97,7 @@ public class PaymentController {
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
                 userModel.select(u -> u.email.equals(ctx.email)).get(0));
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
-                payWithWalletStrategy);
+                payWithWalletStrategy, p -> true);
     }
 
     @PostMapping("/pay-credit-card")
@@ -101,7 +105,8 @@ public class PaymentController {
             @RequestBody CreditCardPaymentBody body) {
         Context ctx = authenticator.getContextFromAuthHeader(authHeader);
         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
-        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy);
+        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy,
+                p -> true);
     }
 
     @PostMapping("/pay-cash")
@@ -109,6 +114,7 @@ public class PaymentController {
             @RequestBody PaymentBody body) {
         Context ctx = authenticator.getContextFromAuthHeader(authHeader);
         PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
-        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy);
+        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy,
+                p -> p.cashOnDelivery);
     }
 }

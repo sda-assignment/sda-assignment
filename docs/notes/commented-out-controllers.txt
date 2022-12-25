@@ -1,5 +1,2 @@
-DiscountController
-PaymentController
 RefundController
 TransactionController
-UserController

@@ -1,36 +1,61 @@
-// package payments.controllers;
+package payments.controllers;
 
-// import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
-// import common.Util;
-// import datastore.Model;
-// import payments.common.Response;
-// import payments.common.enums.TransactionType;
-// import payments.entities.Transaction;
-// import payments.entities.User;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-// public class UserController {
-//     private Model<User> userModel;
-//     private TokenUtil tokenUtil;
-//     private Model<Transaction> transactionModel;
+import common.Util;
+import datastore.Model;
+import payments.common.enums.TransactionType;
+import payments.controllers.auth.Context;
+import payments.controllers.auth.TokenUtil;
+import payments.controllers.request.RechargeWalletBody;
+import payments.controllers.response.UserResponse;
+import payments.entities.Transaction;
+import payments.entities.User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-//     public UserController(Model<User> userModel, TokenUtil tokenUtil,
-//             Model<Transaction> transactionModel) {
-//         this.userModel = userModel;
-//         this.tokenUtil = tokenUtil;
-//         this.transactionModel = transactionModel;
-//     }
+@RestController
+public class UserController {
+    private Model<User> userModel;
+    private TokenUtil tokenUtil;
+    private Model<Transaction> transactionModel;
 
-//     public Response rechargeWallet(double amount, String cardNumber) {
-//         if (!Util.isPositiveInt(cardNumber))
-//             return new Response(false, "Invalid card number");
-//         if (amount < 0)
-//             return new Response(false, "Invalid amount");
-//         userModel.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + amount),
-//                 u -> u.email.equals(tokenUtil.getLoggedInUser().email));
-//         transactionModel.insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
-//                 tokenUtil.getLoggedInUser().email, LocalDateTime.now(), -amount, TransactionType.ADD_TO_WALLET,
-//                 "None", "None"));
-//         return new Response(true, "Wallet recharged successfully");
-//     }
-// }
+    public UserController(Model<User> userModel, TokenUtil tokenUtil, Model<Transaction> transactionModel) {
+        this.userModel = userModel;
+        this.tokenUtil = tokenUtil;
+        this.transactionModel = transactionModel;
+    }
+
+    @PostMapping("/recharge")
+    public void rechargeWallet(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestBody RechargeWalletBody body) {
+        if (!Util.isPositiveInt(body.cardNumber))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid card number");
+        if (body.amount < 0)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid amount");
+
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        userModel.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + body.amount),
+                u -> u.email.equals(ctx.email));
+        transactionModel.insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
+                ctx.email, LocalDateTime.now(), -body.amount, TransactionType.ADD_TO_WALLET,
+                "None", "None"));
+    }
+
+    @GetMapping(value = "/profile")
+    @ResponseBody
+    public UserResponse profile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        User user = userModel.select(u -> u.email.equals(ctx.email)).get(0);
+        return new UserResponse(user.email, user.username, user.isAdmin, user.wallet);
+    }
+
+}

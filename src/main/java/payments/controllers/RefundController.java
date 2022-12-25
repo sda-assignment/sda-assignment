@@ -15,7 +15,7 @@ import datastore.Model;
 import payments.common.enums.RefundRequestStatus;
 import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.TokenUtil;
+import payments.controllers.auth.Authenticator;
 import payments.controllers.request.RefundRequestBody;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
@@ -24,19 +24,19 @@ import payments.entities.Transaction;
 public class RefundController {
     private Model<RefundRequest> refundRequestModel;
     private Model<Transaction> transactionModel;
-    private TokenUtil tokenUtil;
+    private Authenticator authenticator;
 
     public RefundController(Model<RefundRequest> refundRequestModel, Model<Transaction> transactionModel,
-            TokenUtil tokenUtil) {
+            Authenticator authenticator) {
         this.refundRequestModel = refundRequestModel;
         this.transactionModel = transactionModel;
-        this.tokenUtil = tokenUtil;
+        this.authenticator = authenticator;
     }
 
     @PostMapping("/refund")
     public void requestRefund(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody RefundRequestBody body) {
-        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
 
         if (refundRequestModel.recordExists(r -> r.transactionId == body.transactionId))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

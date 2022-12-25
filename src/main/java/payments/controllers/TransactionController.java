@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import datastore.Model;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.TokenUtil;
+import payments.controllers.auth.Authenticator;
 import payments.entities.Transaction;
 
 @RestController
 public class TransactionController {
     private Model<Transaction> transactionModel;
-    private TokenUtil tokenUtil;
+    private Authenticator authenticator;
 
-    public TransactionController(Model<Transaction> transactionModel, TokenUtil tokenUtil) {
+    public TransactionController(Model<Transaction> transactionModel, Authenticator authenticator) {
         this.transactionModel = transactionModel;
-        this.tokenUtil = tokenUtil;
+        this.authenticator = authenticator;
     }
 
     @GetMapping("/transactions")
     @ResponseBody
     public ArrayList<Transaction> getTransactionsForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
         return transactionModel.select(t -> t.userEmail.equals(ctx.email));
     }
 }

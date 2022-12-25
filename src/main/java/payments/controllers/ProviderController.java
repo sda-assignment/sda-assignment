@@ -32,13 +32,4 @@ public class ProviderController {
         return formElementModel
                 .select(fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName));
     }
-
-    public boolean supportsCashOnDelivery(String serviceName, String providerName) {
-        ArrayList<Provider> providers = providerModel
-                .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
-        if (providers.size() == 0) {
-            return false;
-        }
-        return providers.get(0).cashOnDelivery;
-    }
 }

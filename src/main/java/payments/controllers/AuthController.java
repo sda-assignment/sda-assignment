@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import payments.controllers.auth.TokenUtil;
+import payments.controllers.auth.Authenticator;
 import payments.controllers.request.LogInBody;
 import payments.controllers.request.SignUpBody;
 import payments.controllers.response.Token;
@@ -19,11 +19,11 @@ import datastore.Model;
 @RestController
 public class AuthController {
     private Model<User> userModel;
-    private TokenUtil tokenUtil;
+    private Authenticator authenticator;
 
-    public AuthController(Model<User> model, TokenUtil tokenUtil) {
+    public AuthController(Model<User> model, Authenticator authenticator) {
         this.userModel = model;
-        this.tokenUtil = tokenUtil;
+        this.authenticator = authenticator;
     }
 
     @PostMapping("/signup")
@@ -40,7 +40,7 @@ public class AuthController {
         ArrayList<User> users = userModel
                 .select(u -> u.email.equals(body.email) && u.password.equals(body.password));
         if (users.size() > 0) {
-            return new Token(tokenUtil.createJwt(users.get(0).email));
+            return new Token(authenticator.createJwt(users.get(0).email));
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
     }

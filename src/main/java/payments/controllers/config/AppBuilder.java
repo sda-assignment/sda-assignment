@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import datastore.Model;
-import payments.controllers.auth.TokenUtil;
+import payments.controllers.auth.Authenticator;
 import payments.entities.Discount;
 import payments.entities.Provider;
 import payments.entities.RefundRequest;
@@ -47,7 +47,7 @@ public class AppBuilder {
     }
 
     @Bean
-    public TokenUtil tokenUtil() {
-        return new TokenUtil();
+    public Authenticator authenticator() {
+        return new Authenticator();
     }
 }

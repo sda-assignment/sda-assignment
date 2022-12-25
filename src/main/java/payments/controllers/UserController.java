@@ -14,7 +14,7 @@ import common.Util;
 import datastore.Model;
 import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.TokenUtil;
+import payments.controllers.auth.Authenticator;
 import payments.controllers.request.RechargeWalletBody;
 import payments.controllers.response.UserResponse;
 import payments.entities.Transaction;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestController
 public class UserController {
     private Model<User> userModel;
-    private TokenUtil tokenUtil;
+    private Authenticator authenticator;
     private Model<Transaction> transactionModel;
 
-    public UserController(Model<User> userModel, TokenUtil tokenUtil, Model<Transaction> transactionModel) {
+    public UserController(Model<User> userModel, Authenticator authenticator, Model<Transaction> transactionModel) {
         this.userModel = userModel;
-        this.tokenUtil = tokenUtil;
+        this.authenticator = authenticator;
         this.transactionModel = transactionModel;
     }
 
@@ -42,7 +42,7 @@ public class UserController {
         if (body.amount < 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid amount");
 
-        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
         userModel.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + body.amount),
                 u -> u.email.equals(ctx.email));
         transactionModel.insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping(value = "/profile")
     @ResponseBody
     public UserResponse profile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = tokenUtil.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
         User user = userModel.select(u -> u.email.equals(ctx.email)).get(0);
         return new UserResponse(user.email, user.username, user.isAdmin, user.wallet);
     }

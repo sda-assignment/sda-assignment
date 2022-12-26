@@ -42,7 +42,7 @@ public class UserController {
         if (body.amount < 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid amount");
 
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         userModel.update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + body.amount),
                 u -> u.email.equals(ctx.email));
         transactionModel.insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping(value = "/profile")
     @ResponseBody
     public UserResponse profile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         User user = userModel.select(u -> u.email.equals(ctx.email)).get(0);
         return new UserResponse(user.email, user.username, user.isAdmin, user.wallet);
     }

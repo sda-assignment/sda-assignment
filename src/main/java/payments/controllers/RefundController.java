@@ -36,7 +36,7 @@ public class RefundController {
     @PostMapping("/refund")
     public void requestRefund(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody RefundRequestBody body) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
 
         if (refundRequestModel.recordExists(r -> r.transactionId == body.transactionId))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

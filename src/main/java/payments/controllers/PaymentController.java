@@ -93,7 +93,7 @@ public class PaymentController {
     @PostMapping("/pay-wallet")
     public void payUsingWallet(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody PaymentBody body) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
                 userModel.select(u -> u.email.equals(ctx.email)).get(0));
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
@@ -103,7 +103,7 @@ public class PaymentController {
     @PostMapping("/pay-credit-card")
     public void payUsingCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody CreditCardPaymentBody body) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy,
                 p -> true);
@@ -112,7 +112,7 @@ public class PaymentController {
     @PostMapping("/pay-cash")
     public void payCashOnDelivery(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestBody PaymentBody body) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy,
                 p -> p.cashOnDelivery);

@@ -51,14 +51,14 @@ public class DiscountController {
     @GetMapping("/discounts/{serviceName}")
     public ArrayList<Discount> getDiscountsForService(@PathVariable("serviceName") String serviceName,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         return getDiscountsForServiceForUser(ctx.email, serviceName);
     }
 
     @GetMapping("/discounts")
     public ArrayList<Discount> getAllDiscounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         ArrayList<Discount> discounts = discountModel.select(d -> true);
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         return getEffectiveDiscountsForUser(ctx.email, discounts);
     }
 

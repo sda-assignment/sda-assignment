@@ -26,7 +26,7 @@ public class TransactionController {
     @GetMapping("/transactions")
     @ResponseBody
     public ArrayList<Transaction> getTransactionsForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = authenticator.getContextFromAuthHeader(authHeader);
+        Context ctx = authenticator.getContextOrFail(authHeader);
         return transactionModel.select(t -> t.userEmail.equals(ctx.email));
     }
 }

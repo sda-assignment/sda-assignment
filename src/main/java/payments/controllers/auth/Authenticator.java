@@ -54,7 +54,7 @@ public class Authenticator {
         }
     }
 
-    public Context getContextFromAuthHeader(String authHeader) throws InvalidAuthHeaderException {
+    public Context getContextOrFail(String authHeader) throws InvalidAuthHeaderException {
         if (!authHeader.startsWith("Bearer")) {
             throw new InvalidAuthHeaderException();
         }

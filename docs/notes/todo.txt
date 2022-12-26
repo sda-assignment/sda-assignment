@@ -3,8 +3,8 @@ TODO
 - Make return Relation array list immutable
 - Iterate over the requirements and check which need to be exposed as API endpoints
 - Ability to remove discount instead of use only once
-- Relation.selectOne
-- Return 404 in not found stuff
+- Don't discount a service that already has a discount
+- Admin controllers for adding services and service providers (relaxed requirement) (?)
 - Use H2 in memory database (?)
 - Decorator pattern to accumulate the discounts (?)
 - Change lambdas to actual classes (?)

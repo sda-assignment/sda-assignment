@@ -9,6 +9,7 @@ import payments.entities.Discount;
 import payments.entities.FormElement;
 import payments.entities.Provider;
 import payments.entities.RefundRequest;
+import payments.entities.Service;
 import payments.entities.Transaction;
 import payments.entities.UsedDiscount;
 import payments.entities.User;
@@ -50,6 +51,11 @@ public class AppBuilder {
     @Bean
     public Model<FormElement> formElementModel() {
         return new Model<FormElement>();
+    }
+
+    @Bean
+    public Model<Service> serviceModel() {
+        return new Model<Service>();
     }
 
     @Bean

@@ -7,8 +7,8 @@ import java.util.Set;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import payments.common.enums.DiscountType;
@@ -48,18 +48,13 @@ public class DiscountController {
         return getEffectiveDiscountsForUser(email, discounts);
     }
 
-    @GetMapping("/discounts/{serviceName}")
-    public ArrayList<Discount> getDiscountsForService(@PathVariable("serviceName") String serviceName,
+    @GetMapping("/discounts")
+    public ArrayList<Discount> getDiscountsForService(@RequestParam(required = false) String serviceName,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         Context ctx = authenticator.getContextOrFail(authHeader);
+        if (serviceName == null)
+            return getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> true));
         return getDiscountsForServiceForUser(ctx.email, serviceName);
-    }
-
-    @GetMapping("/discounts")
-    public ArrayList<Discount> getAllDiscounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        ArrayList<Discount> discounts = discountModel.select(d -> true);
-        Context ctx = authenticator.getContextOrFail(authHeader);
-        return getEffectiveDiscountsForUser(ctx.email, discounts);
     }
 
     public boolean useDiscount(String email, int discountId) {

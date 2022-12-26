@@ -2,6 +2,9 @@ TODO
 - Get rid of Response
 - Make return Relation array list immutable
 - Iterate over the requirements and check which need to be exposed as API endpoints
+- Ability to remove discount instead of use only once
+- Relation.selectOne
+- Return 404 in not found stuff
 - Use H2 in memory database (?)
 - Decorator pattern to accumulate the discounts (?)
 - Change lambdas to actual classes (?)

@@ -16,7 +16,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import payments.controllers.exceptions.InvalidAuthHeaderException;
 
 public class Authenticator {
     private Key secretKey;
@@ -41,7 +40,7 @@ public class Authenticator {
                 .compact();
     }
 
-    public Context getContextFromJwt(String jwt) {
+    private Context getContextFromJwt(String jwt) {
         try {
             Jws<Claims> token = Jwts
                     .parserBuilder()
@@ -50,13 +49,14 @@ public class Authenticator {
                     .parseClaimsJws(jwt);
             return new Context(token.getBody().getSubject());
         } catch (JwtException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid auth token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid auth token");
         }
     }
 
-    public Context getContextOrFail(String authHeader) throws InvalidAuthHeaderException {
+    public Context getContextOrFail(String authHeader) {
         if (!authHeader.startsWith("Bearer")) {
-            throw new InvalidAuthHeaderException();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Invalid Authorization header. Must be: 'Bearer YOUR_JWT_TOKEN'");
         }
         return getContextFromJwt(authHeader.substring(7));
     }

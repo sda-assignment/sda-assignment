@@ -1,4 +1,5 @@
 TODO
+- Move payment controller stuff into /services/{serviceName}/providers/{providerName}/pay-whatever
 - Get rid of Response
 - Make return Relation array list immutable
 - Iterate over the requirements and check which need to be exposed as API endpoints

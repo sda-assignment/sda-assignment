@@ -1,7 +1,5 @@
 package payments.controllers;
 
-import java.util.ArrayList;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,10 +40,9 @@ public class RefundController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "You already have a refund request on this transaction");
 
-        ArrayList<Transaction> targetTransactions = transactionModel.select(t -> t.id == body.transactionId);
-        if (targetTransactions.size() == 0)
+        Transaction targetTransaction = transactionModel.selectOne(t -> t.id == body.transactionId);
+        if (targetTransaction == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaction not found");
-        Transaction targetTransaction = targetTransactions.get(0);
         if (targetTransaction.type == TransactionType.REFUND)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't request a refund to a refund transaction");
 

@@ -1,7 +1,5 @@
 package payments.controllers;
 
-import java.util.ArrayList;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,10 +35,10 @@ public class AuthController {
     @PostMapping("/login")
     @ResponseBody
     public Token logIn(@RequestBody LogInBody body) {
-        ArrayList<User> users = userModel
-                .select(u -> u.email.equals(body.email) && u.password.equals(body.password));
-        if (users.size() > 0) {
-            return new Token(authenticator.createJwt(users.get(0).email));
+        User user = userModel
+                .selectOne(u -> u.email.equals(body.email) && u.password.equals(body.password));
+        if (user != null) {
+            return new Token(authenticator.createJwt(user.email));
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
     }

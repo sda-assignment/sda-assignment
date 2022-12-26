@@ -54,7 +54,7 @@ public class UserController {
     @ResponseBody
     public UserResponse profile(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         Context ctx = authenticator.getContextOrFail(authHeader);
-        User user = userModel.select(u -> u.email.equals(ctx.email)).get(0);
+        User user = userModel.selectOne(u -> u.email.equals(ctx.email));
         return new UserResponse(user.email, user.username, user.isAdmin, user.wallet);
     }
 

@@ -53,12 +53,11 @@ public class PaymentController {
 
     private void payToProvider(String email, String serviceName, String providerName, HashMap<String, String> request,
             PaymentStrategy paymentStrategy, PaymentStrategyValidator validator) {
-        ArrayList<Provider> providers = providerModel
-                .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
-        if (providers.size() == 0)
+        Provider provider = providerModel
+                .selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
+        if (provider == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid service name or provider name");
 
-        Provider provider = providers.get(0);
         if (!validator.validate(provider))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported payment method for this provider");
 
@@ -95,7 +94,7 @@ public class PaymentController {
             @RequestBody PaymentBody body) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
-                userModel.select(u -> u.email.equals(ctx.email)).get(0));
+                userModel.selectOne(u -> u.email.equals(ctx.email)));
         payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
                 payWithWalletStrategy, p -> true);
     }

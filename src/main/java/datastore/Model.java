@@ -37,6 +37,13 @@ public class Model<T> {
         return result;
     }
 
+    public T selectOne(RecordFilterStrategy<T> filter) {
+        ArrayList<T> records = select(filter);
+        if (records.size() == 0)
+            return null;
+        return records.get(0);
+    }
+
     public boolean recordExists(RecordFilterStrategy<T> filter) {
         ArrayList<T> result = select(filter);
         return result.size() > 0;

@@ -36,10 +36,10 @@ public class AdminRefundController {
             return new Response(false, "An error has occurred");
 
         RefundRequest targetRefund = refunds.get(0);
-        ArrayList<Transaction> transactions = transactionModel.select(t -> t.id == targetRefund.transactionId);
-        if (transactions.size() == 0)
+        Transaction targetTransaction = transactionModel.selectOne(t -> t.id == targetRefund.transactionId);
+        if (targetTransaction == null)
             return new Response(false, "An error has occurred");
-        Transaction targetTransaction = transactions.get(0);
+
         ArrayList<User> users = userModel.update(
                 u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + targetTransaction.amount),
                 u -> u.email.equals(targetRefund.userEmail));

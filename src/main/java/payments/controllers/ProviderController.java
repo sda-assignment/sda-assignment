@@ -44,13 +44,13 @@ public class ProviderController {
     public Provider getProvider(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("name") String name, @PathVariable("serviceName") String serviceName) {
         authenticator.getContextOrFail(authHeader);
-        ArrayList<Provider> providers = providerModel
-                .select(p -> p.serviceName.equals(serviceName) && p.name.equals(name));
-        if (providers.size() == 0) {
+        Provider provider = providerModel
+                .selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(name));
+        if (provider == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "No provider with this name providing this service was found");
         }
-        return providers.get(0);
+        return provider;
     }
 
     @GetMapping("/providers/{name}/{serviceName}/form-elements")

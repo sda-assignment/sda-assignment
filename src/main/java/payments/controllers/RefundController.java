@@ -44,7 +44,7 @@ public class RefundController {
 
         ArrayList<Transaction> targetTransactions = transactionModel.select(t -> t.id == body.transactionId);
         if (targetTransactions.size() == 0)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No transaction with this id was found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaction not found");
         Transaction targetTransaction = targetTransactions.get(0);
         if (targetTransaction.type == TransactionType.REFUND)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't request a refund to a refund transaction");

@@ -56,7 +56,7 @@ public class PaymentController {
         ArrayList<Provider> providers = providerModel
                 .select(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
         if (providers.size() == 0)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid service name or provider name");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid service name or provider name");
 
         Provider provider = providers.get(0);
         if (!validator.validate(provider))

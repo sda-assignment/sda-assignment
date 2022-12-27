@@ -551,7 +551,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/refund",
+					"raw": "http://127.0.0.1:8080/transactions/1/refund",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -561,6 +561,8 @@
 					],
 					"port": "8080",
 					"path": [
+						"transactions",
+						"1",
 						"refund"
 					]
 				}
@@ -1260,6 +1262,29 @@
 						"services",
 						"internet",
 						"discounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/transactions/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"transactions",
+						"1"
 					]
 				}
 			},

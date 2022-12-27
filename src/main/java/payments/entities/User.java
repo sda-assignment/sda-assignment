@@ -1,7 +1,5 @@
 package payments.entities;
 
-import common.Util;
-
 public class User {
     public final String email;
     public final String username;
@@ -15,9 +13,5 @@ public class User {
         this.password = password;
         this.isAdmin = isStaff;
         this.wallet = wallet;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(new Object[] { email, username, password, isAdmin, wallet });
     }
 }

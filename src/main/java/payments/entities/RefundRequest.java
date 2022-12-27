@@ -1,6 +1,5 @@
 package payments.entities;
 
-import common.Util;
 import payments.common.enums.RefundRequestStatus;
 
 public class RefundRequest {
@@ -14,9 +13,5 @@ public class RefundRequest {
         this.transactionId = transactionId;
         this.status = status;
         this.userEmail = userEmail;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(new Object[] { id, transactionId, status, userEmail });
     }
 }

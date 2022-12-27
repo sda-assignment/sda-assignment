@@ -1,6 +1,5 @@
 package payments.entities;
 
-import common.Util;
 import payments.common.enums.DiscountType;
 
 public class Discount {
@@ -14,9 +13,5 @@ public class Discount {
         this.type = type;
         this.percentage = percentage;
         this.serviceName = serviceName;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(new Object[] { id, type, percentage, serviceName });
     }
 }

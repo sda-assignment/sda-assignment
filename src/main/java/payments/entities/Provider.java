@@ -1,6 +1,5 @@
 package payments.entities;
 
-import common.Util;
 import handlers.HandlerName;
 
 public class Provider {
@@ -14,9 +13,5 @@ public class Provider {
         this.name = providerName;
         this.cashOnDelivery = cashOnDelivery;
         this.handlerName = handlerName;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(new Object[] { serviceName, name, cashOnDelivery, handlerName });
     }
 }

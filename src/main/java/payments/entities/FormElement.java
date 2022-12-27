@@ -1,6 +1,5 @@
 package payments.entities;
 
-import common.Util;
 import payments.common.enums.FormElementType;
 
 public class FormElement {
@@ -16,9 +15,5 @@ public class FormElement {
         this.providerName = providerName;
         this.type = type;
         this.info = info;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(new Object[] { name, serviceName, providerName, type, info });
     }
 }

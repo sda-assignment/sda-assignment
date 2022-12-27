@@ -2,7 +2,6 @@ package payments.entities;
 
 import java.time.LocalDateTime;
 
-import common.Util;
 import payments.common.enums.TransactionType;
 
 public class Transaction {
@@ -23,10 +22,5 @@ public class Transaction {
         this.type = type;
         this.serviceName = serviceName;
         this.providerName = providerName;
-    }
-
-    public String storify() {
-        return Util.separateWithColons(
-                new Object[] { id, userEmail, timestamp.toString(), amount, type, serviceName, providerName });
     }
 }

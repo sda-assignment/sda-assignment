@@ -6,8 +6,4 @@ public class Service {
     public Service(String name) {
         this.name = name;
     }
-
-    public String storify() {
-        return name;
-    }
 }

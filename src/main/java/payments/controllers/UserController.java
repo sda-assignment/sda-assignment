@@ -30,7 +30,7 @@ public class UserController {
         this.transactionModel = transactionModel;
     }
 
-    @PostMapping("/recharge")
+    @PostMapping("/user/recharge")
     public void rechargeWallet(@RequestAttribute("context") Context ctx,
             @RequestBody RechargeWalletBody body) {
         if (!Util.isPositiveInt(body.cardNumber))
@@ -45,7 +45,7 @@ public class UserController {
                 "None", "None"));
     }
 
-    @GetMapping(value = "/profile")
+    @GetMapping(value = "/user")
     @ResponseBody
     public UserResponse profile(@RequestAttribute("context") Context ctx) {
         User user = userModel.selectOne(u -> u.email.equals(ctx.email));

@@ -1,7 +1,5 @@
 TODO
 - Get rid of Response
-- Rename /profile to /user and /recharge to /user/recharge
-- Remove getService followed by service provider
 - Make return Relation array list immutable
 - Iterate over the requirements and check which need to be exposed as API endpoints
 - Ability to remove discount instead of use only once

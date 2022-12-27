@@ -3,15 +3,23 @@ package payments.controllers.admin;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import common.Util;
 import datastore.Model;
-import payments.common.Response;
 import payments.common.enums.RefundRequestStatus;
 import payments.common.enums.TransactionType;
+import payments.controllers.response.RefundRequestTransaction;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 import payments.entities.User;
 
+@RestController
 public class AdminRefundController {
     private Model<RefundRequest> refundModel;
     private Model<User> userModel;
@@ -24,21 +32,40 @@ public class AdminRefundController {
         this.transactionModel = transactionModel;
     }
 
-    public ArrayList<RefundRequest> getRefundRequests() {
-        return refundModel.select(r -> true);
+    @GetMapping("/admin/refunds")
+    public ArrayList<RefundRequestTransaction> listRefundRequests() {
+        ArrayList<RefundRequest> refundRequests = refundModel.select(r -> true);
+        ArrayList<RefundRequestTransaction> rrTransactions = new ArrayList<>();
+        for (RefundRequest rr : refundRequests) {
+            rrTransactions
+                    .add(new RefundRequestTransaction(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)));
+        }
+        return rrTransactions;
     }
 
-    public Response acceptRefund(int rid) {
+    @GetMapping("/admin/refunds/{id}")
+    public RefundRequestTransaction getRefund(@PathVariable("id") int id) {
+        RefundRequest refundRequest = refundModel.selectOne(rr -> rr.id == id);
+        if (refundRequest == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid refund request id");
+        }
+        Transaction transaction = transactionModel.selectOne(t -> t.id == refundRequest.transactionId);
+        return new RefundRequestTransaction(refundRequest, transaction);
+    }
+
+    @PostMapping("/admin/refunds/{id}/accept")
+    public void acceptRefund(@PathVariable("id") int rid) {
         ArrayList<RefundRequest> refunds = refundModel.update(
                 r -> new RefundRequest(r.id, r.transactionId, RefundRequestStatus.ACCEPTED, r.userEmail),
-                r -> r.id == rid);
+                r -> r.id == rid && r.status == RefundRequestStatus.PENDING);
         if (refunds.size() == 0)
-            return new Response(false, "An error has occurred");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid refund id");
 
         RefundRequest targetRefund = refunds.get(0);
         Transaction targetTransaction = transactionModel.selectOne(t -> t.id == targetRefund.transactionId);
         if (targetTransaction == null)
-            return new Response(false, "An error has occurred");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Could not find the transaction the refund request refers to");
 
         ArrayList<User> users = userModel.update(
                 u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + targetTransaction.amount),
@@ -50,13 +77,14 @@ public class AdminRefundController {
                             updatedUser.email, LocalDateTime.now(), targetTransaction.amount,
                             TransactionType.REFUND, "None", "None"));
         }
-        return new Response(true, "Refund accepted");
     }
 
-    public Response rejectRefund(int rid) {
-        refundModel.update(
+    @PostMapping("/admin/refunds/{id}/reject")
+    public void rejectRefund(@PathVariable("id") int rid) {
+        ArrayList<RefundRequest> updated = refundModel.update(
                 r -> new RefundRequest(r.id, r.transactionId, RefundRequestStatus.REJECTED, r.userEmail),
-                r -> r.id == rid);
-        return new Response(true, "Refund rejected");
+                r -> r.id == rid && r.status == RefundRequestStatus.PENDING);
+        if (updated.size() == 0)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid refund request id");
     }
 }

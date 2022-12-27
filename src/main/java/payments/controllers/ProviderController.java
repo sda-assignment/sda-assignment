@@ -25,7 +25,7 @@ public class ProviderController {
 
     @GetMapping("/providers")
     @ResponseBody
-    public ArrayList<Provider> searchForProviders(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public ArrayList<Provider> listProviders(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestParam(required = false) String name) {
         authenticator.getContextOrFail(authHeader);
         return providerModel

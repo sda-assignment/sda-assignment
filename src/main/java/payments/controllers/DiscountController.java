@@ -49,7 +49,7 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts")
-    public ArrayList<Discount> getDiscountsForService(@RequestParam(required = false) String serviceName,
+    public ArrayList<Discount> listDiscounts(@RequestParam(required = false) String serviceName,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         if (serviceName == null)

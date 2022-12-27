@@ -25,7 +25,7 @@ public class RefundController {
 
     @GetMapping("/refunds")
     @ResponseBody
-    public ArrayList<RefundRequest> listRefundsForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ArrayList<RefundRequest> listRefunds(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         return refundRequestModel.select(r -> r.userEmail.equals(ctx.email));
     }

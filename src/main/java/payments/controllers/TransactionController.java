@@ -36,14 +36,14 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     @ResponseBody
-    public ArrayList<Transaction> getTransactionsForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ArrayList<Transaction> listTransactions(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         return transactionModel.select(t -> t.userEmail.equals(ctx.email));
     }
 
     @GetMapping("/transactions/{id}")
     @ResponseBody
-    public Transaction getTransactionForUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public Transaction getTransaction(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("id") int id) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         Transaction transaction = transactionModel.selectOne(t -> t.userEmail.equals(ctx.email) && t.id == id);

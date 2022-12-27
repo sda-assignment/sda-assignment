@@ -43,7 +43,7 @@ public class ServiceController {
 
     @GetMapping("/services")
     @ResponseBody
-    public ArrayList<Service> getAllServices(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public ArrayList<Service> listServices(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @RequestParam(required = false) String serviceName) {
         authenticator.getContextOrFail(authHeader);
         return serviceModel
@@ -63,7 +63,7 @@ public class ServiceController {
 
     @GetMapping("/services/{serviceName}/providers")
     @ResponseBody
-    public ArrayList<Provider> getProvidersForService(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public ArrayList<Provider> listProvidersForService(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("serviceName") String serviceName) {
         authenticator.getContextOrFail(authHeader);
         getService(authHeader, serviceName); // Fail if doesn't exist
@@ -72,7 +72,7 @@ public class ServiceController {
 
     @GetMapping("/services/{serviceName}/discounts")
     @ResponseBody
-    public ArrayList<Discount> getDiscountsForService(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public ArrayList<Discount> listDiscountsForService(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("serviceName") String serviceName) {
         authenticator.getContextOrFail(authHeader);
         getService(authHeader, serviceName); // Fail if doesn't exist
@@ -95,7 +95,7 @@ public class ServiceController {
 
     @GetMapping("/services/{serviceName}/providers/{providerName}/form-elements")
     @ResponseBody
-    public ArrayList<FormElement> getServiceProviderFormElements(
+    public ArrayList<FormElement> listServiceProviderFormElements(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName) {
         authenticator.getContextOrFail(authHeader);
@@ -125,7 +125,7 @@ public class ServiceController {
 
     @GetMapping("/services/{serviceName}/providers/{providerName}/form-elements/{formElementName}/choices")
     @ResponseBody
-    public ArrayList<FormElementChoice> getServiceProviderFormElementChoices(
+    public ArrayList<FormElementChoice> listServiceProviderFormElementChoices(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @PathVariable("formElementName") String formElementName) {

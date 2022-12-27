@@ -20,9 +20,14 @@ import payments.entities.User;
 @Configuration
 public class AppBuilder {
     @Bean
+    Authenticator authenticator() {
+        return new Authenticator();
+    }
+
+    @Bean
     MappedInterceptor authInterceptor() {
-        String[] paths = new String[] { "/login", "/signup", "/error" };
-        return new MappedInterceptor(null, paths, new AuthInterceptor());
+        String[] exPaths = new String[] { "/login", "/signup", "/error" };
+        return new MappedInterceptor(null, exPaths, new AuthInterceptor(authenticator()));
     }
 
     @Bean
@@ -70,10 +75,5 @@ public class AppBuilder {
     @Bean
     public Model<Service> serviceModel() {
         return new Model<Service>();
-    }
-
-    @Bean
-    public Authenticator authenticator() {
-        return new Authenticator();
     }
 }

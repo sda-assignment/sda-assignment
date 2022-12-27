@@ -2,12 +2,11 @@ package payments.controllers;
 
 import java.util.ArrayList;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,7 +16,6 @@ import datastore.Model;
 import payments.controllers.auth.Context;
 import payments.common.enums.RefundRequestStatus;
 import payments.common.enums.TransactionType;
-import payments.controllers.auth.Authenticator;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 
@@ -25,27 +23,22 @@ import payments.entities.Transaction;
 public class TransactionController {
     private Model<Transaction> transactionModel;
     private Model<RefundRequest> refundRequestModel;
-    private Authenticator authenticator;
 
-    public TransactionController(Model<Transaction> transactionModel, Model<RefundRequest> refundRequestModel,
-            Authenticator authenticator) {
+    public TransactionController(Model<Transaction> transactionModel, Model<RefundRequest> refundRequestModel) {
         this.transactionModel = transactionModel;
         this.refundRequestModel = refundRequestModel;
-        this.authenticator = authenticator;
     }
 
     @GetMapping("/transactions")
     @ResponseBody
-    public ArrayList<Transaction> listTransactions(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        Context ctx = authenticator.getContextOrFail(authHeader);
+    public ArrayList<Transaction> listTransactions(@RequestAttribute("context") Context ctx) {
         return transactionModel.select(t -> t.userEmail.equals(ctx.email));
     }
 
     @GetMapping("/transactions/{id}")
     @ResponseBody
-    public Transaction getTransaction(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public Transaction getTransaction(@RequestAttribute("context") Context ctx,
             @PathVariable("id") int id) {
-        Context ctx = authenticator.getContextOrFail(authHeader);
         Transaction transaction = transactionModel.selectOne(t -> t.userEmail.equals(ctx.email) && t.id == id);
         if (transaction == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find a transaction with this id");
@@ -53,9 +46,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transactions/{id}/refund")
-    public void requestRefund(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public void requestRefund(@RequestAttribute("context") Context ctx,
             @PathVariable int id) {
-        Context ctx = authenticator.getContextOrFail(authHeader);
 
         if (refundRequestModel.recordExists(r -> r.userEmail.equals(ctx.email) && r.transactionId == id))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

@@ -5,15 +5,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import payments.common.enums.DiscountType;
 import payments.controllers.auth.Context;
-import payments.controllers.auth.Authenticator;
 import payments.entities.Discount;
 import payments.entities.UsedDiscount;
 import datastore.Model;
@@ -22,13 +20,10 @@ import datastore.Model;
 public class DiscountController {
     private Model<Discount> discountModel;
     private Model<UsedDiscount> usedDiscountModel;
-    private Authenticator authenticator;
 
-    public DiscountController(Model<Discount> model, Model<UsedDiscount> usedDiscountModel,
-            Authenticator authenticator) {
+    public DiscountController(Model<Discount> model, Model<UsedDiscount> usedDiscountModel) {
         this.discountModel = model;
         this.usedDiscountModel = usedDiscountModel;
-        this.authenticator = authenticator;
     }
 
     private ArrayList<Discount> getEffectiveDiscountsForUser(String email, ArrayList<Discount> discounts) {
@@ -49,9 +44,8 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts")
-    public ArrayList<Discount> listDiscounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+    public ArrayList<Discount> listDiscounts(@RequestAttribute("context") Context ctx,
             @RequestParam(required = false) String serviceName) {
-        Context ctx = authenticator.getContextOrFail(authHeader);
         if (serviceName == null)
             return getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> true));
         return getDiscountsForServiceForUser(ctx.email, serviceName);

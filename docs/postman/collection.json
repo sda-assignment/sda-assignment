@@ -191,7 +191,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"serviceName\": \"test\",\n    \"providerName\": \"test\",\n    \"handlerRequest\": {\"test\": \"OK\"}\n}",
+					"raw": "{\n    \"handlerRequest\": {\"test\": \"OK\"}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -199,7 +199,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/pay-cash",
+					"raw": "http://127.0.0.1:8080/services/internet/providers/we/pay-cash",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -209,6 +209,10 @@
 					],
 					"port": "8080",
 					"path": [
+						"services",
+						"internet",
+						"providers",
+						"we",
 						"pay-cash"
 					]
 				}
@@ -311,7 +315,7 @@
 			"response": []
 		},
 		{
-			"name": "profile",
+			"name": "my-profile",
 			"event": [
 				{
 					"listen": "test",
@@ -384,7 +388,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -493,7 +497,7 @@
 			"response": []
 		},
 		{
-			"name": "transactions",
+			"name": "my-transactions",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -515,7 +519,7 @@
 			"response": []
 		},
 		{
-			"name": "all-discounts",
+			"name": "my-discounts",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -543,7 +547,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"transactionId\": 1\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -643,7 +647,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -741,7 +745,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -839,7 +843,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -938,7 +942,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1038,7 +1042,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1139,7 +1143,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1241,7 +1245,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"test\",\n    \"password\": \"test\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1268,7 +1272,7 @@
 			"response": []
 		},
 		{
-			"name": "transaction",
+			"name": "my-transaction",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -1285,6 +1289,143 @@
 					"path": [
 						"transactions",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my-refunds",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/refunds",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"refunds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "we-internet-service-provider-form-elements-amount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.9"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:8080"
+					},
+					{
+						"key": "Referer",
+						"value": "http://localhost:8080/"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36"
+					},
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"104\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Linux\""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/services/internet/providers/we/form-elements/amount",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"services",
+						"internet",
+						"providers",
+						"we",
+						"form-elements",
+						"amount"
 					]
 				}
 			},

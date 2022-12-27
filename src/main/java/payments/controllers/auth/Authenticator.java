@@ -30,11 +30,12 @@ public class Authenticator {
         secretKey = new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String createJwt(String email) {
+    public String createJwt(String email, boolean isAdmin) {
         Instant now = Instant.now();
         return Jwts
                 .builder()
                 .setSubject(email)
+                .claim("isAdmin", isAdmin)
                 .setExpiration(Date.from(now.plus(5l, ChronoUnit.DAYS)))
                 .signWith(secretKey)
                 .compact();
@@ -47,7 +48,7 @@ public class Authenticator {
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(jwt);
-            return new Context(token.getBody().getSubject());
+            return new Context(token.getBody().getSubject(), token.getBody().get("isAdmin", Boolean.class));
         } catch (JwtException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid auth token");
         }

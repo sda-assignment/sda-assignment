@@ -38,7 +38,7 @@ public class AuthController {
         User user = userModel
                 .selectOne(u -> u.email.equals(body.email) && u.password.equals(body.password));
         if (user != null) {
-            return new Token(authenticator.createJwt(user.email));
+            return new Token(authenticator.createJwt(user.email, user.isAdmin));
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
     }

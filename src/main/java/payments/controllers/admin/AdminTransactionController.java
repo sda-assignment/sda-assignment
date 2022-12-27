@@ -2,17 +2,22 @@ package payments.controllers.admin;
 
 import java.util.ArrayList;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import payments.entities.Transaction;
 import datastore.Model;
 
+@RestController
 public class AdminTransactionController {
-    private Model<Transaction> model;
+    private Model<Transaction> transactionModel;
 
     public AdminTransactionController(Model<Transaction> model) {
-        this.model = model;
+        this.transactionModel = model;
     }
 
-    public ArrayList<Transaction> getAllTransactions() {
-        return model.select(t -> true);
+    @GetMapping("/admin/transactions")
+    public ArrayList<Transaction> listTransactions() {
+        return transactionModel.select(t -> true);
     }
 }

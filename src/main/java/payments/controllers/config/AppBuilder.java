@@ -6,6 +6,7 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import datastore.Model;
 import payments.controllers.auth.Authenticator;
+import payments.controllers.interceptors.AdminInterceptor;
 import payments.controllers.interceptors.AuthInterceptor;
 import payments.entities.Discount;
 import payments.entities.FormElement;
@@ -28,6 +29,12 @@ public class AppBuilder {
     MappedInterceptor authInterceptor() {
         String[] exPaths = new String[] { "/login", "/signup", "/error" };
         return new MappedInterceptor(null, exPaths, new AuthInterceptor(authenticator()));
+    }
+
+    @Bean
+    MappedInterceptor adminInterceptor() {
+        String[] incPaths = new String[] { "/admin/*" };
+        return new MappedInterceptor(incPaths, new AdminInterceptor(authenticator()));
     }
 
     @Bean

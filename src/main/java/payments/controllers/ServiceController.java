@@ -82,7 +82,6 @@ public class ServiceController {
     @ResponseBody
     public ArrayList<FormElement> listServiceProviderFormElements(
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName) {
-        getService(serviceName); // Fail if doesn't exist
         getServiceProvider(serviceName, providerName); // Fail if doesn't exist
         return formElementModel
                 .select(fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName));
@@ -93,7 +92,6 @@ public class ServiceController {
     public FormElement getServiceProviderFormElement(
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @PathVariable("formElementName") String formElementName) {
-        getService(serviceName); // Fail if doesn't exist
         getServiceProvider(serviceName, providerName); // Fail if doesn't exist
         FormElement formElement = formElementModel.selectOne(fe -> fe.serviceName.equals(serviceName)
                 && fe.providerName.equals(providerName) && fe.name.equals(formElementName));
@@ -109,8 +107,6 @@ public class ServiceController {
     public ArrayList<FormElementChoice> listServiceProviderFormElementChoices(
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @PathVariable("formElementName") String formElementName) {
-        getService(serviceName); // Fail if doesn't exist
-        getServiceProvider(serviceName, providerName); // Fail if doesn't exist
         FormElement formElement = getServiceProviderFormElement(serviceName, providerName, formElementName);
 
         if (formElement.type != FormElementType.DROP_DOWN_FIELD)

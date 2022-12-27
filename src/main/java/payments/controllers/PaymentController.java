@@ -81,7 +81,6 @@ public class PaymentController {
     public void payUsingWallet(@RequestAttribute("context") Context ctx,
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody PaymentBody body) {
-        serviceController.getService(serviceName);
         Provider provider = serviceController.getServiceProvider(serviceName, providerName);
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
                 userModel.selectOne(u -> u.email.equals(ctx.email)));
@@ -92,7 +91,6 @@ public class PaymentController {
     public void payUsingCreditCard(@RequestAttribute("context") Context ctx,
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody CreditCardPaymentBody body) {
-        serviceController.getService(serviceName);
         Provider provider = serviceController.getServiceProvider(serviceName, providerName);
         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
         payToProvider(ctx.email, provider, body.handlerRequest, payWithCreditCardStrategy);
@@ -102,7 +100,6 @@ public class PaymentController {
     public void payCashOnDelivery(@RequestAttribute("context") Context ctx,
             @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody PaymentBody body) {
-        serviceController.getService(serviceName);
         Provider provider = serviceController.getServiceProvider(serviceName, providerName);
         if (!provider.cashOnDelivery)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

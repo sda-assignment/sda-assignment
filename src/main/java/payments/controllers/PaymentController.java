@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,7 +25,6 @@ import payments.controllers.payment_strategies.PayCashOnDelivery;
 import payments.controllers.payment_strategies.PayWithCreditCard;
 import payments.controllers.payment_strategies.PayWithWallet;
 import payments.controllers.payment_strategies.PaymentStrategy;
-import payments.controllers.payment_strategies.PaymentStrategyValidator;
 import payments.controllers.request.CreditCardPaymentBody;
 import payments.controllers.request.PaymentBody;
 import payments.entities.Discount;
@@ -34,32 +34,25 @@ import payments.entities.User;
 
 @RestController
 public class PaymentController {
-    private Model<Provider> providerModel;
     private Model<Transaction> transactionModel;
     private Model<User> userModel;
     private DiscountController discountController;
+    private ServiceController serviceController;
     private Authenticator authenticator;
 
-    public PaymentController(Model<Provider> providerModel, Model<Transaction> transactionModel,
+    public PaymentController(Model<Transaction> transactionModel,
             Model<User> userModel,
-            DiscountController discountController,
+            DiscountController discountController, ServiceController serviceController,
             Authenticator authenticator) {
-        this.providerModel = providerModel;
         this.transactionModel = transactionModel;
         this.userModel = userModel;
         this.discountController = discountController;
+        this.serviceController = serviceController;
         this.authenticator = authenticator;
     }
 
-    private void payToProvider(String email, String serviceName, String providerName, HashMap<String, String> request,
-            PaymentStrategy paymentStrategy, PaymentStrategyValidator validator) {
-        Provider provider = providerModel
-                .selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName));
-        if (provider == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid service name or provider name");
-
-        if (!validator.validate(provider))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported payment method for this provider");
+    private void payToProvider(String email, Provider provider,
+            HashMap<String, String> request, PaymentStrategy paymentStrategy) {
 
         HandlerFactory handlerFactory = new HandlerFactory();
         Handler handler = handlerFactory.getHandler(provider.handlerName);
@@ -70,7 +63,7 @@ public class PaymentController {
                     "The form handler was not able to handle this request:\n" + handlerRes.errorMessage);
 
         double amountToDeduct = handlerRes.amount;
-        ArrayList<Discount> discounts = discountController.getDiscountsForServiceForUser(email, serviceName);
+        ArrayList<Discount> discounts = discountController.getDiscountsForServiceForUser(email, provider.serviceName);
         for (Discount discount : discounts) {
             amountToDeduct = amountToDeduct - amountToDeduct * (discount.percentage / 100);
         }
@@ -80,7 +73,7 @@ public class PaymentController {
         Transaction transactionToInsert = new Transaction(
                 Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)),
                 email,
-                LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, serviceName, providerName);
+                LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, provider.serviceName, provider.name);
         transactionModel
                 .insert(transactionToInsert);
 
@@ -89,31 +82,40 @@ public class PaymentController {
         }
     }
 
-    @PostMapping("/pay-wallet")
+    @PostMapping("/services/{serviceName}/providers/{providerName}/pay-wallet")
     public void payUsingWallet(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody PaymentBody body) {
         Context ctx = authenticator.getContextOrFail(authHeader);
+        serviceController.getService(authHeader, serviceName);
+        Provider provider = serviceController.getServiceProvider(authHeader, serviceName, providerName);
         PaymentStrategy payWithWalletStrategy = new PayWithWallet(userModel,
                 userModel.selectOne(u -> u.email.equals(ctx.email)));
-        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest,
-                payWithWalletStrategy, p -> true);
+        payToProvider(ctx.email, provider, body.handlerRequest, payWithWalletStrategy);
     }
 
-    @PostMapping("/pay-credit-card")
+    @PostMapping("/services/{serviceName}/providers/{providerName}/pay-credit-card")
     public void payUsingCreditCard(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody CreditCardPaymentBody body) {
         Context ctx = authenticator.getContextOrFail(authHeader);
+        serviceController.getService(authHeader, serviceName);
+        Provider provider = serviceController.getServiceProvider(authHeader, serviceName, providerName);
         PaymentStrategy payWithCreditCardStrategy = new PayWithCreditCard(body.cardNumber);
-        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, payWithCreditCardStrategy,
-                p -> true);
+        payToProvider(ctx.email, provider, body.handlerRequest, payWithCreditCardStrategy);
     }
 
-    @PostMapping("/pay-cash")
+    @PostMapping("/services/{serviceName}/providers/{providerName}/pay-cash")
     public void payCashOnDelivery(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
             @RequestBody PaymentBody body) {
         Context ctx = authenticator.getContextOrFail(authHeader);
+        serviceController.getService(authHeader, serviceName);
+        Provider provider = serviceController.getServiceProvider(authHeader, serviceName, providerName);
+        if (!provider.cashOnDelivery)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "This provider does not provide cash on delivery");
         PaymentStrategy cashOnDeliveryStrategy = new PayCashOnDelivery();
-        payToProvider(ctx.email, body.serviceName, body.providerName, body.handlerRequest, cashOnDeliveryStrategy,
-                p -> p.cashOnDelivery);
+        payToProvider(ctx.email, provider, body.handlerRequest, cashOnDeliveryStrategy);
     }
 }

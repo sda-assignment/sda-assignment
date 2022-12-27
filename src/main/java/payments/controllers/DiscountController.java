@@ -49,8 +49,8 @@ public class DiscountController {
     }
 
     @GetMapping("/discounts")
-    public ArrayList<Discount> listDiscounts(@RequestParam(required = false) String serviceName,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ArrayList<Discount> listDiscounts(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @RequestParam(required = false) String serviceName) {
         Context ctx = authenticator.getContextOrFail(authHeader);
         if (serviceName == null)
             return getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> true));

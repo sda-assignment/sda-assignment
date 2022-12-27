@@ -2,9 +2,11 @@ package payments.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import datastore.Model;
 import payments.controllers.auth.Authenticator;
+import payments.controllers.interceptors.AuthInterceptor;
 import payments.entities.Discount;
 import payments.entities.FormElement;
 import payments.entities.FormElementChoice;
@@ -17,6 +19,12 @@ import payments.entities.User;
 
 @Configuration
 public class AppBuilder {
+    @Bean
+    MappedInterceptor authInterceptor() {
+        String[] paths = new String[] { "/login", "/signup", "/error" };
+        return new MappedInterceptor(null, paths, new AuthInterceptor());
+    }
+
     @Bean
     public Model<User> userModel() {
         Model<User> userModel = new Model<User>();

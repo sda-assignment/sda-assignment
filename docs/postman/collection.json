@@ -396,7 +396,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/profile",
+					"raw": "http://127.0.0.1:8080/user",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -406,7 +406,7 @@
 					],
 					"port": "8080",
 					"path": [
-						"profile"
+						"user"
 					]
 				}
 			},
@@ -480,7 +480,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/recharge",
+					"raw": "http://127.0.0.1:8080/user/recharge",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -490,6 +490,7 @@
 					],
 					"port": "8080",
 					"path": [
+						"user",
 						"recharge"
 					]
 				}
@@ -1426,6 +1427,200 @@
 						"we",
 						"form-elements",
 						"amount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all-transactions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/transactions",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-overall-discount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"percentage\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/discounts",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"discounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all-refunds",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/refunds",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"refunds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refund",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/refunds/0",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"refunds",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refund-accept",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/refunds/0/accept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"refunds",
+						"0",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refund-reject",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/admin/refunds/1/reject",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"refunds",
+						"1",
+						"reject"
 					]
 				}
 			},

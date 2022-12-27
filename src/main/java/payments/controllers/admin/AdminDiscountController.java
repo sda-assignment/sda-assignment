@@ -1,11 +1,17 @@
 package payments.controllers.admin;
 
-import payments.common.Response;
 import payments.common.enums.DiscountType;
+import payments.controllers.request.AddDiscountBody;
 import payments.entities.Discount;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import common.Util;
 import datastore.Model;
 
+@RestController
 public class AdminDiscountController {
     private Model<Discount> discountModel;
 
@@ -19,14 +25,14 @@ public class AdminDiscountController {
         discountModel.insert(discountToInsert);
     }
 
-    public Response addOverallDiscount(double percentage) {
-        addDiscount(DiscountType.OVERALL, percentage, "None");
-        return new Response(true, "Discount added successfully");
+    @PostMapping("/admin/discounts")
+    public void addOverallDiscount(@RequestBody AddDiscountBody body) {
+        addDiscount(DiscountType.OVERALL, body.percentage, "None");
     }
 
-    public Response addSpecificDiscount(String serviceName, double percentage) {
+    @PostMapping("/admin/services/{serviceName}/discounts")
+    public void addSpecificDiscount(String serviceName, double percentage) {
         addDiscount(DiscountType.SPECIFIC, percentage, serviceName);
-        return new Response(true, "Discount added successfully");
     }
 
 }

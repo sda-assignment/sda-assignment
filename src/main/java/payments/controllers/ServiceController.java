@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import datastore.Model;
+import payments.common.enums.FormElementType;
 import payments.controllers.auth.Authenticator;
 import payments.entities.Discount;
 import payments.entities.FormElement;
+import payments.entities.FormElementChoice;
 import payments.entities.Provider;
 import payments.entities.Service;
 
@@ -25,15 +27,18 @@ public class ServiceController {
     private Model<Provider> providerModel;
     private Model<Discount> discountModel;
     private Model<FormElement> formElementModel;
+    private Model<FormElementChoice> formElementChoiceModel;
     private Authenticator authenticator;
 
     public ServiceController(Model<Service> serviceModel, Model<Provider> providerModel, Model<Discount> discountModel,
-            Model<FormElement> formElementModel, Authenticator authenticator) {
+            Model<FormElement> formElementModel, Model<FormElementChoice> formElementChoiceModel,
+            Authenticator authenticator) {
         this.serviceModel = serviceModel;
         this.providerModel = providerModel;
         this.discountModel = discountModel;
         this.authenticator = authenticator;
         this.formElementModel = formElementModel;
+        this.formElementChoiceModel = formElementChoiceModel;
     }
 
     @GetMapping("/services")
@@ -99,4 +104,42 @@ public class ServiceController {
         return formElementModel
                 .select(fe -> fe.serviceName.equals(serviceName) && fe.providerName.equals(providerName));
     }
+
+    @GetMapping("/services/{serviceName}/providers/{providerName}/form-elements/{formElementName}")
+    @ResponseBody
+    public FormElement getServiceProviderFormElement(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
+            @PathVariable("formElementName") String formElementName) {
+        authenticator.getContextOrFail(authHeader);
+        getService(authHeader, serviceName); // Fail if doesn't exist
+        getServiceProvider(authHeader, serviceName, providerName); // Fail if doesn't exist
+        FormElement formElement = formElementModel.selectOne(fe -> fe.serviceName.equals(serviceName)
+                && fe.providerName.equals(providerName) && fe.name.equals(formElementName));
+        if (formElement == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Could not find such a form element in such a provider providing such a service");
+
+        return formElement;
+    }
+
+    @GetMapping("/services/{serviceName}/providers/{providerName}/form-elements/{formElementName}/choices")
+    @ResponseBody
+    public ArrayList<FormElementChoice> getServiceProviderFormElementChoices(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader,
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName,
+            @PathVariable("formElementName") String formElementName) {
+        authenticator.getContextOrFail(authHeader);
+
+        getService(authHeader, serviceName); // Fail if doesn't exist
+        getServiceProvider(authHeader, serviceName, providerName); // Fail if doesn't exist
+        FormElement formElement = getServiceProviderFormElement(authHeader,
+                serviceName, providerName, formElementName); // Fail if doesn't exist
+
+        if (formElement.type != FormElementType.DROP_DOWN_FIELD)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only drop down form elements provide choices");
+
+        return formElementChoiceModel.select(fec -> fec.formElementName.equals(formElement.name));
+    }
+
 }

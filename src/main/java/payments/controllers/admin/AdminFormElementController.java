@@ -21,9 +21,8 @@ public class AdminFormElementController {
         return new Response(true, "Form element added successfully");
     }
 
-    public Response addFormElementChoice(String info, String serviceName, String providerName)
-            {
-        formElementChoiceModel.insert(new FormElementChoice(info, serviceName, providerName));
+    public Response addFormElementChoice(String info, String formElementName, String serviceName, String providerName) {
+        formElementChoiceModel.insert(new FormElementChoice(info, formElementName, serviceName, providerName));
         return new Response(true, "Added the form element choice");
     }
 }

@@ -1,14 +1,12 @@
 TODO
-- Get rid of Response
 - Make return Relation array list immutable
 - Iterate over the requirements and check which need to be exposed as API endpoints
 - Ability to remove discount instead of use only once
 - Don't discount a service that already has a discount
 - Create a function withUpdatedWhatever() in the model instead of calling the constructor in the update()
 - Make emails case insensitive
-- Change int ids to UUIDS
+- Change int ids to UUIDS (?)
 - Force valid email (?)
-- Admin controllers for adding services and service providers (relaxed requirement) (?)
 - Use H2 in memory database (?)
 - Decorator pattern to accumulate the discounts (?)
 - Change lambdas to actual classes (?)

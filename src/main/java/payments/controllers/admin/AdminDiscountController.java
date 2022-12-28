@@ -1,9 +1,11 @@
 package payments.controllers.admin;
 
 import payments.common.enums.DiscountType;
+import payments.controllers.ServiceController;
 import payments.controllers.request.AddDiscountBody;
 import payments.entities.Discount;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +16,11 @@ import datastore.Model;
 @RestController
 public class AdminDiscountController {
     private Model<Discount> discountModel;
+    private ServiceController serviceController;
 
-    public AdminDiscountController(Model<Discount> model) {
+    public AdminDiscountController(Model<Discount> model, ServiceController serviceController) {
         this.discountModel = model;
+        this.serviceController = serviceController;
     }
 
     private void addDiscount(DiscountType discountType, double percentage, String serviceName) {
@@ -31,8 +35,10 @@ public class AdminDiscountController {
     }
 
     @PostMapping("/admin/services/{serviceName}/discounts")
-    public void addSpecificDiscount(String serviceName, double percentage) {
-        addDiscount(DiscountType.SPECIFIC, percentage, serviceName);
+    public void addSpecificDiscount(@PathVariable("serviceName") String serviceName,
+            @RequestBody AddDiscountBody body) {
+        serviceController.getService(serviceName);
+        addDiscount(DiscountType.SPECIFIC, body.percentage, serviceName);
     }
 
 }

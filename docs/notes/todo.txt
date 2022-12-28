@@ -1,10 +1,5 @@
 TODO
-- Make return Relation array list immutable
 - Create a function withUpdatedWhatever() in the model instead of calling the constructor in the update()
 - Make emails case insensitive
 - Change int ids to UUIDS (?)
 - Force valid email (?)
-- Use H2 in memory database (?)
-- Decorator pattern to accumulate the discounts (?)
-- Change lambdas to actual classes (?)
-- Proxy pattern in front of authorized controller (?)

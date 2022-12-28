@@ -49,7 +49,7 @@ public class UserController {
     @ResponseBody
     public UserResponse profile(@RequestAttribute("context") Context ctx) {
         User user = userModel.selectOne(u -> u.email.equals(ctx.email));
-        return new UserResponse(user.email, user.username, user.isAdmin, user.wallet);
+        return new UserResponse(user);
     }
 
 }

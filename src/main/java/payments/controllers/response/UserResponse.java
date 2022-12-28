@@ -1,5 +1,7 @@
 package payments.controllers.response;
 
+import payments.entities.User;
+
 public class UserResponse {
     public final String email;
     public final String username;
@@ -11,5 +13,12 @@ public class UserResponse {
         this.username = username;
         this.isAdmin = isAdmin;
         this.wallet = wallet;
+    }
+
+    public UserResponse(User user) {
+        this.email = user.email;
+        this.username = user.username;
+        this.isAdmin = user.isAdmin;
+        this.wallet = user.wallet;
     }
 }

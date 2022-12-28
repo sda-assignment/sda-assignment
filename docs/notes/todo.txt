@@ -5,6 +5,8 @@ TODO
 - Ability to remove discount instead of use only once
 - Don't discount a service that already has a discount
 - Create a function withUpdatedWhatever() in the model instead of calling the constructor in the update()
+- Make emails case insensitive
+- Force valid email (?)
 - Admin controllers for adding services and service providers (relaxed requirement) (?)
 - Use H2 in memory database (?)
 - Decorator pattern to accumulate the discounts (?)

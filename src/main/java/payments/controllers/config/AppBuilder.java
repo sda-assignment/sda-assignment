@@ -34,7 +34,7 @@ public class AppBuilder {
     @Bean
     MappedInterceptor adminInterceptor() {
         String[] incPaths = new String[] { "/admin/*" };
-        return new MappedInterceptor(incPaths, new AdminInterceptor(authenticator()));
+        return new MappedInterceptor(incPaths, new AdminInterceptor());
     }
 
     @Bean

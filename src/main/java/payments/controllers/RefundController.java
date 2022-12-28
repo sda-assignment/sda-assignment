@@ -9,19 +9,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import datastore.Model;
 import payments.controllers.auth.Context;
+import payments.controllers.response.RefundRequestResponse;
 import payments.entities.RefundRequest;
+import payments.entities.Transaction;
 
 @RestController
 public class RefundController {
     private Model<RefundRequest> refundRequestModel;
+    private Model<Transaction> transactionModel;
 
-    public RefundController(Model<RefundRequest> refundRequestModel) {
+    public RefundController(Model<RefundRequest> refundRequestModel, Model<Transaction> transactionModel) {
         this.refundRequestModel = refundRequestModel;
+        this.transactionModel = transactionModel;
     }
 
     @GetMapping("/refunds")
     @ResponseBody
-    public ArrayList<RefundRequest> listRefunds(@RequestAttribute("context") Context ctx) {
-        return refundRequestModel.select(r -> r.userEmail.equals(ctx.email));
+    public ArrayList<RefundRequestResponse> listRefunds(@RequestAttribute("context") Context ctx) {
+        ArrayList<RefundRequest> refundRequests = refundRequestModel.select(r -> r.userEmail.equals(ctx.email));
+        ArrayList<RefundRequestResponse> res = new ArrayList<>();
+        for (RefundRequest refundRequest : refundRequests)
+            res.add(new RefundRequestResponse(refundRequest,
+                    transactionModel.selectOne(t -> t.id == refundRequest.transactionId)));
+        return res;
     }
 }

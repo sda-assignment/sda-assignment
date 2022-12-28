@@ -38,8 +38,8 @@ public class DiscountController {
     }
 
     public ArrayList<Discount> getDiscountsForServiceForUser(String email, String serviceName) {
-        ArrayList<Discount> discounts = discountModel.select(d -> d.type == DiscountType.OVERALL
-                || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName)));
+        ArrayList<Discount> discounts = discountModel.select(d -> d.isActive && (d.type == DiscountType.OVERALL
+                || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))));
         return getEffectiveDiscountsForUser(email, discounts);
     }
 
@@ -47,7 +47,7 @@ public class DiscountController {
     public ArrayList<Discount> listDiscounts(@RequestAttribute("context") Context ctx,
             @RequestParam(required = false) String serviceName) {
         if (serviceName == null)
-            return getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> true));
+            return getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> d.isActive));
         return getDiscountsForServiceForUser(ctx.email, serviceName);
     }
 

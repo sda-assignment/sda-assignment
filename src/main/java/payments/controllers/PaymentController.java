@@ -17,6 +17,7 @@ import datastore.Model;
 import handlers.Handler;
 import handlers.HandlerFactory;
 import handlers.HandlerResponse;
+import payments.common.enums.DiscountType;
 import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
 import payments.controllers.payment_strategies.PayCashOnDelivery;
@@ -73,7 +74,8 @@ public class PaymentController {
                 .insert(transactionToInsert);
 
         for (Discount discount : discounts) {
-            discountController.useDiscount(email, discount.id);
+            if (discount.type == DiscountType.OVERALL)
+                discountController.useDiscount(email, discount.id);
         }
     }
 

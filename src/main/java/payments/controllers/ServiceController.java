@@ -62,7 +62,7 @@ public class ServiceController {
     @ResponseBody
     public ArrayList<Discount> listDiscountsForService(@PathVariable("serviceName") String serviceName) {
         getService(serviceName); // Fail if doesn't exist
-        return discountModel.select(d -> d.serviceName.equals(serviceName));
+        return discountModel.select(d -> d.serviceName.equals(serviceName) && d.isActive);
     }
 
     @GetMapping("/services/{serviceName}/providers/{providerName}")

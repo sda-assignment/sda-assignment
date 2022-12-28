@@ -1,6 +1,6 @@
 package payments.entities;
 
-import payments.common.enums.FormElementType;
+import payments.enums.FormElementType;
 
 public class FormElement {
     public final String name;

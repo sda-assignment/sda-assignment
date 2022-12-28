@@ -1,6 +1,6 @@
 package payments.controllers.request;
 
-import payments.common.enums.FormElementType;
+import payments.enums.FormElementType;
 
 public class AddFormElementBody {
     public final String name;

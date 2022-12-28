@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import datastore.Model;
-import payments.common.enums.FormElementType;
 import payments.entities.Discount;
 import payments.entities.FormElement;
 import payments.entities.FormElementChoice;
 import payments.entities.Provider;
 import payments.entities.Service;
+import payments.enums.FormElementType;
 
 @RestController
 public class ServiceController {

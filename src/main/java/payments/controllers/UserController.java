@@ -11,12 +11,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import common.Util;
 import datastore.Model;
-import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
 import payments.controllers.request.RechargeWalletBody;
 import payments.controllers.response.UserResponse;
 import payments.entities.Transaction;
 import payments.entities.User;
+import payments.enums.TransactionType;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

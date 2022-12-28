@@ -2,7 +2,7 @@ package payments.entities;
 
 import java.time.LocalDateTime;
 
-import payments.common.enums.TransactionType;
+import payments.enums.TransactionType;
 
 public class Transaction {
     public final int id;

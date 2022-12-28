@@ -10,10 +10,10 @@ import datastore.Model;
 import handlers.Handler;
 import handlers.HandlerFactory;
 import handlers.HandlerName;
-import payments.common.enums.FormElementType;
 import payments.entities.FormElement;
 import payments.entities.Provider;
 import payments.entities.Service;
+import payments.enums.FormElementType;
 
 @Component
 public class DataPopulator implements ApplicationRunner {

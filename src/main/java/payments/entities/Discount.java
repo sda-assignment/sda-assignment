@@ -1,6 +1,6 @@
 package payments.entities;
 
-import payments.common.enums.DiscountType;
+import payments.enums.DiscountType;
 
 public class Discount {
     public final int id;

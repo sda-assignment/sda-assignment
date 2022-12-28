@@ -1,6 +1,6 @@
 package payments.entities;
 
-import payments.common.enums.RefundRequestStatus;
+import payments.enums.RefundRequestStatus;
 
 public class RefundRequest {
     public final int id;

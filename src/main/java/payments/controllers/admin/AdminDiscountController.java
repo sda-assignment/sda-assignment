@@ -1,9 +1,9 @@
 package payments.controllers.admin;
 
-import payments.common.enums.DiscountType;
 import payments.controllers.ServiceController;
 import payments.controllers.request.AddDiscountBody;
 import payments.entities.Discount;
+import payments.enums.DiscountType;
 
 import java.util.ArrayList;
 

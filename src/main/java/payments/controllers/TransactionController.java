@@ -14,10 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 import common.Util;
 import datastore.Model;
 import payments.controllers.auth.Context;
-import payments.common.enums.RefundRequestStatus;
-import payments.common.enums.TransactionType;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
+import payments.enums.RefundRequestStatus;
+import payments.enums.TransactionType;
 
 @RestController
 public class TransactionController {

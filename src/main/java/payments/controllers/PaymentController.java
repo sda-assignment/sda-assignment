@@ -17,8 +17,6 @@ import datastore.Model;
 import handlers.Handler;
 import handlers.HandlerFactory;
 import handlers.HandlerResponse;
-import payments.common.enums.DiscountType;
-import payments.common.enums.TransactionType;
 import payments.controllers.auth.Context;
 import payments.controllers.payment_strategies.PayCashOnDelivery;
 import payments.controllers.payment_strategies.PayWithCreditCard;
@@ -30,6 +28,8 @@ import payments.entities.Discount;
 import payments.entities.Provider;
 import payments.entities.Transaction;
 import payments.entities.User;
+import payments.enums.DiscountType;
+import payments.enums.TransactionType;
 
 @RestController
 public class PaymentController {

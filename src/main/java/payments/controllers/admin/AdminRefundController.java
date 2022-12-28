@@ -14,7 +14,7 @@ import common.Util;
 import datastore.Model;
 import payments.common.enums.RefundRequestStatus;
 import payments.common.enums.TransactionType;
-import payments.controllers.response.RefundResponse;
+import payments.controllers.response.RefundRequestResponse;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 import payments.entities.User;
@@ -33,24 +33,24 @@ public class AdminRefundController {
     }
 
     @GetMapping("/admin/refunds")
-    public ArrayList<RefundResponse> listRefundRequests() {
+    public ArrayList<RefundRequestResponse> listRefundRequests() {
         ArrayList<RefundRequest> refundRequests = refundModel.select(r -> true);
-        ArrayList<RefundResponse> rrTransactions = new ArrayList<>();
+        ArrayList<RefundRequestResponse> rrTransactions = new ArrayList<>();
         for (RefundRequest rr : refundRequests) {
             rrTransactions
-                    .add(new RefundResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)));
+                    .add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)));
         }
         return rrTransactions;
     }
 
     @GetMapping("/admin/refunds/{id}")
-    public RefundResponse getRefund(@PathVariable("id") int id) {
+    public RefundRequestResponse getRefund(@PathVariable("id") int id) {
         RefundRequest refundRequest = refundModel.selectOne(rr -> rr.id == id);
         if (refundRequest == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid refund request id");
         }
         Transaction transaction = transactionModel.selectOne(t -> t.id == refundRequest.transactionId);
-        return new RefundResponse(refundRequest, transaction);
+        return new RefundRequestResponse(refundRequest, transaction);
     }
 
     @PostMapping("/admin/refunds/{id}/accept")

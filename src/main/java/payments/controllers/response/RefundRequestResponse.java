@@ -7,7 +7,7 @@ import payments.common.enums.TransactionType;
 import payments.entities.RefundRequest;
 import payments.entities.Transaction;
 
-public class RefundResponse {
+public class RefundRequestResponse {
     public final int id;
     public final RefundRequestStatus status;
     public final String serviceName;
@@ -17,7 +17,7 @@ public class RefundResponse {
     public final LocalDateTime timeStamp;
     public TransactionType type;
 
-    public RefundResponse(RefundRequest refundRequest, Transaction transaction) {
+    public RefundRequestResponse(RefundRequest refundRequest, Transaction transaction) {
         this.id = refundRequest.id;
         this.status = refundRequest.status;
         this.serviceName = transaction.serviceName;

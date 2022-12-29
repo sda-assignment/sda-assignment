@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import datastore.Model;
+import handlers.Handler;
+import handlers.HandlerFactory;
+import payments.controllers.response.HandlerResponse;
 import payments.entities.Discount;
 import payments.entities.FormElement;
 import payments.entities.FormElementChoice;
@@ -76,6 +79,16 @@ public class ServiceController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Could not find a provider with such a name providing such a service");
         return provider;
+    }
+
+    @GetMapping("/services/{serviceName}/providers/{providerName}/handler")
+    @ResponseBody
+    public HandlerResponse getServiceProviderHandler(
+            @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName) {
+        Provider provider = getServiceProvider(serviceName, providerName); // Fail if doesn't exist
+        HandlerFactory handlerFactory = new HandlerFactory();
+        Handler handler = handlerFactory.getHandler(provider.handlerName);
+        return new HandlerResponse(handler);
     }
 
     @GetMapping("/services/{serviceName}/providers/{providerName}/form-elements")

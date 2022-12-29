@@ -1993,6 +1993,32 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "we-internet-handler",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/services/internet/providers/we/handler",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"services",
+						"internet",
+						"providers",
+						"we",
+						"handler"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

@@ -189,4 +189,23 @@ DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
 DiscountController -->Spring Dispatcher Serverlet : ArrayList<Discount>
 end
+title LogIn
 
+
+actor user
+boundary Spring Dispatcher Serverlet
+control AuthController
+entity UserModel
+control Authenticator
+
+user->Spring Dispatcher Serverlet:POST /login
+Spring Dispatcher Serverlet ->AuthController : logIn(@RequestBody LogInBody body)
+AuthController ->UserModel : selectOne(u -> u.email.equals(body.email) && u.password.equals(body.password))
+UserModel -->AuthController : user
+
+alt user != null
+AuthController ->* Token:<<create>>user
+Token -->AuthController:
+AuthController -->Spring Dispatcher Serverlet : Token
+end
+AuthController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password")

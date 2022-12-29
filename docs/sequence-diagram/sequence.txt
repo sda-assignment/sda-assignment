@@ -78,3 +78,91 @@ alt body.amount < 0
 
 end 
 end  
+
+title pay using cash
+
+actor user
+boundary Spring Dispatcher Serverlet
+control PaymentController
+control ServiceController
+control DiscountControlller
+entity ProviderModel
+entity DiscountModel
+entity UsedDiscountModel
+entity TransactionModel
+participant CashOnDeliveryStrategy
+
+participant handlerFactory
+
+participant ErroneousHandler
+participant handler
+
+entity handlers
+
+user->Spring Dispatcher Serverlet : POST /services/{serviceName}/providers/{providerName}/pay-cash
+Spring Dispatcher Serverlet ->PaymentController : payCashOnDelivery(@RequestAttribute("context") Context ctx, @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName, @RequestBody PaymentBody body)
+
+PaymentController ->ServiceController : getServiceProvider(serviceName, providerName)
+ServiceController ->ServiceController : getService(serviceName)
+ServiceController ->ProviderModel:selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName))
+ProviderModel -->ServiceController: Provider
+alt provider = null
+ServiceController -->PaymentController: throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find a provider with such a name providing such a service")
+PaymentController -->Spring Dispatcher Serverlet:
+else provider != null
+ServiceController -->PaymentController : provider
+alt !provider.CashOnDelivery
+PaymentController-->Spring Dispatcher Serverlet: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This provider does not provide cash on delivery")
+PaymentController-->*CashOnDeliveryStrategy:<<create>>
+end
+PaymentController ->PaymentController : payToProvider(ctx.email, provider, body.handlerRequest, cashOnDeliveryStrategy)
+PaymentController-->*handlerFactory:<<create>>
+PaymentController ->handlerFactory: getHandler(provider.handlerName)
+alt !handlers.containsKey(handlerName)
+handlerFactory ->* ErroneousHandler:<<create>>
+handlerFactory -->PaymentController : ErroneousHandler
+
+end
+handlerFactory -->handlers : get(handlerName);
+handlers -->handlerFactory : handler
+handlerFactory -->PaymentController : handler
+
+end
+PaymentController -> *handler: <<create>>
+PaymentController -> handler: validateAndHandleRequest(request)
+alt !requestContainsAllKeys(request)
+handler ->*handlerResponse: <<create>>
+handler -->PaymentController: handlerResponse
+else requestContainsAllKeys(request)
+handler->handler:handleRequestAndGetAmount(request)
+alt !res.success
+	handler -->PaymentController: handlerResponse
+end 
+	handler -->PaymentController: handlerResponse
+
+alt !handlerRes.success
+PaymentController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The form handler was not able to handle this request:\n" + handlerRes.errorMessage)
+end
+PaymentController ->DiscountControlller:getDiscountsForServiceForUser(email, provider.serviceName)
+DiscountControlller ->DiscountModel: (d -> d.isActive && (d.type == DiscountType.OVERALL || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))))
+DiscountControlller ->*Discounts: <<create>>
+DiscountControlller ->DiscountControlller: getEffectiveDiscountsForUser(email, discounts)
+DiscountControlller ->UsedDiscountModel: select(d -> d.email.equals(email))
+
+UsedDiscountModel -->DiscountControlller : ArrayList<UsedDiscounts>
+DiscountControlller -> Discounts: removeIf(d -> usedDiscountsIds.contains(d.id))
+Discounts -->DiscountControlller : ArrayList<Discounts>user
+DiscountControlller -->PaymentController: Discounts
+PaymentController ->CashOnDeliveryStrategy : pay(amountToDeduct)
+CashOnDeliveryStrategy -->PaymentController: 
+PaymentController -> * transactionToInsert:<<create>>
+PaymentController ->TransactionModel: insert(transactionToInsert)
+TransactionModel -->PaymentController:
+alt discount.type == DiscountType.OVERALL
+PaymentController ->DiscountControlller : useDiscount(email, discount.id)
+end
+PaymentController -->Spring Dispatcher Serverlet:
+end
+
+
+

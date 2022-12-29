@@ -164,5 +164,29 @@ end
 PaymentController -->Spring Dispatcher Serverlet:
 end
 
+title List Discounts
+actor user
+boundary Spring Dispatcher Serverlet
+control DiscountController
+entity discountModel
+entity usedDiscountModel
 
+user ->Spring Dispatcher Serverlet : GET /discounts
+Spring Dispatcher Serverlet -> DiscountController : listDiscounts(@RequestAttribute("context") Context ctx, @RequestParam(required = false) String serviceName)
+
+alt serviceName doesn't exist
+DiscountController ->DiscountController : getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> d.isActive))
+DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
+usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
+DiscountController -->Spring Dispatcher Serverlet : ArrayList<Discount>
+
+else serviceName exists
+DiscountController ->DiscountController : getDiscountsForServiceForUser(ctx.email, serviceName)
+DiscountController ->discountModel : select(d -> d.isActive && (d.type == DiscountType.OVERALL || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))))
+discountModel -->DiscountController : ArrayList<Discount>
+DiscountController ->DiscountController : getEffectiveDiscountsForUser(email, discounts);
+DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
+usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
+DiscountController -->Spring Dispatcher Serverlet : ArrayList<Discount>
+end
 

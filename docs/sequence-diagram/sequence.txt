@@ -1,0 +1,80 @@
+title Admin List Transactions
+actor admin
+boundary Spring Dispatcher Serverlet
+control AdminTransactionController
+entity TransactionModel
+
+admin ->Spring Dispatcher Serverlet : Get /admin/transactions
+Spring Dispatcher Serverlet ->AdminTransactionController : listTransactions()
+AdminTransactionController ->TransactionModel : select(t -> true)
+TransactionModel -->AdminTransactionController : ArrayList<Transaction>
+AdminTransactionController -->Spring Dispatcher Serverlet : ArrayList<Transaction>
+
+
+title SignUp
+
+actor user
+boundary Spring Dispatcher Serverlet
+control AuthController
+boundary UserModel
+
+user ->Spring Dispatcher Serverlet : POST /signup
+Spring Dispatcher Serverlet ->AuthController : signUp( SignUpBody body)
+AuthController -> UserModel : recordExists(userEmail)
+alt returns true
+UserModel -->AuthController : True
+AuthController -->Spring Dispatcher Serverlet : throw new ResponseStatusException()
+else returns false
+UserModel -->AuthController : False
+AuthController ->UserModel : insert(new User(user information))
+UserModel -->AuthController :
+AuthController -->Spring Dispatcher Serverlet :
+end
+
+title Refund Request
+
+actor user
+boundary Spring Dispatcher Serverlet
+control TransactionController
+boundary RefundRequestModel
+boundary UserModel
+user ->Spring Dispatcher Serverlet : POST /transactions/{id}/refund
+Spring Dispatcher Serverlet ->TransactionController : requestRefund(Context ctx, int id)
+TransactionController ->RefundRequestModel : recordExists(userEmail, transactionId)
+alt returns true
+RefundRequestModel -->TransactionController : True
+TransactionController -->Spring Dispatcher Serverlet: throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+else returns false
+RefundRequestModel -->TransactionController: False
+TransactionController ->RefundRequestModel : selectOne(userEmail, id)
+RefundRequestModel --> TransactionController : TargetTransactoin (Transaction Object)
+alt targetTransaction is not found 
+TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+else targetTransaction is found
+alt targetTransaction is of type refund 
+TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+else transaction if not of type refund
+TransactionController -> UserModel : insert(new RefundRequest(RefundRequest information)
+UserModel-->TransactionController: 
+TransactionController-->Spring Dispatcher Serverlet:
+end
+end 
+
+end
+
+title Recharge
+actor user
+boundary Spring Dispatcher Serverlet
+control UserController
+boundary TrasnactionModel
+boundary UserModel
+user ->Spring Dispatcher Serverlet : POST /user/recharge
+Spring Dispatcher Serverlet ->UserController : rechargeWallet(Contex ctx, RechargeWalletBody body)
+alt body.cardNumber is negative 
+UserController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+else body.cardNumber is positive 
+alt body.amount < 0
+
+
+end 
+end  

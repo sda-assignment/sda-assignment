@@ -1,16 +1,30 @@
 title Admin List Transactions
 actor admin
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
+control AdminInterceptor
 control AdminTransactionController
 entity TransactionModel
 
 admin ->Spring Dispatcher Serverlet : Get /admin/transactions
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
+Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AdminInterceptor -->Spring Dispatcher Serverlet :
 Spring Dispatcher Serverlet ->AdminTransactionController : listTransactions()
 AdminTransactionController ->TransactionModel : select(t -> true)
 TransactionModel -->AdminTransactionController : ArrayList<Transaction>
 AdminTransactionController -->Spring Dispatcher Serverlet : ArrayList<Transaction>
+else returns false
+AdminInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+end
+else returns false
+AuthInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
 
-
+end
+==================================================
 title SignUp
 
 actor user
@@ -30,15 +44,20 @@ AuthController ->UserModel : insert(new User(user information))
 UserModel -->AuthController :
 AuthController -->Spring Dispatcher Serverlet :
 end
-
+========================================
 title Refund Request
 
 actor user
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
 control TransactionController
+
 boundary RefundRequestModel
 boundary UserModel
 user ->Spring Dispatcher Serverlet : POST /transactions/{id}/refund
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
 Spring Dispatcher Serverlet ->TransactionController : requestRefund(Context ctx, int id)
 TransactionController ->RefundRequestModel : recordExists(userEmail, transactionId)
 alt returns true
@@ -48,37 +67,54 @@ else returns false
 RefundRequestModel -->TransactionController: False
 TransactionController ->RefundRequestModel : selectOne(userEmail, id)
 RefundRequestModel --> TransactionController : TargetTransactoin (Transaction Object)
-alt targetTransaction is not found 
+alt targetTransaction is not found
 TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
 else targetTransaction is found
-alt targetTransaction is of type refund 
+alt targetTransaction is of type refund
 TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
 else transaction if not of type refund
 TransactionController -> UserModel : insert(new RefundRequest(RefundRequest information)
-UserModel-->TransactionController: 
+UserModel-->TransactionController:
 TransactionController-->Spring Dispatcher Serverlet:
 end
-end 
-
 end
 
+end
+else returns False
+AuthInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+end
+=====================================
 title Recharge
 actor user
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
 control UserController
-boundary TrasnactionModel
+boundary TransactionModel
 boundary UserModel
 user ->Spring Dispatcher Serverlet : POST /user/recharge
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
+
 Spring Dispatcher Serverlet ->UserController : rechargeWallet(Contex ctx, RechargeWalletBody body)
-alt body.cardNumber is negative 
-UserController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
-else body.cardNumber is positive 
+alt body.cardNumber is negative
+UserController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid card number");
+else body.cardNumber is positive
 alt body.amount < 0
 
-
-end 
-end  
-
+UserController --> Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid amount")
+else body.amount >= 0
+UserController ->UserModel : update(u -> new User(u.email, u.username, u.password, u.isAdmin, u.wallet + body.amount), u -> u.email.equals(ctx.email))
+UserModel -->UserController :
+UserController ->TransactionModel : insert(new Transaction(Util.incrementOrInitialize(transactionModel.selectMax(t -> t.id)), ctx.email, LocalDateTime.now(), -body.amount, TransactionType.ADD_TO_WALLET, "None", "None"));
+TransactionModel -->UserController:
+UserController -->Spring Dispatcher Serverlet:
+end
+end
+else returns False
+AuthInterceptor -->Spring Dispatcher Serverlet: throws ResponseStatusException
+end
+==============================================
 title pay using cash
 
 actor user
@@ -137,7 +173,7 @@ else requestContainsAllKeys(request)
 handler->handler:handleRequestAndGetAmount(request)
 alt !res.success
 	handler -->PaymentController: handlerResponse
-end 
+end
 	handler -->PaymentController: handlerResponse
 
 alt !handlerRes.success
@@ -154,7 +190,7 @@ DiscountControlller -> Discounts: removeIf(d -> usedDiscountsIds.contains(d.id))
 Discounts -->DiscountControlller : ArrayList<Discounts>user
 DiscountControlller -->PaymentController: Discounts
 PaymentController ->CashOnDeliveryStrategy : pay(amountToDeduct)
-CashOnDeliveryStrategy -->PaymentController: 
+CashOnDeliveryStrategy -->PaymentController:
 PaymentController -> * transactionToInsert:<<create>>
 PaymentController ->TransactionModel: insert(transactionToInsert)
 TransactionModel -->PaymentController:
@@ -163,7 +199,7 @@ PaymentController ->DiscountControlller : useDiscount(email, discount.id)
 end
 PaymentController -->Spring Dispatcher Serverlet:
 end
-
+===========================================================================
 title List Discounts
 actor user
 boundary Spring Dispatcher Serverlet
@@ -189,6 +225,7 @@ DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
 DiscountController -->Spring Dispatcher Serverlet : ArrayList<Discount>
 end
+=======================================================
 title LogIn
 
 
@@ -209,7 +246,7 @@ Token -->AuthController:
 AuthController -->Spring Dispatcher Serverlet : Token
 end
 AuthController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password")
-
+======================================================================
 title Admin List Refunds
 actor admin
 boundary Spring Dispatcher Serverlet

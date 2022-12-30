@@ -12,7 +12,7 @@ alt returns True
 AuthInterceptor -->Spring Dispatcher Serverlet: True
 Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 alt returns True
-AdminInterceptor -->Spring Dispatcher Serverlet :
+AdminInterceptor -->Spring Dispatcher Serverlet : True
 Spring Dispatcher Serverlet ->AdminTransactionController : listTransactions()
 AdminTransactionController ->TransactionModel : select(t -> true)
 TransactionModel -->AdminTransactionController : ArrayList<Transaction>
@@ -119,6 +119,7 @@ title pay using cash
 
 actor user
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
 control PaymentController
 control ServiceController
 control DiscountControlller
@@ -136,6 +137,9 @@ participant handler
 entity handlers
 
 user->Spring Dispatcher Serverlet : POST /services/{serviceName}/providers/{providerName}/pay-cash
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
 Spring Dispatcher Serverlet ->PaymentController : payCashOnDelivery(@RequestAttribute("context") Context ctx, @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName, @RequestBody PaymentBody body)
 
 PaymentController ->ServiceController : getServiceProvider(serviceName, providerName)
@@ -199,15 +203,23 @@ PaymentController ->DiscountControlller : useDiscount(email, discount.id)
 end
 PaymentController -->Spring Dispatcher Serverlet:
 end
+
+else returns False
+AuthInterceptor -->Spring Dispatcher Serverlet: throws ResponseStatusException
+end
 ===========================================================================
 title List Discounts
 actor user
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
 control DiscountController
 entity discountModel
 entity usedDiscountModel
 
 user ->Spring Dispatcher Serverlet : GET /discounts
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
 Spring Dispatcher Serverlet -> DiscountController : listDiscounts(@RequestAttribute("context") Context ctx, @RequestParam(required = false) String serviceName)
 
 alt serviceName doesn't exist
@@ -225,9 +237,11 @@ DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
 DiscountController -->Spring Dispatcher Serverlet : ArrayList<Discount>
 end
+else returns False
+AuthInterceptor -->Spring Dispatcher Serverlet: throws ResponseStatusException
+end
 =======================================================
 title LogIn
-
 
 actor user
 boundary Spring Dispatcher Serverlet
@@ -250,15 +264,30 @@ AuthController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(
 title Admin List Refunds
 actor admin
 boundary Spring Dispatcher Serverlet
+control AuthInterceptor
+control AdminInterceptor
 control AdminRefundController
 entity refundModel
 participant rrTransactions
 
 
 admin -> Spring Dispatcher Serverlet : GET /admin/refunds
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
+Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AdminInterceptor -->Spring Dispatcher Serverlet : True
 Spring Dispatcher Serverlet ->AdminRefundController : listRefundRequests()
 AdminRefundController ->refundModel : select(r -> true)
 refundModel -->AdminRefundController : Model<RefundRequest>
 AdminRefundController ->rrTransactions : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
 rrTransactions -->AdminRefundController : ArrayList<RefundRequestResponse>
 AdminRefundController -->Spring Dispatcher Serverlet : ArrayList<RefundRequestResponse>
+else returns false
+AdminInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+end
+else returns false
+AuthInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+
+end

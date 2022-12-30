@@ -209,3 +209,19 @@ Token -->AuthController:
 AuthController -->Spring Dispatcher Serverlet : Token
 end
 AuthController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password")
+
+title Admin List Refunds
+actor admin
+boundary Spring Dispatcher Serverlet
+control AdminRefundController
+entity refundModel
+participant rrTransactions
+
+
+admin -> Spring Dispatcher Serverlet : GET /admin/refunds
+Spring Dispatcher Serverlet ->AdminRefundController : listRefundRequests()
+AdminRefundController ->refundModel : select(r -> true)
+refundModel -->AdminRefundController : Model<RefundRequest>
+AdminRefundController ->rrTransactions : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
+rrTransactions -->AdminRefundController : ArrayList<RefundRequestResponse>
+AdminRefundController -->Spring Dispatcher Serverlet : ArrayList<RefundRequestResponse>

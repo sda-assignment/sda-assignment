@@ -267,8 +267,9 @@ boundary Spring Dispatcher Serverlet
 control AuthInterceptor
 control AdminInterceptor
 control AdminRefundController
-entity refundModel
 participant rrTransactions
+entity "Model<RefundRequest>" as ModelRefundRequest
+entity "Model<Transaction>" as ModelTransaction
 
 
 admin -> Spring Dispatcher Serverlet : GET /admin/refunds
@@ -279,10 +280,14 @@ Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest re
 alt returns True
 AdminInterceptor -->Spring Dispatcher Serverlet : True
 Spring Dispatcher Serverlet ->AdminRefundController : listRefundRequests()
-AdminRefundController ->refundModel : select(r -> true)
-refundModel -->AdminRefundController : Model<RefundRequest>
-AdminRefundController ->rrTransactions : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
-rrTransactions -->AdminRefundController : ArrayList<RefundRequestResponse>
+AdminRefundController ->ModelRefundRequest : select(r -> true)
+ModelRefundRequest -->AdminRefundController : ArrayList<RefundRequest>
+AdminRefundController -->* rrTransactions : <<creates>> ArrayList<RefundRequestResponse>
+AdminRefundController ->ModelTransaction : selectOne(t -> t.id == rr.transactionId)
+ModelTransaction -->AdminRefundController : Transaction
+loop from 1 to ArrayList<RefundRequest> size
+AdminRefundController ->rrTransactions : add(new RefundRequestResponse(rr, ModelTransaction.selectOne(t -> t.id == rr.transactionId))
+end
 AdminRefundController -->Spring Dispatcher Serverlet : ArrayList<RefundRequestResponse>
 else returns false
 AdminInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException

@@ -105,6 +105,7 @@ TransactionController ->TransactionModel : selectOne(userEmail, id)
 activate TransactionModel
 TransactionModel --> TransactionController : TargetTransaction (Transaction Object)
 deactivate TransactionModel
+destroysilent TransactionModel
 alt targetTransaction is not found
 TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
 deactivate TransactionController
@@ -120,12 +121,13 @@ TransactionController ->RefundRequestModel:refundRequestModel.selectMax(r -> r.i
 activate TransactionController
 activate RefundRequestModel
 RefundRequestModel-->TransactionController: RefundRequest object
+destroysilent RefundRequestModel
 deactivate RefundRequestModel
 TransactionController -> UserModel : insert(new RefundRequest(Util.incrementOrIntialize(refundRequestModel.selectMax(r -> r.id)),id, RefundRequestStatus.PENDING, ctx.email))
+destroysilent UserModel
+destroysilent TransactionController
 activate UserModel
-UserModel -->TransactionController :
-deactivate UserModel
-TransactionController -->Spring Dispatcher Serverlet :
+deactivate UserModel 
 deactivate TransactionController
 Spring Dispatcher Serverlet --> user : 200 OK
 end

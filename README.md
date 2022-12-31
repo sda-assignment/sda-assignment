@@ -25,3 +25,12 @@ $ ./mvnw spring-boot:run
 - SDS: `docs/Phase2_S5_Phase1_20206008_20206011_20206043_20206123_SDS Document.pdf`
 - Postman collection: `docs/postman/collection.json`
 - GitHub repo: https://github.com/sda-assignment/sda-assignment/
+
+### Admin account
+```
+{
+    username: admin,
+    email: admin
+    password: admin,
+}
+```

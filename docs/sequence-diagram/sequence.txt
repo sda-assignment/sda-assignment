@@ -112,8 +112,8 @@ end
 end
 else returns False
 activate AuthInterceptor
-AuthInterceptor -->Spring Dispatcher Serverlet : throws new ResponseStatusException ()
-Spring Dispatcher Serverlet --> user:401 Unauthorized
+AuthInterceptor -->Spring Dispatcher Serverlet : throws new ResponseStatusException (HttpStatus.UNAUTHORIZED)
+Spring Dispatcher Serverlet --> user:401 UNAUTHROIZED
 deactivate AuthInterceptor
 end
 =====================================
@@ -131,7 +131,7 @@ activate AuthInterceptor
 alt returns True
 AuthInterceptor -->Spring Dispatcher Serverlet: True
 deactivate AuthInterceptor
-Spring Dispatcher Serverlet ->UserController : rechargeWallet(Contex ctx, RechargeWalletBody body)
+Spring Dispatcher Serverlet ->UserController : rechargeWallet(Context ctx, RechargeWalletBody body)
 activate UserController 
 alt body.cardNumber is negative
 UserController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
@@ -157,9 +157,9 @@ end
 end
 else returns False
 activate AuthInterceptor
-AuthInterceptor -->Spring Dispatcher Serverlet: throws ResponseStatusException()
+AuthInterceptor -->Spring Dispatcher Serverlet: throws new ResponseStatusException(HttpStatus.UNAUTHORIZED)
 deactivate AuthInterceptor
-Spring Dispatcher Serverlet --> user:401 Unauthorized
+Spring Dispatcher Serverlet --> user:401 UNAUTHORIZED
 end
 ==============================================
 title pay using cash
@@ -168,91 +168,138 @@ actor user
 boundary Spring Dispatcher Serverlet
 control AuthInterceptor
 control PaymentController
+participant PayCashOnDeliveryStrategy
+participant handlerFactory
+participant concreteHandler
 control ServiceController
-control DiscountControlller
 entity ProviderModel
+entity TransactionModel
+control DiscountController
 entity DiscountModel
 entity UsedDiscountModel
-entity TransactionModel
-participant CashOnDeliveryStrategy
 
-participant handlerFactory
 
-participant ErroneousHandler
-participant handler
 
-entity handlers
 
 user->Spring Dispatcher Serverlet : POST /services/{serviceName}/providers/{providerName}/pay-cash
+activate Spring Dispatcher Serverlet
 Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate AuthInterceptor
 alt returns True
 AuthInterceptor -->Spring Dispatcher Serverlet: True
-Spring Dispatcher Serverlet ->PaymentController : payCashOnDelivery(@RequestAttribute("context") Context ctx, @PathVariable("serviceName") String serviceName, @PathVariable("providerName") String providerName, @RequestBody PaymentBody body)
+deactivate AuthInterceptor
+Spring Dispatcher Serverlet ->PaymentController : payCashOnDelivery(Context ctx, String serviceName, String providerName, PaymentBody body)
+activate PaymentController
 
-PaymentController ->ServiceController : getServiceProvider(serviceName, providerName)
-ServiceController ->ServiceController : getService(serviceName)
+PaymentController ->ServiceController : getServiceProvider(String erviceName, String providerName)
+activate ServiceController
+ServiceController ->ServiceController : getService(String serviceName)
 ServiceController ->ProviderModel:selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName))
-ProviderModel -->ServiceController: Provider
+activate ProviderModel
+ProviderModel -->ServiceController: return Provider
+deactivate ProviderModel
+destroysilent ProviderModel
 alt provider = null
-ServiceController -->PaymentController: throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find a provider with such a name providing such a service")
-PaymentController -->Spring Dispatcher Serverlet:
+ServiceController -->PaymentController: throw new ResponseStatusException(HttpStatus.NOT_FOUND)
+deactivate ServiceController
+PaymentController -->Spring Dispatcher Serverlet: return throw new ResponseStatusException(HttpStatus.NOT_FOUND)
+deactivate PaymentController
+Spring Dispatcher Serverlet -->user: 404 NOT_FOUND
 else provider != null
-ServiceController -->PaymentController : provider
+activate ServiceController 
+activate PaymentController
+ServiceController -->PaymentController : return Provider
+deactivate ServiceController
+destroysilent ServiceController
 alt !provider.CashOnDelivery
-PaymentController-->Spring Dispatcher Serverlet: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This provider does not provide cash on delivery")
-PaymentController-->*CashOnDeliveryStrategy:<<create>>
+PaymentController-->Spring Dispatcher Serverlet: throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+deactivate PaymentController
+Spring Dispatcher Serverlet -->user:400 BAD_REQUEST
 end
+activate PaymentController
+PaymentController-->*PayCashOnDeliveryStrategy:<<create>>
 PaymentController ->PaymentController : payToProvider(ctx.email, provider, body.handlerRequest, cashOnDeliveryStrategy)
 PaymentController-->*handlerFactory:<<create>>
-PaymentController ->handlerFactory: getHandler(provider.handlerName)
-alt !handlers.containsKey(handlerName)
-handlerFactory ->* ErroneousHandler:<<create>>
-handlerFactory -->PaymentController : ErroneousHandler
-
+PaymentController ->handlerFactory:getHandler(provider.handlerName)
+activate handlerFactory
+handlerFactory ->* concreteHandler:<<create>>
+handlerFactory -->PaymentController : return concreteHandler object
+deactivate handlerFactory
+destroysilent handlerFactory
 end
-handlerFactory -->handlers : get(handlerName);
-handlers -->handlerFactory : handler
-handlerFactory -->PaymentController : handler
-
+PaymentController -> concreteHandler : validateAndHandleRequest(HashMap<String, String> request)
+activate concreteHandler
+alt !requestContainsAllKeys(request) : Failure
+concreteHandler -->PaymentController: return handlerResponse
+PaymentController -->Spring Dispatcher Serverlet:throw new ResponseStatusException (HttpStatus.BAD_REQUEST)
+deactivate PaymentController
+Spring Dispatcher Serverlet -->user: 400 BAD_REQUEST
+deactivate concreteHandler
+else requestContainsAllKeys(request) : Success
+activate concreteHandler
+activate PaymentController
+concreteHandler->concreteHandler:handleRequestAndGetAmount(HashMap <String, String> request)
+alt !res.success (failure)
+	concreteHandler -->PaymentController: return handlerResponse object
+    deactivate concreteHandler
+    PaymentController -->Spring Dispatcher Serverlet: :throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+    deactivate PaymentController
+    Spring Dispatcher Serverlet-->user:400 BAD_REQUEST
 end
-PaymentController -> *handler: <<create>>
-PaymentController -> handler: validateAndHandleRequest(request)
-alt !requestContainsAllKeys(request)
-handler ->*handlerResponse: <<create>>
-handler -->PaymentController: handlerResponse
-else requestContainsAllKeys(request)
-handler->handler:handleRequestAndGetAmount(request)
-alt !res.success
-	handler -->PaymentController: handlerResponse
-end
-	handler -->PaymentController: handlerResponse
+activate PaymentController
+activate concreteHandler
+	concreteHandler -->PaymentController: return new HandlerResponse(res.amount)
+deactivate concreteHandler
+destroysilent concreteHandler
+PaymentController ->DiscountController:getDiscountsForServiceForUser(email, provider.serviceName)
+activate DiscountController
+DiscountController ->DiscountModel: select(d -> d.isActive && (d.type == DiscountType.OVERALL || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))))
+activate DiscountModel
+DiscountModel -->DiscountController: return Arraylisy<Discount>
+destroysilent DiscountModel
+deactivate DiscountModel
+DiscountController ->DiscountController: getEffectiveDiscountsForUser(String email, ArrayList <Discount> discounts)
+DiscountController ->UsedDiscountModel: select(d -> d.email.equals(email))
+activate UsedDiscountModel
+UsedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
+deactivate UsedDiscountModel
+DiscountController -->PaymentController: ArrayList<Discount> discounts
+deactivate DiscountController
+PaymentController ->PayCashOnDeliveryStrategy : pay(amountToDeduct)
+activate PayCashOnDeliveryStrategy
+deactivate PayCashOnDeliveryStrategy
+destroysilent PayCashOnDeliveryStrategy
+PaymentController ->TransactionModel:selectMax(t-> t.id)
+activate TransactionModel
+TransactionModel -->PaymentController: Integer ID
 
-alt !handlerRes.success
-PaymentController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The form handler was not able to handle this request:\n" + handlerRes.errorMessage)
-end
-PaymentController ->DiscountControlller:getDiscountsForServiceForUser(email, provider.serviceName)
-DiscountControlller ->DiscountModel: (d -> d.isActive && (d.type == DiscountType.OVERALL || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))))
-DiscountControlller ->*Discounts: <<create>>
-DiscountControlller ->DiscountControlller: getEffectiveDiscountsForUser(email, discounts)
-DiscountControlller ->UsedDiscountModel: select(d -> d.email.equals(email))
-
-UsedDiscountModel -->DiscountControlller : ArrayList<UsedDiscounts>
-DiscountControlller -> Discounts: removeIf(d -> usedDiscountsIds.contains(d.id))
-Discounts -->DiscountControlller : ArrayList<Discounts>user
-DiscountControlller -->PaymentController: Discounts
-PaymentController ->CashOnDeliveryStrategy : pay(amountToDeduct)
-CashOnDeliveryStrategy -->PaymentController:
-PaymentController -> * transactionToInsert:<<create>>
-PaymentController ->TransactionModel: insert(transactionToInsert)
-TransactionModel -->PaymentController:
+PaymentController ->TransactionModel: insert(new transaction(ID,email, LocalDateTime.now(), amountToDeduct, TransactionType.PAYMENT, provider.serviceName, provider.name)))
+deactivate TransactionModel
+destroysilent TransactionModel
+loop i from 0 to ArrayList<Discounts> discounts size
 alt discount.type == DiscountType.OVERALL
-PaymentController ->DiscountControlller : useDiscount(email, discount.id)
+PaymentController ->DiscountController : useDiscount(email, discount.id)
+activate DiscountController
+DiscountController ->UsedDiscountModel:insert(new UsedDiscount(email, discountId))
+activate UsedDiscountModel
+UsedDiscountModel-->DiscountController: return true
+destroysilent DiscountController
+deactivate UsedDiscountModel
+destroysilent UsedDiscountModel
+deactivate DiscountController
+deactivate PaymentController
+destroysilent PaymentController
 end
-PaymentController -->Spring Dispatcher Serverlet:
 end
-
+Spring Dispatcher Serverlet --> user:200 OK
+end
 else returns False
-AuthInterceptor -->Spring Dispatcher Serverlet: throws ResponseStatusException
+activate AuthInterceptor
+AuthInterceptor -->Spring Dispatcher Serverlet: throws new  ResponseStatusException(HttpStatus.UNAUTHORIZED)
+deactivate AuthInterceptor
+destroysilent AuthInterceptor
+Spring Dispatcher Serverlet -->user: 401 UNAUTHORIZED
+
 end
 ===========================================================================
 title List Discounts

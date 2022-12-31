@@ -406,31 +406,52 @@ Spring Dispatcher Servlet -->user : 400 BAD_REQUEST
 ======================================================================
 title Admin List Refunds
 actor admin
-boundary Spring Dispatcher Serverlet
+boundary Spring Dispatcher Servlet
 control AuthInterceptor
 control AdminInterceptor
 control AdminRefundController
-entity refundModel
-participant rrTransactions
+entity "Model<Refund>" as refundModel
+participant RefundRequest
+activate Spring Dispatcher Servlet
 
+admin -> Spring Dispatcher Servlet : GET /admin/refunds
+Spring Dispatcher Servlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate AuthInterceptor
+alt returns True
+AuthInterceptor -->Spring Dispatcher Servlet: True
+deactivate AuthInterceptor
 
-admin -> Spring Dispatcher Serverlet : GET /admin/refunds
-Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+Spring Dispatcher Servlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate AdminInterceptor
 alt returns True
-AuthInterceptor -->Spring Dispatcher Serverlet: True
-Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-alt returns True
-AdminInterceptor -->Spring Dispatcher Serverlet : True
-Spring Dispatcher Serverlet ->AdminRefundController : listRefundRequests()
+
+AdminInterceptor -->Spring Dispatcher Servlet : True
+
+deactivate AdminInterceptor
+activate AdminRefundController
+Spring Dispatcher Servlet ->AdminRefundController : listRefundRequests()
+activate refundModel
 AdminRefundController ->refundModel : select(r -> true)
 refundModel -->AdminRefundController : Model<RefundRequest>
-AdminRefundController ->rrTransactions : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
-rrTransactions -->AdminRefundController : ArrayList<RefundRequestResponse>
-AdminRefundController -->Spring Dispatcher Serverlet : ArrayList<RefundRequestResponse>
-else returns false
-AdminInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
-end
-else returns false
-AuthInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+deactivate refundModel
+activate RefundRequest
+AdminRefundController ->RefundRequest : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
+RefundRequest -->AdminRefundController : ArrayList<RefundRequestResponse>
+deactivate RefundRequest
+AdminRefundController -->Spring Dispatcher Servlet : ArrayList<RefundRequestResponse>
+deactivate AdminRefundController
 
+Spring Dispatcher Servlet -->admin :200 OK
+else returns false
+activate AdminInterceptor
+AdminInterceptor -->Spring Dispatcher Servlet :throws new ResponseStatusException(HttpStatus.FORBIDDEN)
+Spring Dispatcher Servlet -->admin: 403 FORBIDDEN
+deactivate AdminInterceptor
+end
+
+else returns false
+activate AuthInterceptor
+AuthInterceptor -->Spring Dispatcher Servlet :throws new ResponseStatusException(HttpStatus.UNAUTHORIZED)
+Spring Dispatcher Servlet -->admin : 401 UNAUTHORIZED
+deactivate AuthInterceptor
 end

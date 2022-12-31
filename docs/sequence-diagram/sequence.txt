@@ -286,8 +286,8 @@ activate DiscountController
 
 alt serviceName == null
 DiscountController ->DiscountController : getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> d.isActive))
-activate usedDiscountModel
 DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
+activate usedDiscountModel
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
 deactivate usedDiscountModel
 DiscountController -->Spring Dispatcher Servlet : ArrayList<Discount>
@@ -296,13 +296,13 @@ Spring Dispatcher Servlet -->user: 200 OK
 else serviceName != null
 activate DiscountController
 DiscountController ->DiscountController : getDiscountsForServiceForUser(ctx.email, serviceName)
-activate discountModel
 DiscountController ->discountModel : select(d -> d.isActive && (d.type == DiscountType.OVERALL || (d.type == DiscountType.SPECIFIC && d.serviceName.equals(serviceName))))
+activate discountModel
 discountModel -->DiscountController : ArrayList<Discount>
 deactivate discountModel
 DiscountController ->DiscountController : getEffectiveDiscountsForUser(email, discounts);
-activate usedDiscountModel
 DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
+activate usedDiscountModel
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>
 deactivate usedDiscountModel
 DiscountController -->Spring Dispatcher Servlet : ArrayList<Discount>
@@ -311,9 +311,9 @@ Spring Dispatcher Servlet -->user: 200 OK
 end
 else returns False
 activate AuthInterceptor
-AuthInterceptor -->Spring Dispatcher Servlet:throws new ResponseStatusException(HttpStatus.BAD_REQUEST)
+AuthInterceptor -->Spring Dispatcher Servlet:throws new ResponseStatusException(HttpStatus.UNAUTHORIZED)
 deactivate AuthInterceptor
-Spring Dispatcher Servlet --> user:400 BAD_REQUEST
+Spring Dispatcher Servlet --> user:401 UNAUTHORIZED
 
 end
 =======================================================

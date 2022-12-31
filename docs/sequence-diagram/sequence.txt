@@ -78,7 +78,6 @@ control AuthInterceptor
 control TransactionController
 entity "Model<RefundRequest>" as RefundRequestModel
 entity "Model<Transaction>" as TransactionModel
-entity "Model<User>" as UserModel
 activate Spring Dispatcher Serverlet
 activate AuthInterceptor
 user ->Spring Dispatcher Serverlet : POST /transactions/{id}/refund
@@ -120,15 +119,14 @@ else transaction if not of type refund
 TransactionController ->RefundRequestModel:refundRequestModel.selectMax(r -> r.id))
 activate TransactionController
 activate RefundRequestModel
-RefundRequestModel-->TransactionController: RefundRequest object
-destroysilent RefundRequestModel
+RefundRequestModel-->TransactionController: Integer ID
 deactivate RefundRequestModel
-TransactionController -> UserModel : insert(new RefundRequest(Util.incrementOrIntialize(refundRequestModel.selectMax(r -> r.id)),id, RefundRequestStatus.PENDING, ctx.email))
-destroysilent UserModel
-destroysilent TransactionController
-activate UserModel
-deactivate UserModel 
+TransactionController -> RefundRequestModel : insert(new RefundRequest(Util.incrementOrIntialize(ID),id, RefundRequestStatus.PENDING, ctx.email))
+activate RefundRequestModel
+deactivate RefundRequestModel
+destroysilent RefundRequestModel
 deactivate TransactionController
+destroysilent TransactionController
 Spring Dispatcher Serverlet --> user : 200 OK
 end
 end

@@ -352,9 +352,9 @@ deactivate DiscountController
 end
 else returns False
 activate AuthInterceptor
-AuthInterceptor -->Spring Dispatcher Servlet: throws new ResponseStatusException(HttpStatus.UNAUTHORIZED)
+AuthInterceptor -->Spring Dispatcher Servlet:throws new ResponseStatusException(HttpStatus.BAD_REQUEST)
 deactivate AuthInterceptor
-Spring Dispatcher Servlet --> user:401 UNAUTHORIZED
+Spring Dispatcher Servlet --> user:400 BAD_REQUEST\n
 
 end
 =======================================================

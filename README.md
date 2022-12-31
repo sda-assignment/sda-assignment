@@ -1,7 +1,7 @@
 # sda-assignment
 
 ## Prerequisites
-Java 19
+Java 19 (jdk-19)
 
 ## Building and running
 ### On a UNIX/Linux environment in the root directory

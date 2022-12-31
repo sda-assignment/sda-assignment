@@ -30,7 +30,7 @@ title SignUp
 actor user
 boundary Spring Dispatcher Serverlet
 control AuthController
-boundary "Model<User>" as UserModel
+entity "Model<User>" as UserModel
 
 activate Spring Dispatcher Serverlet
 user ->Spring Dispatcher Serverlet : POST /signup

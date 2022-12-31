@@ -68,6 +68,76 @@ deactivate AuthController
 Spring Dispatcher Servlet -->user : 200 OK 
 
 end
+
+====================================================
+title Refund Request
+
+actor user
+boundary Spring Dispatcher Serverlet
+control AuthInterceptor
+control TransactionController
+entity "Model<RefundRequest>" as RefundRequestModel
+entity "Model<Transaction>" as TransactionModel
+entity "Model<User>" as UserModel
+activate Spring Dispatcher Serverlet
+activate AuthInterceptor
+user ->Spring Dispatcher Serverlet : POST /transactions/{id}/refund
+Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+alt returns True
+AuthInterceptor -->Spring Dispatcher Serverlet: True
+deactivate AuthInterceptor
+Spring Dispatcher Serverlet ->TransactionController : requestRefund(Context ctx, int id)
+activate TransactionController
+TransactionController ->RefundRequestModel : recordExists(userEmail, transactionId)
+activate RefundRequestModel
+alt returns true
+RefundRequestModel -->TransactionController : True
+deactivate RefundRequestModel
+TransactionController -->Spring Dispatcher Serverlet: throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+deactivate TransactionController
+Spring Dispatcher Serverlet --> user:400 BAD_REQUEST
+else returns false
+activate TransactionController
+activate RefundRequestModel
+RefundRequestModel -->TransactionController: False
+deactivate RefundRequestModel
+TransactionController ->TransactionModel : selectOne(userEmail, id)
+activate TransactionModel
+TransactionModel --> TransactionController : TargetTransaction (Transaction Object)
+deactivate TransactionModel
+alt targetTransaction is not found
+TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+deactivate TransactionController
+Spring Dispatcher Serverlet --> user:400 BAD_REQUEST
+else targetTransaction is found
+activate TransactionController
+alt targetTransaction is of type refund
+TransactionController -->Spring Dispatcher Serverlet : throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
+deactivate TransactionController
+Spring Dispatcher Serverlet --> user:400 BAD_REQUEST
+else transaction if not of type refund
+TransactionController ->RefundRequestModel:refundRequestModel.selectMax(r -> r.id))
+activate TransactionController
+activate RefundRequestModel
+RefundRequestModel-->TransactionController: RefundRequest object
+deactivate RefundRequestModel
+TransactionController -> UserModel : insert(new RefundRequest(Util.incrementOrIntialize(refundRequestModel.selectMax(r -> r.id)),id, RefundRequestStatus.PENDING, ctx.email))
+activate UserModel
+UserModel -->TransactionController :
+deactivate UserModel
+TransactionController -->Spring Dispatcher Serverlet :
+deactivate TransactionController
+Spring Dispatcher Serverlet --> user : 200 OK
+end
+end
+
+end
+else returns False
+activate AuthInterceptor
+AuthInterceptor -->Spring Dispatcher Serverlet : throws new ResponseStatusException (HttpStatus.UNAUTHORIZED)
+deactivate AuthInterceptor
+Spring Dispatcher Serverlet --> user:401 UNAUTHROIZED
+end
 =====================================
 title Recharge
 actor user

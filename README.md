@@ -3,15 +3,22 @@
 ## Prerequisites
 Java 19 (jdk-19)
 
+Make sure system variable `JAVA_HOME` is set to the jdk location and the `PATH` variables contains the `bin` of the jdk location
+
 ## Building and running
 ### On a UNIX/Linux environment in the root directory
-```sh
+```bash
 $ ./mvnw spring-boot:run
 ```
 
-### On a Windows environment in the root directory
-```powershell
+### On Windows CMD in the root directory
+```cmd
 > mvnw.cmd spring-boot:run
+```
+
+### On Windows PowerShell in the root directory
+```powershell
+> ./mvnw.cmd spring-boot:run
 ```
 
 ### Locations and links

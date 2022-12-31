@@ -1,27 +1,43 @@
 title Admin List Transactions
 actor admin
-boundary Spring Dispatcher Serverlet
+boundary Spring Dispatcher Servlet
 control AuthInterceptor
 control AdminInterceptor
 control AdminTransactionController
-entity TransactionModel
+entity "Model<Transaction>" as TransactionModel
 
-admin ->Spring Dispatcher Serverlet : Get /admin/transactions
-Spring Dispatcher Serverlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate Spring Dispatcher Servlet
+admin ->Spring Dispatcher Servlet : Get /admin/transactions
+Spring Dispatcher Servlet ->AuthInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate AuthInterceptor
 alt returns True
-AuthInterceptor -->Spring Dispatcher Serverlet: True
-Spring Dispatcher Serverlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+AuthInterceptor -->Spring Dispatcher Servlet: True
+deactivate AuthInterceptor
+Spring Dispatcher Servlet ->AdminInterceptor : preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+activate AdminInterceptor
 alt returns True
-AdminInterceptor -->Spring Dispatcher Serverlet : True
-Spring Dispatcher Serverlet ->AdminTransactionController : listTransactions()
+AdminInterceptor -->Spring Dispatcher Servlet : True
+deactivate AdminInterceptor
+Spring Dispatcher Servlet ->AdminTransactionController : listTransactions()
+activate AdminTransactionController
 AdminTransactionController ->TransactionModel : select(t -> true)
+activate TransactionModel
 TransactionModel -->AdminTransactionController : ArrayList<Transaction>
-AdminTransactionController -->Spring Dispatcher Serverlet : ArrayList<Transaction>
+deactivate TransactionModel
+AdminTransactionController -->Spring Dispatcher Servlet : ArrayList<Transaction>
+Spring Dispatcher Servlet -->admin : 200 OK
+deactivate AdminTransactionController
 else returns false
-AdminInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+activate AdminInterceptor
+AdminInterceptor -->Spring Dispatcher Servlet : throw new ResponseStatusException(HttpStatus.FORBIDDEN)
+deactivate AdminInterceptor
+Spring Dispatcher Servlet -->admin : 403 FORBIDDEN
 end
 else returns false
-AuthInterceptor -->Spring Dispatcher Serverlet : throws ResponseStatusException
+activate AuthInterceptor
+AuthInterceptor -->Spring Dispatcher Servlet : throw new ResponseStatusException(HttpStatus.UNAUTHORIZED)
+deactivate AuthInterceptor
+Spring Dispatcher Servlet -->admin : 401 UNAUTHORIZED
 
 end
 ==================================================
@@ -361,31 +377,32 @@ end
 title LogIn
 
 actor user
-boundary Spring Dispatcher Serverlet
+boundary Spring Dispatcher Servlet
 control AuthController
 entity "Model<User>" as UserModel
-
 participant Token
 
-activate Spring Dispatcher Serverlet
-
-user->Spring Dispatcher Serverlet:POST /login
-Spring Dispatcher Serverlet ->AuthController : logIn(@RequestBody LogInBody body)
+activate Spring Dispatcher Servlet
+user->Spring Dispatcher Servlet:POST /login
+Spring Dispatcher Servlet ->AuthController : logIn(LogInBody body)
 activate AuthController
-activate UserModel
 AuthController ->UserModel : selectOne(u -> u.email.equals(body.email) && u.password.equals(body.password))
+activate UserModel
 UserModel -->AuthController : user
-
-alt user != null
-AuthController ->* Token:<<create>>user
-Token -->AuthController:
 deactivate UserModel
-AuthController -->Spring Dispatcher Serverlet : Token
+alt user != null
+AuthController ->* Token:<<create>>
+activate Token
+Token -->AuthController :
+AuthController -->Spring Dispatcher Servlet : Token
+deactivate Token
+Spring Dispatcher Servlet -->user : 200 OK
 deactivate AuthController
 end
 activate AuthController
-AuthController -->Spring Dispatcher Serverlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password")
+AuthController -->Spring Dispatcher Servlet:throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
 deactivate AuthController
+Spring Dispatcher Servlet -->user : 400 BAD_REQUEST
 ======================================================================
 title Admin List Refunds
 actor admin

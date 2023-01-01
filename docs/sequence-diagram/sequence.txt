@@ -217,7 +217,7 @@ deactivate AuthInterceptor
 Spring Dispatcher Servlet ->PaymentController : payCashOnDelivery(Context ctx, String serviceName, String providerName, PaymentBody body)
 activate PaymentController
 
-PaymentController ->ServiceController : getServiceProvider(String erviceName, String providerName)
+PaymentController ->ServiceController : getServiceProvider(String serviceName, String providerName)
 activate ServiceController
 ServiceController ->ServiceController : getService(String serviceName)
 ServiceController ->ProviderModel:selectOne(p -> p.serviceName.equals(serviceName) && p.name.equals(providerName))
@@ -266,7 +266,7 @@ activate concreteHandler
 activate PaymentController
 concreteHandler->concreteHandler:handleRequestAndGetAmount(HashMap <String, String> request)
 alt !res.success (failure)
-	concreteHandler -->PaymentController: return handlerResponse object
+	concreteHandler -->PaymentController: return handlerResponse 
     deactivate concreteHandler
     PaymentController -->Spring Dispatcher Servlet: :throw new ResponseStatusException(HttpStatus.BAD_REQUEST)
     deactivate PaymentController
@@ -311,14 +311,12 @@ activate DiscountController
 DiscountController ->UsedDiscountModel:insert(new UsedDiscount(email, discountId))
 activate UsedDiscountModel
 UsedDiscountModel-->DiscountController: True
-DiscountController -->PaymentController :
 destroysilent DiscountController
 deactivate UsedDiscountModel
 destroysilent UsedDiscountModel
 deactivate DiscountController
 end
-end
-PaymentController -->Spring Dispatcher Servlet :
+end 
 deactivate PaymentController
 Spring Dispatcher Servlet --> user:200 OK
 destroysilent PaymentController

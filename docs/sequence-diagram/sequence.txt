@@ -170,9 +170,7 @@ UserModel -->UserController :
 deactivate UserModel
 UserController ->TransactionModel : insert(new Transaction( Util.incrementOrIntialize (transactionModel.selectMax(t -> t.id)), ctx.email, LocalDateTime.now(), -body.amount, TransactionType.ADD_TO_WALLET, "None", "None"));
 activate TransactionModel
-TransactionModel -->UserController :
 deactivate TransactionModel
-UserController -->Spring Dispatcher Servlet :
 deactivate UserController
 
 Spring Dispatcher Servlet -->user: 200 OK
@@ -184,6 +182,7 @@ AuthInterceptor -->Spring Dispatcher Servlet: throws new ResponseStatusException
 deactivate AuthInterceptor
 Spring Dispatcher Servlet --> user:401 UNAUTHORIZED
 end
+
 ==============================================
 title pay using cash
 

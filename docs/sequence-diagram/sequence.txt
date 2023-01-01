@@ -61,14 +61,11 @@ Spring Dispatcher Servlet --> user:400 BAD_REQUEST
 else returns false
 UserModel -->AuthController : False
 AuthController ->UserModel : insert(new User(body.email, body.username, body.password, false, 0))
-UserModel -->AuthController :
 deactivate UserModel
-AuthController -->Spring Dispatcher Servlet :
 deactivate AuthController
 Spring Dispatcher Servlet -->user : 200 OK 
 
 end
-
 ====================================================
 title Refund Request
 

@@ -123,10 +123,8 @@ RefundRequestModel-->TransactionController: Integer ID
 deactivate RefundRequestModel
 TransactionController -> RefundRequestModel : insert(new RefundRequest(Util.incrementOrIntialize(ID),id, RefundRequestStatus.PENDING, ctx.email))
 activate RefundRequestModel
-RefundRequestModel -->TransactionController :
 deactivate RefundRequestModel
 destroysilent RefundRequestModel
-TransactionController -->Spring Dispatcher Servlet :
 deactivate TransactionController
 destroysilent TransactionController
 Spring Dispatcher Servlet --> user : 200 OK
@@ -138,7 +136,6 @@ else returns False
 activate AuthInterceptor
 AuthInterceptor -->Spring Dispatcher Servlet : throws new ResponseStatusException (HttpStatus.UNAUTHORIZED)
 deactivate AuthInterceptor
-destroysilent AuthInterceptor
 Spring Dispatcher Servlet --> user:401 UNAUTHROIZED
 end
 =====================================
@@ -314,17 +311,15 @@ activate DiscountController
 DiscountController ->UsedDiscountModel:insert(new UsedDiscount(email, discountId))
 activate UsedDiscountModel
 UsedDiscountModel-->DiscountController: True
+destroysilent DiscountController
 deactivate UsedDiscountModel
 destroysilent UsedDiscountModel
-DiscountController -->PaymentController :
 deactivate DiscountController
-destroysilent DiscountController
-PaymentController -->Spring Dispatcher Servlet :
-deactivate PaymentController
-destroysilent PaymentController
 end
 end 
+deactivate PaymentController
 Spring Dispatcher Servlet --> user:200 OK
+destroysilent PaymentController
 end
 else returns False
 activate AuthInterceptor

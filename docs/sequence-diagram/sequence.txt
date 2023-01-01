@@ -424,7 +424,7 @@ control AuthInterceptor
 control AdminInterceptor
 control AdminRefundController
 entity "Model<Refund>" as refundModel
-participant RefundRequest
+entity "Model<Transaction>" as TransactionModel
 activate Spring Dispatcher Servlet
 
 admin -> Spring Dispatcher Servlet : GET /admin/refunds
@@ -445,26 +445,38 @@ activate AdminRefundController
 Spring Dispatcher Servlet ->AdminRefundController : listRefundRequests()
 activate refundModel
 AdminRefundController ->refundModel : select(r -> true)
-refundModel -->AdminRefundController : Model<RefundRequest>
+refundModel -->AdminRefundController : ArrayList <RefundRequest>
+destroysilent refundModel
 deactivate refundModel
-activate RefundRequest
-AdminRefundController ->RefundRequest : add(new RefundRequestResponse(rr, transactionModel.selectOne(t -> t.id == rr.transactionId)))
-RefundRequest -->AdminRefundController : ArrayList<RefundRequestResponse>
-deactivate RefundRequest
+AdminRefundController -->* RefundRequestResponse: <<creates Array List>>
+loop for i = 0  to refund request array list size
+AdminRefundController ->TransactionModel:transactionModel.selectOne(t -> t.id == rr.transactionId)
+activate TransactionModel
+TransactionModel -->AdminRefundController: return Integer ID 
+deactivate TransactionModel
+destroysilent TransactionModel
+AdminRefundController -> RefundRequestResponse : add(new RefundRequestResponse(rr, ID)))
+activate RefundRequestResponse
+end
+RefundRequestResponse -->AdminRefundController : ArrayList<RefundRequestResponse>
+deactivate RefundRequestResponse
 AdminRefundController -->Spring Dispatcher Servlet : ArrayList<RefundRequestResponse>
 deactivate AdminRefundController
-
+destroysilent AdminRefundController
 Spring Dispatcher Servlet -->admin :200 OK
+destroysilent RefundRequestResponse
 else returns false
 activate AdminInterceptor
 AdminInterceptor -->Spring Dispatcher Servlet :throws new ResponseStatusException(HttpStatus.FORBIDDEN)
-Spring Dispatcher Servlet -->admin: 403 FORBIDDEN
 deactivate AdminInterceptor
+destroysilent AdminInterceptor
+Spring Dispatcher Servlet -->admin: 403 FORBIDDEN
 end
 
 else returns false
 activate AuthInterceptor
 AuthInterceptor -->Spring Dispatcher Servlet :throws new ResponseStatusException(HttpStatus.UNAUTHORIZED)
-Spring Dispatcher Servlet -->admin : 401 UNAUTHORIZED
 deactivate AuthInterceptor
+destroysilent AuthInterceptor
+Spring Dispatcher Servlet -->admin : 401 UNAUTHORIZED
 end

@@ -358,7 +358,7 @@ alt serviceName == null
 DiscountController ->discountModel: discountModel.select(d -> d.isActive)
 activate discountModel
 discountModel -->DiscountController: ArrayList<Discount> 
-DiscountController ->DiscountController : getEffectiveDiscountsForUser(context ctx.email,ArrayList<Discount>)
+DiscountController ->DiscountController : getEffectiveDiscountsForUser(String ctx.email,ArrayList<Discount>)
 deactivate discountModel
 DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
 activate usedDiscountModel
@@ -456,10 +456,10 @@ AdminRefundController -->* RefundRequestResponse: <<creates Array List>>
 loop for i = 0  to refund request array list size
 AdminRefundController ->TransactionModel:transactionModel.selectOne(t -> t.id == rr.transactionId)
 activate TransactionModel
-TransactionModel -->AdminRefundController: return Integer ID 
+TransactionModel -->AdminRefundController: return Transaction
 deactivate TransactionModel
 destroysilent TransactionModel
-AdminRefundController -> RefundRequestResponse : add(new RefundRequestResponse(rr, ID)))
+AdminRefundController -> RefundRequestResponse : add(new RefundRequestResponse(rr, Transaction obj)))
 activate RefundRequestResponse
 end
 RefundRequestResponse -->AdminRefundController : ArrayList<RefundRequestResponse>

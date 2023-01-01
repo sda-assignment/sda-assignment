@@ -355,7 +355,11 @@ Spring Dispatcher Servlet -> DiscountController : listDiscounts(Context ctx, Str
 activate DiscountController
 
 alt serviceName == null
-DiscountController ->DiscountController : getEffectiveDiscountsForUser(ctx.email, discountModel.select(d -> d.isActive))
+DiscountController ->discountModel: discountModel.select(d -> d.isActive)
+activate discountModel
+discountModel -->DiscountController: ArrayList<Discount> 
+DiscountController ->DiscountController : getEffectiveDiscountsForUser(context ctx.email,ArrayList<Discount>)
+deactivate discountModel
 DiscountController ->usedDiscountModel : select(d -> d.email.equals(email))
 activate usedDiscountModel
 usedDiscountModel -->DiscountController : ArrayList<UsedDiscount>

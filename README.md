@@ -1,5 +1,15 @@
 # sda-assignment
 
+## Team members
+- Ahmed Wael Nagy Wanas - 20206008
+- Adham Hazem Fahmy Shafei - 20206011
+- Omar Adel Abdel Hamid Ahmed Brikaa - 20206043
+- Ali Esmat Ahmed Orfi - 20206123
+
+## Checking out to different phases
+- Use "git checkout ba9bcc75e8b176490e935f7b4afaf778b26d855b" to checkout to Phase 1 changes.
+- Use "git checkout main" to checkout back to the current changes (phase 2).
+
 ## Prerequisites
 Java 19 (jdk-19)
 
